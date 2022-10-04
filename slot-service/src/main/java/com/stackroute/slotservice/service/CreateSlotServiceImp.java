@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 
+
 @Service
 public class CreateSlotServiceImp implements CreateSlotService{
 
@@ -32,6 +33,11 @@ public class CreateSlotServiceImp implements CreateSlotService{
     public void addCreateSlot(CreateSlot createSlot) {
         createSlotRepository.save(createSlot);
 
+    }
+    @Override
+    public Boolean deleteCreatedSlotById(String id) {
+        createSlotRepository.deleteById(id);
+        return true;
     }
 
     @Override

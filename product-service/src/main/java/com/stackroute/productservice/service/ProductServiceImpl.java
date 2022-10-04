@@ -1,12 +1,16 @@
 package com.stackroute.productservice.service;
 
 import com.fasterxml.uuid.Generators;
+import com.stackroute.productservice.exception.ProductNotFoundException;
 import com.stackroute.productservice.model.Product;
 import com.stackroute.productservice.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -16,45 +20,72 @@ public class ProductServiceImpl implements ProductService{
     private ProductRepository productRepository;
 
     @Override
-    public Boolean createProduct(Product product) {
+    public ResponseEntity<String> createProduct(Product product) {
         product.setId(Generators.timeBasedGenerator().generate());
         Product savedProduct = productRepository.save(product);
         if(savedProduct != null && savedProduct.getId() != null){
-            return true;
+            return new ResponseEntity<>("Product added successfully.", HttpStatus.CREATED);
         } else {
-            return false;
+            return new ResponseEntity<>("Could not create product.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public List<Product> getProducts() {
-        return productRepository.findAll();
-    }
+    public ResponseEntity<?> getProducts() {
+        List<Product> products = productRepository.findAll();
 
-    @Override
-    public Product getProductById(UUID id) {
-        return productRepository.findById(id).get();
-    }
-
-    @Override
-    public Boolean updateProduct(Product product) {
-        Product savedProduct = productRepository.save(product);
-        if(savedProduct != null && savedProduct.getId() != null){
-            return true;
+        if(products != null && products.size() > 0){
+            return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
         } else {
-            return false;
+            return new ResponseEntity<String>("No products found", HttpStatus.OK);
+        }
+
+    }
+
+    @Override
+    public ResponseEntity<Product> getProductById(UUID id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isPresent()){
+            return new ResponseEntity<>(productOptional.get(), HttpStatus.OK);
+        } else {
+            throw new ProductNotFoundException("Product with id " + id + " is not found.");
         }
     }
 
     @Override
-    public Boolean deleteProductById(UUID id) {
-        productRepository.deleteById(id);
-        return true;
+    public ResponseEntity<String> updateProductById(UUID id, Product product) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isPresent()){
+            Product savedProduct = productRepository.save(product);
+            if(savedProduct != null && savedProduct.getId() != null){
+                return new ResponseEntity<>("Product with id " + id + " not found", HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>("Update of product with id " + id + " failed", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            throw new ProductNotFoundException("Product with id " + id + " is not found.");
+        }
     }
 
     @Override
-    public List<Product> getProductsByOwnerEmail(String ownerEmail) {
-        return productRepository.findProductsByOwnerEmail(ownerEmail);
+    public ResponseEntity<String> deleteProductById(UUID id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isPresent()){
+            productRepository.deleteById(id);
+            return new ResponseEntity<>("Product with id " + id + " deleted successfull", HttpStatus.OK);
+        } else {
+            throw new ProductNotFoundException("Product with id " + id + " is not found.");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getProductsByOwnerEmail(String ownerEmail) {
+        List<Product> products = productRepository.findProductsByOwnerEmail(ownerEmail);
+        if(products != null && products.size() > 0){
+            return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("User " + ownerEmail + " has no products", HttpStatus.OK);
+        }
     }
 
 

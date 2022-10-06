@@ -86,7 +86,6 @@ public class UserServiceImpl implements UserService{
             if(savedProduct != null ){
                 return new ResponseEntity<>("Product with id " + id + " is updated", HttpStatus.ACCEPTED);
             } else {
-//                return new ResponseEntity<>("Update of product with id " + id + " failed", HttpStatus.INTERNAL_SERVER_ERROR);
                 throw new UserNotFoundException("Product with id " + id + " is not found.So it can't be updated");
 
             }

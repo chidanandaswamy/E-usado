@@ -17,8 +17,9 @@ import java.util.UUID;
 public class Chat {
 
 
-    @Id
+
     private long productId;
+    @Id
     private UUID questionId;
     private String questions;
     private List reply;

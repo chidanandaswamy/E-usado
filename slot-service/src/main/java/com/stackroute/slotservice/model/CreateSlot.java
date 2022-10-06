@@ -25,5 +25,19 @@ public class CreateSlot {
     private Timestamp endTime;
     private String description;
 
+//    {
+//        "slotId":"05",
+//            "sellerName":"dinesh",
+//            "sellerEmailId":"bk@gmail.com",
+//            "buyerName":"bittu",
+//            "buyerEmailId":"bittu@gmail.com",
+//    "slotStatus":"progress",
+//            "date":"2022-10-10",
+//            "startTime":"2022-10-10T18:42:33.049Z",
+//            "endTime":"2022-11-10T18:42:33.049Z",
+//            "description":"details"
+//
+//    }
+
 
 }

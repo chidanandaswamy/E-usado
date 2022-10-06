@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.stackroute.orderservice.repository.OrderRepository;
 
 
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    HashSet<Order> orderlist = new HashSet();
+
     @Autowired
     OrderRepository orderRepository;
 
@@ -54,22 +54,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ResponseEntity<?>  getAllOrders() {
-        List<Order> products = orderRepository.findAll();
+        List<Order> orders = orderRepository.findAll();
 
-        if(products != null && products.size() > 0){
-            return new ResponseEntity<List<Order>>(products, HttpStatus.OK);
+        if(orders != null){
+            return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>("No products found", HttpStatus.OK);
+            return new ResponseEntity<String>("No Order found", HttpStatus.OK);
         }
     }
 
     @Override
     public ResponseEntity<Order>  getOrderById(long id) {
-        Optional<Order> productOptional = orderRepository.findById(id);
-        if(productOptional.isPresent()){
-            return new ResponseEntity<>(productOptional.get(), HttpStatus.OK);
+        Optional<Order> orders = orderRepository.findById(id);
+        if(orders.isPresent()){
+            return new ResponseEntity<>(orders.get(), HttpStatus.OK);
         } else {
-            throw new OrderNotFoundException("Product with id " + id + " is not found.");
+            throw new OrderNotFoundException("Order with id " + id + " is not found.");
         }
     }
 
@@ -82,12 +82,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ResponseEntity<String> deleteOrderById(long id) {
-        Optional<Order> productOptional = orderRepository.findById(id);
-        if(productOptional.isPresent()){
+        Optional<Order> orders = orderRepository.findById(id);
+        if(orders.isPresent()){
             orderRepository.deleteById(id);
-            return new ResponseEntity<>("Product with id " + id + " deleted successfull", HttpStatus.OK);
+            return new ResponseEntity<>("Order with id " + id + " deleted successfull", HttpStatus.OK);
         } else {
-            throw new OrderNotFoundException("Product with id " + id + " is not found.");
+            throw new OrderNotFoundException("Order with id " + id + " is not found.");
         }
 
 

@@ -1,22 +1,32 @@
 package com.stackroute.userservice.model;
-
-
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Document(value="usado_user")
+@ToString
+@Document(value="user_table")
 public class User {
-    @Id
-    private String email;
-    private String name;
-    private long contactNo;
-    private String gender;
 
-    private Address address;
+    @Transient
+    public static final String SEQUENCE_NAME = "booking_sequence";
+
+    @Id
+    private long userId;
+
+    private String password;
+
+    private String email;
+
+  private long contactNo;
+    @NotNull(message = "Enter your full name for registration")
+   private String name;
+
+   private String gender;
+   private Address address;
 
 }

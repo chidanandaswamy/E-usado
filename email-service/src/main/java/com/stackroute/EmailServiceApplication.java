@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
+import javax.mail.MessagingException;
+
 @SpringBootApplication
 public class EmailServiceApplication {
 @Autowired
@@ -16,8 +18,7 @@ private EmailServiceImpl service;
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
-	public void triggerMail(){
-		service.sendSimpleEmail("chidanandaswamy321@gmail.com",
-				 "hi","welcome to eusado");
+	public void triggerMail() throws MessagingException {
+		service.sendMail("chidanandaswamy356@gmail.com", "E-usado order conformation mail" ,"Thank for Ordering Using E-usado" ,"/home/chidananda/Downloads/windows-11-landscape-scenery-sunrise-stock-day-light-3840x2400-5661.jpg");
 	}
 }

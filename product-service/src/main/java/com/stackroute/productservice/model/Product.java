@@ -32,5 +32,6 @@ public class Product {
     private Float productDiscount;
     private Boolean warrantyStatus;
     private Float productDamageLevel;
+    private Location location;
 
 }

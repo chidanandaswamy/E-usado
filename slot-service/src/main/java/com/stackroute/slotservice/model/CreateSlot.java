@@ -37,6 +37,8 @@ public class CreateSlot {
 
 //    {
 //        "slotId":"05",
+//            "{
+//        "slotId":"05",
 //            "sellerName":"dinesh",
 //            "sellerEmailId":"bk@gmail.com",
 //            "buyerName":"bittu",

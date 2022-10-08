@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +32,24 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ResponseEntity<?> getProducts() {
-        List<Product> products = productRepository.findAll();
+    public ResponseEntity<?> getProducts(int pageNumber,
+                                         int pageSize,
+                                         String productBrand) {
+        int offset = 0;
+        int limit = 0;
 
+        if(pageNumber == 0){
+            pageNumber = 1;
+        }
+
+        if(pageSize == 0){
+            pageSize = 10;
+        }
+
+        limit = pageSize;
+        offset = pageSize * (pageNumber - 1);
+
+        List<Product> products = productRepository.findProducts(offset, limit);
         if(products != null && products.size() > 0){
             return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
         } else {
@@ -79,7 +95,24 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ResponseEntity<?> getProductsByOwnerEmail(String ownerEmail) {
+    public ResponseEntity<?> getProductsByOwnerEmail(String ownerEmail,
+                                                     int pageNumber,
+                                                     int pageSize,
+                                                     String productBrand) {
+        int offset = 0;
+        int limit = 0;
+
+        if(pageNumber == 0){
+            pageNumber = 1;
+        }
+
+        if(pageSize == 0){
+            pageSize = 10;
+        }
+
+        limit = pageSize;
+        offset = pageSize * (pageNumber - 1);
+
         List<Product> products = productRepository.findProductsByOwnerEmail(ownerEmail);
         if(products != null && products.size() > 0){
             return new ResponseEntity<List<Product>>(products, HttpStatus.OK);

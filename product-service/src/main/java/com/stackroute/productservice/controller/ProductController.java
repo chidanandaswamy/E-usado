@@ -20,9 +20,12 @@ public class ProductController {
         return productServiceImpl.createProduct(product);
     }
 
-    @RequestMapping(value = "/products", method= RequestMethod.GET)
-    public ResponseEntity<?> getProducts(){
-        return productServiceImpl.getProducts();
+    @RequestMapping(value = "/products", method= RequestMethod.GET,
+            params = {"pageNumber", "pageSize", "productBrand"})
+    public ResponseEntity<?> getProducts(@RequestParam int pageNumber,
+                                         @RequestParam int pageSize,
+                                         @RequestParam String productBrand){
+        return productServiceImpl.getProducts(pageNumber, pageSize, productBrand);
     }
 
     @RequestMapping(value = "/product/{id}", method= RequestMethod.GET)
@@ -30,9 +33,13 @@ public class ProductController {
         return productServiceImpl.getProductById(id);
     }
 
-    @RequestMapping(value = "/products/{ownerEmail}", method= RequestMethod.GET)
-    public ResponseEntity<?> getProductsByOwnerEmail(@PathVariable String ownerEmail){
-        return productServiceImpl.getProductsByOwnerEmail(ownerEmail);
+    @RequestMapping(value = "/product/{ownerEmail}", method= RequestMethod.GET,
+            params = {"pageNumber", "pageSize", "productBrand"})
+    public ResponseEntity<?> getProductsByOwnerEmail(@PathVariable String ownerEmail,
+                                                     @RequestParam int pageNumber,
+                                                     @RequestParam int pageSize,
+                                                     @RequestParam String productBrand){
+        return productServiceImpl.getProductsByOwnerEmail(ownerEmail, pageNumber, pageSize, productBrand);
     }
 
     @RequestMapping(value = "/product/{id}", method= RequestMethod.PUT)

@@ -1,17 +1,22 @@
 package com.stackroute.slotservice.service;
 
 import com.stackroute.slotservice.model.CreateSlot;
-
-
-import java.util.HashSet;
+import org.springframework.http.ResponseEntity;
 
 
 public interface CreateSlotService {
 
 
-    HashSet<CreateSlot> getAllSlots();
-   CreateSlot getSlotById(String id);
-     void addCreateSlot(CreateSlot createSlot);
+
+
+    ResponseEntity<?> getAllSlots();
+
+   // ResponseEntity<CreateSlot> getSlotById(Long id);
+
+    ResponseEntity<CreateSlot> getSlotById(Long id);
+
+    ResponseEntity<String> addCreateSlot(CreateSlot createSlot);
+
     void deleteAllCreateSlots();
-     Boolean deleteCreatedSlotById(String id);
+    ResponseEntity<String> deleteCreatedSlotById(Long id);
 }

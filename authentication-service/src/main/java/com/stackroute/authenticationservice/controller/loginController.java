@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
+
 @RestController
 public class loginController {
 
@@ -23,6 +24,7 @@ public class loginController {
 
     @Autowired
    private UserRepository repository;
+
 
 
     @PostMapping("/SaveUserDetails")

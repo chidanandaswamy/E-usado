@@ -10,14 +10,12 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "User_TBL")
+@Table
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String userName;
-    private String password;
     private String email;
+    private String password;
+    private String userName;
+    private Roles roles;
 }
 

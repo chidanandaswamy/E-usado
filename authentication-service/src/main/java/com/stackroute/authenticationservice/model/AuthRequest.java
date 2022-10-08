@@ -11,6 +11,7 @@ public class AuthRequest {
 
     private String userName;
     private String password;
+    private String emailId;
 }
 
 

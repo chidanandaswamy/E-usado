@@ -1,10 +1,7 @@
 package com.stackroute.userservice.service;
 import com.stackroute.userservice.model.User;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.HashSet;
-
 
 @Service
 public interface UserService {
@@ -12,11 +9,10 @@ public interface UserService {
     HashSet<User> findAllUsers();
      User findByEmail(String email) ;
 
-    User findByID(long id) ;
+    User deleteUserByEmail(String email);
 
-    ResponseEntity<String> updateProductById(long id, User user);
+    User updateUser(User user);
 
-    ResponseEntity<String> deleteById(long id);
-
+    User UpdateByEmail(User user,String email);
 
 }

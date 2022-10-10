@@ -1,4 +1,4 @@
-package com.stackroute.orderservice.model;
+package com.stackroute.cartservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

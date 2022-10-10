@@ -1,4 +1,4 @@
-package com.stackroute.userservice.model;
+package com.stackroute.slotservice.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

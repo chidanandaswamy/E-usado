@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface ProductService {
     ResponseEntity<String> createProduct(Product product);
-    ResponseEntity<?> getProducts(int pageNumber, int pageSize, String productBrand);
+    ResponseEntity<?> getProducts(int pageNumber, int pageSize, String productBrand, String productCategory, String productManufacturedYear, String warrantyStatus);
     ResponseEntity<Product> getProductById(UUID id);
     ResponseEntity<String> updateProductById(UUID id, Product product);
     ResponseEntity<String> deleteProductById(UUID id);

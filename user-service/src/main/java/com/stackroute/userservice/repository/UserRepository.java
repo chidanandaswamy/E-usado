@@ -5,13 +5,18 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, Long> {
+public interface UserRepository extends MongoRepository<User, String> {
 
 
     @Query("{'email' : ?0}")
     User findByEmail(String email);
 
+    @Query("{'email' : ?0}")
+    void deleteByEmail(String email);
+//    boolean existByEmail(String email);
 
+    @Query("{'email':?1}")
+    User updateByEmail(String email,User user);
 
 }
 

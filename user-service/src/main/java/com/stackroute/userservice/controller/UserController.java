@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 
@@ -20,21 +19,16 @@ public class UserController {
     @Autowired
     UserServiceImpl userServiceImpl;
 
-
     @RequestMapping(value="/users/add",method = RequestMethod.POST)
     public void adduser(@RequestBody User user) {
-        user.setUserId(userServiceImpl.getSequenceNumber(User.SEQUENCE_NAME));
         userServiceImpl.addUser(user);
 
     }
-
 
     @RequestMapping(value="/users" ,method=RequestMethod.GET)
     public HashSet<User> findAllUsers() {
         return userServiceImpl.findAllUsers();
     }
-
-
 
     @RequestMapping (value="/users/{email}",method=RequestMethod.GET)
     public ResponseEntity<?> getByEmail(@PathVariable String email, HttpSession session) throws UserNotFoundException{
@@ -45,23 +39,22 @@ public class UserController {
 
     }
 
-    @RequestMapping(value="/users/getById/{id}",method=RequestMethod.GET)
-    public ResponseEntity<User> getById(@PathVariable long id, HttpSession session) {
-            responseEntity=new ResponseEntity<User>(userServiceImpl.findByID(id), HttpStatus.CREATED);
+    @RequestMapping(value="/users/delete/{email}",method=RequestMethod.DELETE)
+    public ResponseEntity<User> deleteUserByEmail( @PathVariable String email){
+        responseEntity=new ResponseEntity<User>(userServiceImpl.deleteUserByEmail(email),HttpStatus.OK);
         return responseEntity;
     }
 
-
-
-    @RequestMapping(value="/users/delete/{id}",method=RequestMethod.DELETE)
-    public ResponseEntity<?> deleteProductById(@PathVariable long id){
-        return userServiceImpl.deleteById(id);
+    @RequestMapping(value="/users/update",method=RequestMethod.PUT)
+    public ResponseEntity<User> updateUser( @RequestBody User user){
+        responseEntity=new ResponseEntity<User>(userServiceImpl.updateUser(user),HttpStatus.OK);
+        return responseEntity;
     }
 
-
-    @RequestMapping(value = "/users/update/{id}", method= RequestMethod.PUT)
-    public ResponseEntity<?> updateProductById(@PathVariable long id, @RequestBody User user){
-        return userServiceImpl.updateProductById(id, user);
+    @RequestMapping(value="/users/update/{email}",method=RequestMethod.PUT)
+    public ResponseEntity<User> updateUser( @RequestBody User user,@PathVariable String email){
+        responseEntity=new ResponseEntity<User>(userServiceImpl.UpdateByEmail(user,email),HttpStatus.OK);
+        return responseEntity;
     }
 
 }

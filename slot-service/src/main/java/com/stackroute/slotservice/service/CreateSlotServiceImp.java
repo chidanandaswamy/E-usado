@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 
@@ -75,6 +72,26 @@ public class CreateSlotServiceImp implements CreateSlotService{
             return new ResponseEntity<>("Could not create slot.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
+    @Override
+    public ResponseEntity<String> updateSlotById(Long id, CreateSlot createSlot) {
+        Optional<CreateSlot> slotOptional = createSlotRepository.findById(id);
+        if(slotOptional.isPresent()){
+            CreateSlot savedSlot = createSlotRepository.save(createSlot);
+            if(savedSlot != null){
+                return new ResponseEntity<>("Product with id " + id + " not found", HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>("Update of product with id " + id + " failed", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            throw new SlotNotFoundException("Product with id " + id + " is not found.");
+        }
+    }
+
+
+
 
 
     @Override

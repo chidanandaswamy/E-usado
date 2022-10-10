@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 
-
 @RestController
 @RequestMapping("api/v1")
 public class CreateSlotController {
@@ -29,6 +28,12 @@ public class CreateSlotController {
     @RequestMapping(value = "/getSlotById/{id}", method= RequestMethod.GET)
     public ResponseEntity<?> getCreateSlotById(@PathVariable Long id){
         return createSlotServiceImp.getSlotById(id);
+    }
+
+
+    @RequestMapping(value = "/updateSlot/{id}", method= RequestMethod.PUT)
+    public ResponseEntity<?> updateSlotById(@PathVariable Long id, @RequestBody CreateSlot createSlot){
+        return createSlotServiceImp.updateSlotById(id, createSlot);
     }
 
 

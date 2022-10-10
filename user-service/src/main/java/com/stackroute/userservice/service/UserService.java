@@ -9,9 +9,7 @@ public interface UserService {
     HashSet<User> findAllUsers();
      User findByEmail(String email) ;
 
-    User deleteUserByEmail(String email);
-
-    User updateUser(User user);
+    boolean deleteUserByEmail(String email);
 
     User UpdateByEmail(User user,String email);
 

@@ -13,9 +13,10 @@ public class UserServiceImpl implements UserService{
     UserRepository userRepository;
 
 
-    HashSet<User> userList=new HashSet();
+
     @Override
     public void addUser(User user) {
+
         user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
         userRepository.save(user);
 
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public HashSet<User> findAllUsers() {
+        HashSet<User> userList=new HashSet();
        userRepository.findAll().forEach(user -> userList.add(user));
        return userList;
     }
@@ -30,7 +32,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email);
-        if (user != null) {
+        if (user != null && user.getEmail()!=null) {
             return user;
 
         }
@@ -41,38 +43,28 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public User deleteUserByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        if(user==null){
-            throw new UserNotFoundException("User with email " + email + " doesn't exist.");
-        }
+    public boolean deleteUserByEmail(String email) {
+        User u= userRepository.findByEmail(email);
+        if(u!=null && u.getEmail()!=null){
             userRepository.deleteByEmail(email);
-            return user;
+    return true;
+        }
+          else{ throw new UserNotFoundException("User with email " + email + " doesn't exist.");}
+//
     }
 
     @Override
     public User UpdateByEmail(User user,String email) {
-        String email1 = user.getEmail();
-        System.out.println(email1);
-        if(email1==null){
-            throw new UserNotFoundException("User with email " + user + " doesn't exist.");
-
+        User u= userRepository.findByEmail(email);
+        System.out.println(user);
+        if(u!=null &&u.getEmail()!=null  ){
+            user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
+          return  userRepository.save(user);
         }
 
-        userRepository.save(user);
-        return user;
+        else{throw new UserNotFoundException("User with email " + user + " doesn't exist.");}
+
     }
-
-    @Override
-    public User updateUser(User user) {
-     System.out.println(user);
-         if(user==null){
-            throw new UserNotFoundException("User with email " + user + " doesn't exist.");
-        }
-          userRepository.save(user);
-             return user;
-}
-
 
 }
 

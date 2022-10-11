@@ -13,10 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+
+import java.util.*;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 
@@ -24,7 +22,7 @@ import static org.springframework.data.mongodb.core.FindAndModifyOptions.options
 @Service
 public class CreateSlotServiceImp implements CreateSlotService{
 
-    HashSet<CreateSlot> CreatedSlotList=new HashSet<>();
+  //  HashSet<CreateSlot> CreatedSlotList=new HashSet<>();
 
     @Autowired
     CreateSlotRepository createSlotRepository;
@@ -43,25 +41,46 @@ public class CreateSlotServiceImp implements CreateSlotService{
 
 
 
+//    @Override
+//    public ResponseEntity<?> getAllSlots() {
+//        List<CreateSlot> createslot = createSlotRepository.findAll();
+//        if(createslot != null && createslot.size() > 0){
+//            return new ResponseEntity<List<CreateSlot>>(createslot, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<String>("No slots found", HttpStatus.OK);
+//        }
+//    }
+
     @Override
-    public ResponseEntity<?> getAllSlots() {
-        List<CreateSlot> createslot = createSlotRepository.findAll();
-        if(createslot != null && createslot.size() > 0){
-            return new ResponseEntity<List<CreateSlot>>(createslot, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<String>("No slots found", HttpStatus.OK);
-        }
+    public HashSet<CreateSlot> findAllUsers() {
+        HashSet<CreateSlot> userList=new HashSet();
+//        createSlotRepository.findAll().forEach(user -> userList.add(user));
+        createSlotRepository.findAll().forEach(c->userList.add(c));
+        System.out.println(userList);
+        return userList;
     }
 
+//    @Override
+//    public ResponseEntity<CreateSlot> getSlotById(long slotId) {
+//        Optional<CreateSlot> createSlot = createSlotRepository.findById(slotId);
+//        if(createSlot.isPresent()){
+//            return new ResponseEntity<>(createSlot.get(), HttpStatus.OK);
+//        } else {
+//            throw new SlotNotFoundException("slot with id " + slotId + " is not found.");
+//        }
+//    }
+
 
     @Override
-    public ResponseEntity<CreateSlot> getSlotById(Long id) {
-        Optional<CreateSlot> createSlot = createSlotRepository.findById(id);
-        if(createSlot.isPresent()){
-            return new ResponseEntity<>(createSlot.get(), HttpStatus.OK);
+    public CreateSlot getById(long slotId) {
+        Optional<CreateSlot> findById = createSlotRepository.findById(slotId);
+        if (findById.isPresent()) {
+            findById.get();
         } else {
-            throw new SlotNotFoundException("slot with id " + id + " is not found.");
+            throw new SlotNotFoundException("User Not Found !!");
         }
+        return findById.get();
+
     }
 
 
@@ -77,15 +96,48 @@ public class CreateSlotServiceImp implements CreateSlotService{
     }
 
 
+
+//    @Override
+//    public ResponseEntity<String> updateSlotById(long slotId, CreateSlot createSlot) {
+//        Optional<CreateSlot> slotOptional = createSlotRepository.findById(slotId);
+//        if(slotOptional.isPresent()){
+//            CreateSlot savedSlot = createSlotRepository.save(createSlot);
+//            if(savedSlot != null){
+//                return new ResponseEntity<>("Product with id " + slotId + " not found", HttpStatus.ACCEPTED);
+//            } else {
+//                return new ResponseEntity<>("Update of product with id " + slotId + " failed", HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        } else {
+//            throw new SlotNotFoundException("Product with id " + slotId + " is not found.");
+//        }
+//    }
+
+
     @Override
-    public ResponseEntity<String> deleteCreatedSlotById(Long id) {
-        Optional<CreateSlot> createSlot = createSlotRepository.findById(id);
+    public CreateSlot UpdateSlotById( CreateSlot createSlot, long slotId) {
+        Optional<CreateSlot> slotOptional = createSlotRepository.findById(slotId);
+        System.out.println(slotOptional);
+        if (slotOptional != null && slotOptional.isPresent()==true) {
+
+            return createSlotRepository.save(createSlot);
+        } else {
+            throw new SlotNotFoundException("User with slotId " + slotId + " doesn't exist.");
+
+        }
+    }
+
+
+
+
+    @Override
+    public ResponseEntity<String> deleteCreatedSlotById(long slotId) {
+        Optional<CreateSlot> createSlot = createSlotRepository.findById(slotId);
         System.out.println(createSlot);
         if(createSlot.isPresent()){
-            createSlotRepository.deleteById(id);
-            return new ResponseEntity<>("Slot with id " + id + " deleted successfull", HttpStatus.OK);
+            createSlotRepository.deleteById(slotId);
+            return new ResponseEntity<>("Slot with id " + slotId + " deleted successfull", HttpStatus.OK);
         } else {
-            throw new SlotNotFoundException("Slot with id " + id + " is not found.");
+            throw new SlotNotFoundException("Slot with id " + slotId + " is not found.");
         }
     }
 

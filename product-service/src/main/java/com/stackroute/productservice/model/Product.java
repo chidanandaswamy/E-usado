@@ -34,6 +34,6 @@ public class Product {
     private Boolean warrantyStatus;
     private Float productDamageLevel;
     private Location location;
-    private UUID productImageId;
+    private Binary productImage;
 
 }

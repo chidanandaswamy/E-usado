@@ -1,10 +1,10 @@
-package com.stackroute.cartservice.service;
+package com.stackroute.orderservice.service;
 
-import com.stackroute.cartservice.exception.CartNotFoundException;
-import com.stackroute.cartservice.model.Cart;
-import com.stackroute.cartservice.model.DbSequence;
 
-import com.stackroute.cartservice.repository.CartRepository;
+import com.stackroute.orderservice.exception.CartNotFoundException;
+import com.stackroute.orderservice.model.Cart;
+import com.stackroute.orderservice.model.DbSequence;
+import com.stackroute.orderservice.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -35,8 +35,8 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public ResponseEntity<String> createCart(Cart cart) {
-        Cart carted= cartRepository.save(cart);
-        if(carted != null ){
+        Cart cart1= cartRepository.save(cart);
+        if(cart1 != null ){
             return new ResponseEntity<>("Cart is added successfully.", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("Cart Creation terminated.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -44,23 +44,24 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public ResponseEntity<Cart> getProductById(long id) {
-        Optional<Cart> product = cartRepository.findById(id);
-        if(product.isPresent()){
-            return new ResponseEntity<>(product.get(), HttpStatus.OK);
+    public ResponseEntity<Cart>  getCartById(long cartId) {
+        Optional<Cart> orders = cartRepository.findByCartId(cartId);
+        if(orders.isPresent()){
+            return new ResponseEntity<>(orders.get(), HttpStatus.OK);
         } else {
-            throw new CartNotFoundException("Product with id " + id + " is not found.");
+            throw new CartNotFoundException("Cart with id " + cartId + " is not found.");
         }
     }
 
     @Override
-    public ResponseEntity<String> deleteById(long id) {
-        Optional<Cart> carted = cartRepository.findById(id);
+    public ResponseEntity<String> deleteCartById(long cartId) {
+        Optional<Cart> carted = cartRepository.findByCartId(cartId);
         if(carted.isPresent()){
-            cartRepository.deleteById(id);
-            return new ResponseEntity<>("Cart with id " + id + " deleted successfully", HttpStatus.OK);
+            cartRepository.deleteByCartId(cartId);
+
+            return new ResponseEntity<>("Cart with id " + cartId + " deleted successfully", HttpStatus.OK);
         } else {
-            throw new CartNotFoundException("Cart with id " + id + " is not found.");
+            throw new CartNotFoundException("Cart with id " + cartId + " is not found.");
         }
     }
 }

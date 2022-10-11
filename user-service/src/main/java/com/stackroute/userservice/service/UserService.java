@@ -5,9 +5,9 @@ import java.util.HashSet;
 
 @Service
 public interface UserService {
-     void addUser(User user);
+    void addUser(User user);
     HashSet<User> findAllUsers();
-     User findByEmail(String email) ;
+    User findByEmail(String email) ;
 
     boolean deleteUserByEmail(String email);
 

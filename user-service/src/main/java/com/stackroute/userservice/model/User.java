@@ -17,12 +17,12 @@ public class User {
     private String password;
 
 
-  private long contactNo;
+    private long contactNo;
     @NotNull(message = "Enter your full name for registration")
-   private String name;
+    private String name;
 
-   private String gender;
+    private String gender;
 
-   private Address address;
+    private Address address;
 
 }

@@ -2,8 +2,6 @@ package com.stackroute.chatservice.service;
 
 
 
-
-import com.fasterxml.uuid.Generators;
 import com.stackroute.chatservice.exception.ChatNotFoundException;
 import com.stackroute.chatservice.model.Chat;
 import com.stackroute.chatservice.repository.ChatRepository;
@@ -11,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 public class ChatServiceImpl implements ChatService{
@@ -25,64 +23,61 @@ public class ChatServiceImpl implements ChatService{
         this.chatRepository = chatRepository;
     }
 
-   @Override
+    @Override
     public Chat saveChat(Chat chat) {
-        chat.setQuestionId(Generators.timeBasedGenerator().generate());
         return chatRepository.save(chat);
     }
 
     @Override
-    public Chat getChatById(UUID id) {
-        Optional<Chat> chat = chatRepository.findById(id);
-        if(chat.isPresent()){
-            return chat.get();
-        }else {
-            throw new ChatNotFoundException("product chat with id" + id + "is not found.");
-        }
-        
+    public Chat updateChat(Chat chat, long questionId) {
+        // we need to check whether question in database is present or not
+
+        Chat existingQuestion = chatRepository.findById(questionId).orElseThrow(
+                () -> new ChatNotFoundException("Question with Id" + questionId + "not Found"));
+        existingQuestion.setReply(chat.getReply());
+
+        // save existing question
+        chatRepository.save(existingQuestion);
+        return existingQuestion;
     }
 
     @Override
-    public Chat updateChatById(UUID questionId) {
+    public Chat getChatByQuestionId(long questionId) {
         Optional<Chat> chat = chatRepository.findById(questionId);
-        if (chat.isPresent()) {
-            return chat.get();
-        } else {
-            throw new ChatNotFoundException("Chat not found with id" + questionId);
-        }
-    }
-
-    @Override
-    public void deleteChat(UUID id) {
-       //check- whether a chat exist in a database or not
-        chatRepository.findById(id).orElseThrow(() -> new ChatNotFoundException("chat with id" + id + "is not found."));
-
-        chatRepository.deleteById(id);
-    }
-
-    @Override
-    public Chat getProductChatById(UUID productId) {
-        Optional<Chat>  chat = chatRepository.findById(productId);
         if(chat.isPresent()){
             return chat.get();
-            
         }else{
-            throw new ChatNotFoundException("product chat with id" + productId + "is not found.");
+            throw new ChatNotFoundException("No reply found by Question with Id " + questionId);
         }
+
     }
 
     @Override
-    public Chat updateChatReply(UUID questionId) {
-        Chat existingChat = chatRepository.findById(questionId).orElseThrow(
-                () -> new ChatNotFoundException(" Chat with " + questionId + "is not found "));
-        existingChat.setReply(updateChatById(questionId).getReply());
-        chatRepository.save(existingChat);
+    public void deleteChatByQuestionId(long questionId) {
+        //check whether a chat exist in db
+        chatRepository.findById(questionId).orElseThrow(()
+                -> new ChatNotFoundException("There is no chat found by Id" + questionId));
+      chatRepository.deleteById(questionId);
+    }
 
+    @Override
+    public Chat replyChat(Chat chat, long questionId) {
+         Chat existingChat = chatRepository.findById(questionId).orElseThrow(
+                 () -> new ChatNotFoundException("Chat does not Exist with Id" +questionId));
+
+         existingChat.setReply(chat.getReply());
+         //save
+        chatRepository.save(existingChat);
         return existingChat;
     }
 
+    @Override
+    public Chat getChatByProductId(long productId) {
+        Optional <Chat> chat = chatRepository.findById(productId);
 
-
+        return chatRepository.findById(productId).orElseThrow(()
+                -> new ChatNotFoundException("Chat is not present with Product Id" + productId));
+    }
 
 
 }

@@ -4,69 +4,60 @@ package com.stackroute.chatservice.controller;
 
 
 import com.stackroute.chatservice.model.Chat;
-import com.stackroute.chatservice.service.ChatServiceImpl;
+import com.stackroute.chatservice.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1")
 public class ChatController {
      @Autowired
-     private ChatServiceImpl chatServiceImpl;
+     private ChatService chatService;
 
-    public ChatController(ChatServiceImpl chatServiceImpl) {
+    public ChatController(ChatService chatService) {
         super();
-        this.chatServiceImpl = chatServiceImpl;
+        this.chatService = chatService;
     }
 
-    //build Rest api
+  // build add question rest api
     @PostMapping("/question")
     public ResponseEntity<Chat> saveChat(@RequestBody Chat chat){
-        return new ResponseEntity<Chat>(chatServiceImpl.saveChat(chat), HttpStatus.CREATED);
+        return new ResponseEntity<Chat>(chatService.saveChat(chat), HttpStatus.CREATED);
+    }
+  // update reply to the question
+    @PutMapping("/reply/{questionId}")
+    public ResponseEntity<Chat> updateChat(@PathVariable("questionId") long questionId, @RequestBody Chat chat){
+         return new ResponseEntity<Chat>(chatService.updateChat(chat, questionId), HttpStatus.OK);
     }
 
-    //build get answer for particular question_id
-    @GetMapping("{uuid}")
-    public ResponseEntity<Chat> getChatById(@PathVariable("uuid") UUID questionId){
-        return new ResponseEntity<Chat>(chatServiceImpl.getChatById(questionId), HttpStatus.OK);
+   // get reply by QuestionId
+   @GetMapping("/reply/{questionId}")
+   public ResponseEntity<Chat> getChatByQuestionId(@PathVariable("questionId") long questionId){
+       return new ResponseEntity<Chat>(chatService.getChatByQuestionId(questionId), HttpStatus.OK);
+   }
+
+   // delete chat by QuestionId
+    @DeleteMapping("{questionId}")
+    public ResponseEntity<String> deleteChat(@PathVariable("questionId") long questionId){
+        chatService.deleteChatByQuestionId(questionId);
+        return new ResponseEntity<String>("Chat deleted successfully.", HttpStatus.OK);
+    }
+
+    //reply to previous answer
+    @PutMapping("/answer/{questionId}")
+    public ResponseEntity<Chat> replyChat(@PathVariable("questionId") long questionId
+         ,@RequestBody Chat chat){
+        return new ResponseEntity<>(chatService.replyChat(chat, questionId), HttpStatus.OK);
 
     }
 
-    //build update Chat Rest Api
-    @PutMapping("{uuid}")
-      public ResponseEntity<Chat> updateChat(@PathVariable("uuid") UUID questionId
-                   ,@RequestBody Chat chat){
-        return new ResponseEntity<Chat>(chatServiceImpl.updateChatById( questionId),HttpStatus.OK);
-
-      }
-
-      //build delete chat
-      @DeleteMapping("{uuid}")
-      public ResponseEntity<String> deleteChat(@PathVariable("uuid") UUID questionId){
-        chatServiceImpl.deleteChat(questionId);//deleteChat
-          return new ResponseEntity<String>("Chat deleted successfully", HttpStatus.OK);
-      }
-
-      //build update chat reply to answer posted earlier
-
-
-      // build to get particular product comment by id
-       @RequestMapping(value = "/product/{id}",method = RequestMethod.GET)
-    public ResponseEntity<Chat> getChatByProductId(@PathVariable("productId") UUID productId){
-        return new ResponseEntity<Chat>(chatServiceImpl.getProductChatById(productId),HttpStatus.OK) ;
+    // get chat by productId
+    @GetMapping("{productId}")
+    public ResponseEntity<Chat> getChatByProductId(@PathVariable("productId") long productId){
+        return new ResponseEntity<Chat>(chatService.getChatByProductId(productId), HttpStatus.OK);
     }
-
-    // build update reply to given question
-    @RequestMapping(value = "/answer/{questionId}",method = RequestMethod.PUT)
-    public ResponseEntity<Chat> updateChatReply(@PathVariable("questionId")UUID questionId
-            , @RequestBody Chat chat){
-         return
-                  new ResponseEntity<Chat>(chatServiceImpl.updateChatReply(questionId),HttpStatus.OK);
-    }
-
 
 }

@@ -25,8 +25,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public HashSet<User> findAllUsers() {
         HashSet<User> userList=new HashSet();
-        userRepository.findAll().forEach(user -> userList.add(user));
-        return userList;
+       userRepository.findAll().forEach(user -> userList.add(user));
+       return userList;
     }
 
     @Override
@@ -47,9 +47,9 @@ public class UserServiceImpl implements UserService{
         User u= userRepository.findByEmail(email);
         if(u!=null && u.getEmail()!=null){
             userRepository.deleteByEmail(email);
-            return true;
+    return true;
         }
-        else{ throw new UserNotFoundException("User with email " + email + " doesn't exist.");}
+          else{ throw new UserNotFoundException("User with email " + email + " doesn't exist.");}
 //
     }
 
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService{
         System.out.println(user);
         if(u!=null &&u.getEmail()!=null  ){
             user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
-            return  userRepository.save(user);
+          return  userRepository.save(user);
         }
 
         else{throw new UserNotFoundException("User with email " + user + " doesn't exist.");}
@@ -67,3 +67,6 @@ public class UserServiceImpl implements UserService{
     }
 
 }
+
+
+

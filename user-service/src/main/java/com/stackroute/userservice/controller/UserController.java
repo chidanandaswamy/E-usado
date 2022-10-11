@@ -35,21 +35,16 @@ public class UserController {
 
         responseEntity= new ResponseEntity<>(userServiceImpl.findByEmail(email), HttpStatus.CREATED);
 
-    return responseEntity;
+        return responseEntity;
 
     }
 
     @RequestMapping(value="/users/delete/{email}",method=RequestMethod.DELETE)
-    public ResponseEntity<User> deleteUserByEmail( @PathVariable String email){
-        responseEntity=new ResponseEntity<User>(userServiceImpl.deleteUserByEmail(email),HttpStatus.OK);
+    public ResponseEntity<?> deleteUserByEmail( @PathVariable String email){
+        responseEntity=new ResponseEntity<Boolean>(userServiceImpl.deleteUserByEmail(email),HttpStatus.OK);
         return responseEntity;
     }
 
-    @RequestMapping(value="/users/update",method=RequestMethod.PUT)
-    public ResponseEntity<User> updateUser( @RequestBody User user){
-        responseEntity=new ResponseEntity<User>(userServiceImpl.updateUser(user),HttpStatus.OK);
-        return responseEntity;
-    }
 
     @RequestMapping(value="/users/update/{email}",method=RequestMethod.PUT)
     public ResponseEntity<User> updateUser( @RequestBody User user,@PathVariable String email){

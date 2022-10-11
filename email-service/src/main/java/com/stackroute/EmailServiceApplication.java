@@ -24,6 +24,7 @@ public class EmailServiceApplication {
 	public MailResponse sendEmail(@RequestBody MailRequest request) {
 		Map<String, Object> model = new HashMap<>();
 		model.put("name", request.getName());
+
 		model.put("location", "Banglore, India");
 
 		return service.sendEmail(request, model);

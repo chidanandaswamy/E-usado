@@ -3,7 +3,6 @@ package com.stackroute.productservice.service;
 import com.stackroute.productservice.model.Product;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {

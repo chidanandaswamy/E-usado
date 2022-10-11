@@ -1,19 +1,27 @@
 package com.stackroute.productservice.service;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.uuid.Generators;
 import com.stackroute.productservice.exception.ProductNotFoundException;
 import com.stackroute.productservice.model.Product;
 import com.stackroute.productservice.repository.ProductRepository;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,12 +35,28 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    @Override
-    public ResponseEntity<String> createProduct(Product product) {
-        product.setId(Generators.timeBasedGenerator().generate());
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
+    @Value("${e-usado.product-service.rabbitmq.exchange}")
+    private String exchange;
+
+    @Value("${e-usado.product.rabbitmq.routingkey}")
+    private String routingKey;
+
+    @Override
+    public ResponseEntity<String> createProduct(String productAsJSONString, MultipartFile image1) {
+
+        Product product = JSON.parseObject(productAsJSONString, Product.class);
+        product.setId(Generators.timeBasedGenerator().generate());
+        try {
+            product.setProductImage(new Binary(BsonBinarySubType.BINARY, image1.getBytes()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Product savedProduct = productRepository.save(product);
         if(savedProduct != null && savedProduct.getId() != null){
+            rabbitTemplate.convertAndSend(exchange, routingKey, product);
             return new ResponseEntity<>("Product added successfully.", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("Could not create product.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -45,7 +69,11 @@ public class ProductServiceImpl implements ProductService{
                                          String productBrand,
                                          String productCategory,
                                          String productManufacturedYear,
-                                         String warrantyStatus) {
+                                         String warrantyStatus,
+                                         BigDecimal productPrice,
+                                         Float productDiscount,
+                                         Float productDamageLevel,
+                                         String location) {
         //pagination
         int offset = 0;
         int limit = 0;
@@ -80,9 +108,20 @@ public class ProductServiceImpl implements ProductService{
             filter.put("warrantyStatus", Boolean.valueOf(warrantyStatus));
         }
 
+//        System.out.println("product price" + productPrice);
+//        BigDecimal upperLimitPrice;
+//        BigDecimal lowerLimitPrice;
+//        if(productPrice != null){
+//            if(productPrice.compareTo(BigDecimal.valueOf(5000)) == 1){
+//                lowerLimitPrice = productPrice.subtract(BigDecimal.valueOf(5000));
+//            }
+//            upperLimitPrice = productPrice.add(BigDecimal.valueOf(5000));
+//        }
+
 //        List<Product> products = productRepository.findProducts(offset, limit);
         System.out.println("filter" + filter);
         Query query = new BasicQuery(filter.toJSONString()).skip(offset).limit(limit);
+        query.addCriteria(Criteria.where("productPrice").is(productPrice));
         List<Product> products = mongoTemplate.find(query, Product.class);
         if(products != null && products.size() > 0){
             return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
@@ -103,9 +142,23 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ResponseEntity<String> updateProductById(UUID id, Product product) {
+    public ResponseEntity<String> updateProductById(UUID id, String productAsJSONString, MultipartFile image1) {
         Optional<Product> productOptional = productRepository.findById(id);
         if(productOptional.isPresent()){
+            Product product = JSON.parseObject(productAsJSONString, Product.class);
+            product.setId(id);
+
+            if(!image1.isEmpty()){
+                try {
+                    product.setProductImage(new Binary(BsonBinarySubType.BINARY, image1.getBytes()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else {
+                product.setProductImage(productOptional.get().getProductImage());
+            }
+
             Product savedProduct = productRepository.save(product);
             if(savedProduct != null && savedProduct.getId() != null){
                 return new ResponseEntity<>("Product with id " + id + " not found", HttpStatus.ACCEPTED);
@@ -122,7 +175,7 @@ public class ProductServiceImpl implements ProductService{
         Optional<Product> productOptional = productRepository.findById(id);
         if(productOptional.isPresent()){
             productRepository.deleteById(id);
-            return new ResponseEntity<>("Product with id " + id + " deleted successfull", HttpStatus.OK);
+            return new ResponseEntity<>("Product with id " + id + " deleted successfully", HttpStatus.OK);
         } else {
             throw new ProductNotFoundException("Product with id " + id + " is not found.");
         }

@@ -13,7 +13,9 @@ public class ApiConfig {
     public FreeMarkerConfigurationFactoryBean factoryBean() {
 
         FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
-        bean.setTemplateLoaderPath("classpath:/templates");
+        bean.setTemplateLoaderPath("classpath:/template");
         return bean;
+
+
     }
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -33,5 +34,6 @@ public class Product {
     private Boolean warrantyStatus;
     private Float productDamageLevel;
     private Location location;
+    private Binary productImage;
 
 }

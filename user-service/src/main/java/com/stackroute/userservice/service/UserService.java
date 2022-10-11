@@ -9,7 +9,7 @@ import java.util.HashSet;
 @Service
 public interface UserService {
      void addUser(User user);
-    HashSet<User> findAllUsers();
+     HashSet<User> findAllUsers();
      User findByEmail(String email) ;
 
     User findByID(long id) ;

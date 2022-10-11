@@ -4,18 +4,20 @@ package com.stackroute.chatservice.service;
 import com.stackroute.chatservice.model.Chat;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 @Service
 public interface ChatService {
+
   Chat saveChat(Chat chat);
-  Chat getChatById(UUID id);
- // Chat updateChat(Chat chat, UUID uuid);
 
-  Chat updateChatById(UUID questionId);
-  void deleteChat(UUID id);
-  Chat getProductChatById(UUID productid);
+  Chat updateChat(Chat chat, long questionId);
 
-  Chat updateChatReply( UUID questionId);
+  Chat getChatByQuestionId(long questionId);
+
+   void deleteChatByQuestionId(long questionId);
+
+   Chat replyChat(Chat chat, long questionId);
+
+   Chat getChatByProductId(long productId);
 
 }
 

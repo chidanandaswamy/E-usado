@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +19,10 @@ public class Chat {
 
     private long productId;
     @Id
-    private UUID questionId;
-    private String questions;
+    private long questionId;
+    private String question;
     private List reply;
+    private String userEmail;
+
+
 }

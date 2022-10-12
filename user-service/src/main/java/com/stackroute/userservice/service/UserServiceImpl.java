@@ -3,11 +3,8 @@ import com.fasterxml.uuid.Generators;
 import com.stackroute.userservice.exception.UserNotFoundException;
 import com.stackroute.userservice.model.User;
 import com.stackroute.userservice.repository.UserRepository;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
 import java.util.List;
 
 @Service

@@ -1,11 +1,11 @@
 package com.stackroute.service;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
-@Service
+@Component
 public class RabbitMQConsumerService {
     @RabbitListener(queues = "${javainuse.rabbitmq.queue}")
     public void recievedMessage(HashMap<String, Object> product) {

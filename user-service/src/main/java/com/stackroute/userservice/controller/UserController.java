@@ -35,7 +35,7 @@ public class UserController {
 
         responseEntity= new ResponseEntity<>(userServiceImpl.findByEmail(email), HttpStatus.CREATED);
 
-    return responseEntity;
+        return responseEntity;
 
     }
 

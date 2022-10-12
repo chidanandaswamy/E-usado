@@ -1,7 +1,9 @@
 package com.stackroute.userservice.controller;
+import com.stackroute.userservice.config.MessageConfiguration;
 import com.stackroute.userservice.exception.UserNotFoundException;
 import com.stackroute.userservice.model.User;
 import com.stackroute.userservice.service.UserServiceImpl;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +19,24 @@ public class UserController {
     private ResponseEntity responseEntity;
 
     @Autowired
+    RabbitTemplate rabbitTemplate;
+
+    @Autowired
     UserServiceImpl userServiceImpl;
 
     @RequestMapping(value="/users/add",method = RequestMethod.POST)
     public void adduser(@RequestBody User user) {
         userServiceImpl.addUser(user);
+        rabbitTemplate.convertAndSend(MessageConfiguration.EXCHANGE, MessageConfiguration.ROUTING_KEY,user);
 
     }
 
+
     @RequestMapping(value="/users" ,method=RequestMethod.GET)
-    public HashSet<User> findAllUsers() {
-        return userServiceImpl.findAllUsers();
+    public ResponseEntity<?> findAll() throws UserNotFoundException{
+
+            responseEntity= new ResponseEntity<>(userServiceImpl.findAllUsers(), HttpStatus.OK);
+         return responseEntity;
     }
 
     @RequestMapping (value="/users/{email}",method=RequestMethod.GET)

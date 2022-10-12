@@ -3,6 +3,7 @@ package com.stackroute.productservice.service;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.uuid.Generators;
+import com.mongodb.BasicDBList;
 import com.stackroute.productservice.exception.ProductNotFoundException;
 import com.stackroute.productservice.model.Product;
 import com.stackroute.productservice.repository.ProductRepository;
@@ -12,9 +13,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.BasicQuery;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -64,7 +63,8 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ResponseEntity<?> getProducts(int pageNumber,
+    public ResponseEntity<?> getProducts(String search,
+                                         int pageNumber,
                                          int pageSize,
                                          String productBrand,
                                          String productCategory,
@@ -74,6 +74,9 @@ public class ProductServiceImpl implements ProductService{
                                          Float productDiscount,
                                          Float productDamageLevel,
                                          String location) {
+        Query query = new Query();
+        BasicDBList and = new BasicDBList();
+
         //pagination
         int offset = 0;
         int limit = 0;
@@ -89,40 +92,86 @@ public class ProductServiceImpl implements ProductService{
         limit = pageSize;
         offset = pageSize * (pageNumber - 1);
 
-        //filter
-        JSONObject filter = new JSONObject();
-
         if(productBrand != null && !productBrand.equalsIgnoreCase("all")){
-            filter.put("productBrand", productBrand);
+            Criteria criteria = Criteria.where("productBrand").is(productBrand);
+            and.add(criteria.getCriteriaObject());
         }
 
         if(productCategory != null && !productCategory.equalsIgnoreCase("all")){
-            filter.put("productCategory", productCategory);
+            Criteria criteria = Criteria.where("productCategory").is(productCategory);
+            and.add(criteria.getCriteriaObject());
         }
 
         if(productManufacturedYear != null && !productManufacturedYear.equalsIgnoreCase("all")){
-            filter.put("productManufacturedYear", productManufacturedYear);
+            Criteria criteria = Criteria.where("productManufacturedYear").is(productManufacturedYear);
+            and.add(criteria.getCriteriaObject());
         }
 
         if(warrantyStatus != null && !warrantyStatus.equalsIgnoreCase("all")){
-            filter.put("warrantyStatus", Boolean.valueOf(warrantyStatus));
+            Criteria criteria = Criteria.where("warrantyStatus").is(warrantyStatus);
+            and.add(criteria.getCriteriaObject());
         }
 
-//        System.out.println("product price" + productPrice);
-//        BigDecimal upperLimitPrice;
-//        BigDecimal lowerLimitPrice;
-//        if(productPrice != null){
+//        if(productPrice != null && productPrice.compareTo(BigDecimal.valueOf(-1)) != 1){
+//            BigDecimal upperLimitPrice = null;
+//            BigDecimal lowerLimitPrice = null;
 //            if(productPrice.compareTo(BigDecimal.valueOf(5000)) == 1){
 //                lowerLimitPrice = productPrice.subtract(BigDecimal.valueOf(5000));
+//            } else {
+//                lowerLimitPrice = BigDecimal.valueOf(0);
 //            }
 //            upperLimitPrice = productPrice.add(BigDecimal.valueOf(5000));
+//
+//            Criteria criteria = Criteria.where("productPrice").gte(lowerLimitPrice).lte(upperLimitPrice);
+//            and.add(criteria.getCriteriaObject());
 //        }
 
+        if(productDiscount != null && productDiscount > -1f){
+            Float upperLimit = null;
+            Float lowerLimit = null;
+            if(productDiscount > 3f){
+                lowerLimit = productDiscount - 3f;
+            } else {
+                lowerLimit = 0f;
+            }
+            upperLimit = productDiscount + 3f;
+
+            Criteria criteria = Criteria.where("productDiscount").gte(lowerLimit).lte(upperLimit);
+            and.add(criteria.getCriteriaObject());
+        }
+
+        if(productDamageLevel != null && productDamageLevel > -1f){
+            Float upperLimit = null;
+            Float lowerLimit = null;
+            if(productDamageLevel > 3f){
+                lowerLimit = productDamageLevel - 3f;
+            } else {
+                lowerLimit = 0f;
+            }
+            upperLimit = productDamageLevel + 3f;
+
+            Criteria criteria = Criteria.where("productDamageLevel").gte(lowerLimit).lte(upperLimit);
+            and.add(criteria.getCriteriaObject());
+        }
+
 //        List<Product> products = productRepository.findProducts(offset, limit);
-        System.out.println("filter" + filter);
-        Query query = new BasicQuery(filter.toJSONString()).skip(offset).limit(limit);
-        query.addCriteria(Criteria.where("productPrice").is(productPrice));
+
+        //search products
+        if(search != null && !search.equalsIgnoreCase("none")){
+            TextCriteria searchCriteria = TextCriteria.forDefaultLanguage().matchingAny(search);
+            and.add(searchCriteria.getCriteriaObject());
+        }
+
+
+
+        if(and.stream().count() > 0){
+            query.addCriteria(new Criteria("$and").is(and));
+        }
+
+        query.skip(offset).limit(limit);
+
         List<Product> products = mongoTemplate.find(query, Product.class);
+
         if(products != null && products.size() > 0){
             return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
         } else {

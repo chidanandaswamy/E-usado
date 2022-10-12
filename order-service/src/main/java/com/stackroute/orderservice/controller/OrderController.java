@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
+
 @RestController
 @RequestMapping("/api/v1")
 public class OrderController {
 
+    private ResponseEntity responseEntity;
     @Autowired
     OrderServiceImpl orderService;
 
@@ -24,7 +27,7 @@ public class OrderController {
         return orderService.getOrderById(id) ;
     }
     @GetMapping("/getOrders")
-    public ResponseEntity<?> getAllOrders() {
+    public HashSet<Order> getAllOrders() {
         return orderService.getAllOrders();
     }
 

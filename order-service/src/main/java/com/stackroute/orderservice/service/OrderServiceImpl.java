@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import com.stackroute.orderservice.repository.OrderRepository;
 
 
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -53,14 +50,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity<?>  getAllOrders() {
-        List<Order> orders = orderRepository.findAll();
+    public HashSet<Order> getAllOrders() {
 
-        if(orders != null){
-            return new ResponseEntity<List<Order>>(orders, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<String>("No Order found", HttpStatus.OK);
+
+        HashSet<Order> orderList=new HashSet();
+        orderRepository.findAll().forEach(user -> orderList.add(user));
+        if(orderList != null){
+            System.out.println("No Order found");
         }
+        return orderList;
     }
 
     @Override

@@ -14,19 +14,29 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @Configuration
 @EnableSwagger2
 public class SpringFoxConfig {
+
+
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("e-Usado").apiInfo(apiInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("com.stackroute.orderservice")).paths(regex("/api/v1/order-service.*")).build();
-    }
-
-
-    public ApiInfo apiInfo(){
-        return new ApiInfoBuilder().title("Order Service")
-                .description("REST API documentation for order service.")
-                .version("1.0.0")
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
                 .build();
     }
+//    @Bean
+//    public Docket api() {
+//        return new Docket(DocumentationType.SWAGGER_2).select().paths(PathSelectors.any())
+//                .apis(RequestHandlerSelectors.basePackage("com.stackroute.controller")).build();
+//    }
+
+
+    // public ApiInfo apiInfo(){
+    //     return new ApiInfoBuilder().title("Order Service")
+    //             .description("REST API documentation for order service.")
+    //             .version("1.0.0")
+    //             .build();
+    // }
 
     /** This URL is used for Swagger
      * http://localhost:8087/swagger-ui.html

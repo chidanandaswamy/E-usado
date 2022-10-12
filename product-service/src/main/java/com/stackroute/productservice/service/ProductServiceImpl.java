@@ -1,19 +1,26 @@
 package com.stackroute.productservice.service;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.uuid.Generators;
+import com.mongodb.BasicDBList;
 import com.stackroute.productservice.exception.ProductNotFoundException;
 import com.stackroute.productservice.model.Product;
 import com.stackroute.productservice.repository.ProductRepository;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.BasicQuery;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,12 +34,28 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    @Override
-    public ResponseEntity<String> createProduct(Product product) {
-        product.setId(Generators.timeBasedGenerator().generate());
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
+    @Value("${e-usado.product-service.rabbitmq.exchange}")
+    private String exchange;
+
+    @Value("${e-usado.product.rabbitmq.routingkey}")
+    private String routingKey;
+
+    @Override
+    public ResponseEntity<String> createProduct(String productAsJSONString, MultipartFile image1) {
+
+        Product product = JSON.parseObject(productAsJSONString, Product.class);
+        product.setId(Generators.timeBasedGenerator().generate());
+        try {
+            product.setProductImage(new Binary(BsonBinarySubType.BINARY, image1.getBytes()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Product savedProduct = productRepository.save(product);
         if(savedProduct != null && savedProduct.getId() != null){
+            rabbitTemplate.convertAndSend(exchange, routingKey, product);
             return new ResponseEntity<>("Product added successfully.", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("Could not create product.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,12 +63,20 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ResponseEntity<?> getProducts(int pageNumber,
+    public ResponseEntity<?> getProducts(String search,
+                                         int pageNumber,
                                          int pageSize,
                                          String productBrand,
                                          String productCategory,
                                          String productManufacturedYear,
-                                         String warrantyStatus) {
+                                         String warrantyStatus,
+                                         BigDecimal productPrice,
+                                         Float productDiscount,
+                                         Float productDamageLevel,
+                                         String location) {
+        Query query = new Query();
+        BasicDBList and = new BasicDBList();
+
         //pagination
         int offset = 0;
         int limit = 0;
@@ -61,29 +92,86 @@ public class ProductServiceImpl implements ProductService{
         limit = pageSize;
         offset = pageSize * (pageNumber - 1);
 
-        //filter
-        JSONObject filter = new JSONObject();
-
         if(productBrand != null && !productBrand.equalsIgnoreCase("all")){
-            filter.put("productBrand", productBrand);
+            Criteria criteria = Criteria.where("productBrand").is(productBrand);
+            and.add(criteria.getCriteriaObject());
         }
 
         if(productCategory != null && !productCategory.equalsIgnoreCase("all")){
-            filter.put("productCategory", productCategory);
+            Criteria criteria = Criteria.where("productCategory").is(productCategory);
+            and.add(criteria.getCriteriaObject());
         }
 
         if(productManufacturedYear != null && !productManufacturedYear.equalsIgnoreCase("all")){
-            filter.put("productManufacturedYear", productManufacturedYear);
+            Criteria criteria = Criteria.where("productManufacturedYear").is(productManufacturedYear);
+            and.add(criteria.getCriteriaObject());
         }
 
         if(warrantyStatus != null && !warrantyStatus.equalsIgnoreCase("all")){
-            filter.put("warrantyStatus", Boolean.valueOf(warrantyStatus));
+            Criteria criteria = Criteria.where("warrantyStatus").is(warrantyStatus);
+            and.add(criteria.getCriteriaObject());
+        }
+
+//        if(productPrice != null && productPrice.compareTo(BigDecimal.valueOf(-1)) != 1){
+//            BigDecimal upperLimitPrice = null;
+//            BigDecimal lowerLimitPrice = null;
+//            if(productPrice.compareTo(BigDecimal.valueOf(5000)) == 1){
+//                lowerLimitPrice = productPrice.subtract(BigDecimal.valueOf(5000));
+//            } else {
+//                lowerLimitPrice = BigDecimal.valueOf(0);
+//            }
+//            upperLimitPrice = productPrice.add(BigDecimal.valueOf(5000));
+//
+//            Criteria criteria = Criteria.where("productPrice").gte(lowerLimitPrice).lte(upperLimitPrice);
+//            and.add(criteria.getCriteriaObject());
+//        }
+
+        if(productDiscount != null && productDiscount > -1f){
+            Float upperLimit = null;
+            Float lowerLimit = null;
+            if(productDiscount > 3f){
+                lowerLimit = productDiscount - 3f;
+            } else {
+                lowerLimit = 0f;
+            }
+            upperLimit = productDiscount + 3f;
+
+            Criteria criteria = Criteria.where("productDiscount").gte(lowerLimit).lte(upperLimit);
+            and.add(criteria.getCriteriaObject());
+        }
+
+        if(productDamageLevel != null && productDamageLevel > -1f){
+            Float upperLimit = null;
+            Float lowerLimit = null;
+            if(productDamageLevel > 3f){
+                lowerLimit = productDamageLevel - 3f;
+            } else {
+                lowerLimit = 0f;
+            }
+            upperLimit = productDamageLevel + 3f;
+
+            Criteria criteria = Criteria.where("productDamageLevel").gte(lowerLimit).lte(upperLimit);
+            and.add(criteria.getCriteriaObject());
         }
 
 //        List<Product> products = productRepository.findProducts(offset, limit);
-        System.out.println("filter" + filter);
-        Query query = new BasicQuery(filter.toJSONString()).skip(offset).limit(limit);
+
+        //search products
+        if(search != null && !search.equalsIgnoreCase("none")){
+            TextCriteria searchCriteria = TextCriteria.forDefaultLanguage().matchingAny(search);
+            and.add(searchCriteria.getCriteriaObject());
+        }
+
+
+
+        if(and.stream().count() > 0){
+            query.addCriteria(new Criteria("$and").is(and));
+        }
+
+        query.skip(offset).limit(limit);
+
         List<Product> products = mongoTemplate.find(query, Product.class);
+
         if(products != null && products.size() > 0){
             return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
         } else {
@@ -103,9 +191,23 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ResponseEntity<String> updateProductById(UUID id, Product product) {
+    public ResponseEntity<String> updateProductById(UUID id, String productAsJSONString, MultipartFile image1) {
         Optional<Product> productOptional = productRepository.findById(id);
         if(productOptional.isPresent()){
+            Product product = JSON.parseObject(productAsJSONString, Product.class);
+            product.setId(id);
+
+            if(!image1.isEmpty()){
+                try {
+                    product.setProductImage(new Binary(BsonBinarySubType.BINARY, image1.getBytes()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else {
+                product.setProductImage(productOptional.get().getProductImage());
+            }
+
             Product savedProduct = productRepository.save(product);
             if(savedProduct != null && savedProduct.getId() != null){
                 return new ResponseEntity<>("Product with id " + id + " not found", HttpStatus.ACCEPTED);
@@ -122,7 +224,7 @@ public class ProductServiceImpl implements ProductService{
         Optional<Product> productOptional = productRepository.findById(id);
         if(productOptional.isPresent()){
             productRepository.deleteById(id);
-            return new ResponseEntity<>("Product with id " + id + " deleted successfull", HttpStatus.OK);
+            return new ResponseEntity<>("Product with id " + id + " deleted successfully", HttpStatus.OK);
         } else {
             throw new ProductNotFoundException("Product with id " + id + " is not found.");
         }

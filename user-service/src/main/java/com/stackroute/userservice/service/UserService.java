@@ -1,17 +1,16 @@
 package com.stackroute.userservice.service;
 import com.stackroute.userservice.model.User;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
+import java.util.List;
 
 @Service
 public interface UserService {
-     void addUser(User user);
-    HashSet<User> findAllUsers();
-     User findByEmail(String email) ;
+    void addUser(User user);
+//    HashSet<User> findAllUsers();
+    List<User> findAllUsers();
+    User findByEmail(String email) ;
 
-    User deleteUserByEmail(String email);
-
-    User updateUser(User user);
+    boolean deleteUserByEmail(String email);
 
     User UpdateByEmail(User user,String email);
 

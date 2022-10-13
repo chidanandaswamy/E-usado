@@ -10,7 +10,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -42,7 +41,7 @@ public class Product {
     private Boolean warrantyStatus;
     private Float productDamageLevel;
     private Location location;
-    private Binary productImage;
+    private Binary[] productImages;
     private Boolean productAvailability;
-
+    private Long productAddedTime;
 }

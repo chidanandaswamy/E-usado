@@ -4,11 +4,15 @@ import com.stackroute.productservice.model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4bdc20955b73391c31adefb1b9edb7ac147a554d
 import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface ProductService {
-    ResponseEntity<String> createProduct(String product, MultipartFile image1);
+    ResponseEntity<String> createProduct(String product, MultipartFile[] images);
     ResponseEntity<?> getProducts(String search,
                                   int pageNumber,
                                   int pageSize,
@@ -16,12 +20,14 @@ public interface ProductService {
                                   String productCategory,
                                   String productManufacturedYear,
                                   String warrantyStatus,
-                                  BigDecimal productPrice,
+                                  Double productPrice,
                                   Float productDiscount,
                                   Float productDamageLevel,
-                                  String location);
+                                  String location,
+                                  String productAvailability);
     ResponseEntity<Product> getProductById(UUID id);
-    ResponseEntity<String> updateProductById(UUID id, String productAsJSONString, MultipartFile image1);
+    ResponseEntity<String> updateProductById(UUID id, String productAsJSONString, MultipartFile[] images);
     ResponseEntity<String> deleteProductById(UUID id);
-    ResponseEntity<?> getProductsByOwnerEmail(String ownerEmail, int pageNumber, int pageSize, String productBrand);
+    ResponseEntity<String> deleteAllProducts();
+    ResponseEntity<?> getProductsByOwnerEmail(String ownerEmail, int pageNumber, int pageSize, Long productAddedTime);
 }

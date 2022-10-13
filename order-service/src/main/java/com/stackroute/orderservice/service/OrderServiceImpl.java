@@ -50,13 +50,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public HashSet<Order> getAllOrders() {
+    public List<Order> getAllOrders() {
 
-
-        HashSet<Order> orderList=new HashSet();
-        orderRepository.findAll().forEach(user -> orderList.add(user));
-        if(orderList != null){
-            System.out.println("No Order found");
+        List<Order> orderList=orderRepository.findAll();
+        if(orderList.isEmpty()){
+            throw new OrderNotFoundException("No Order found");
         }
         return orderList;
     }

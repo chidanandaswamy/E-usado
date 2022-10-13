@@ -1,8 +1,9 @@
 package com.stackroute.orderservice.consumer;
 
-import com.javatechie.rabbitmq.demo.config.MessagingConfig;
-import com.javatechie.rabbitmq.demo.dto.OrderStatus;
+import com.stackroute.orderservice.config.RabbitMqConfiguration;
+import com.stackroute.orderservice.model.Product;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+
 import org.springframework.stereotype.Component;
 
 
@@ -10,8 +11,9 @@ import org.springframework.stereotype.Component;
 public class Consumer {
 
 
-    @RabbitListener(queues = MessagingConfig.QUEUE)
-    public void consumeMessageFromQueue(OrderStatus orderStatus) {
-        System.out.println("Message recieved from queue : " + orderStatus);
+
+    @RabbitListener(queues = RabbitMqConfiguration.QUEUE)
+    public void rabitMqConfiguration(Product product) {
+        System.out.println("Message received from queue : " + product);
     }
 }

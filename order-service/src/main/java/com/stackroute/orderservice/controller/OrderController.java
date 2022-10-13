@@ -3,10 +3,9 @@ package com.stackroute.orderservice.controller;
 import com.stackroute.orderservice.model.Order;
 import com.stackroute.orderservice.service.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -27,8 +26,9 @@ public class OrderController {
         return orderService.getOrderById(id) ;
     }
     @GetMapping("/getOrders")
-    public HashSet<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public ResponseEntity<?> getAllOrders() {
+        responseEntity= new ResponseEntity<>(orderService.getAllOrders(), HttpStatus.OK);
+        return responseEntity;
     }
 
     @PutMapping("/updateOrder")

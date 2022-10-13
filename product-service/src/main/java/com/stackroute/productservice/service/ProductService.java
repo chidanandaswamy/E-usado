@@ -4,10 +4,6 @@ import com.stackroute.productservice.model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 4bdc20955b73391c31adefb1b9edb7ac147a554d
 import java.math.BigDecimal;
 import java.util.UUID;
 

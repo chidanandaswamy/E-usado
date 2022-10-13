@@ -49,7 +49,7 @@ public class EmailService {
             helper.setTo(request.getTo());
             helper.setText(html, true);
             helper.setSubject("Order Confirmation Email");
-            helper.setFrom(request.getFrom());
+            helper.setFrom("eusado3@gmail.com");
 
             sender.send(message);
 
@@ -96,6 +96,41 @@ public class EmailService {
 
         return response;
     }
+
+    public MailResponse sendEmailSlotBooking(MailRequest request1, Map<String, Object> model) {
+
+        MailResponse response = new MailResponse();
+        MimeMessage message = sender.createMimeMessage();
+        try {
+            // set mediaType
+            MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name());
+            // add attachment
+            helper.addAttachment("slotBookingImage.webp", new ClassPathResource("slotBookingImage.webp"));
+            //ClassPathResource pdf = new ClassPathResource("static/invoice.pdf");
+
+            Template t = config.getTemplate("email-slot.ftl");
+            String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
+
+            helper.setTo(request1.getTo());
+            helper.setText(html, true);
+            helper.setSubject("Slot Booked Successfully");
+            helper.setFrom("eusado3@gmail.com");
+
+            sender.send(message);
+
+            response.setMessage("mail send to : " + request1.getTo());
+            response.setStatus(Boolean.TRUE);
+
+        } catch (MessagingException | IOException | TemplateException e) {
+            response.setMessage("Mail Sending failure : " + e.getMessage());
+            response.setStatus(Boolean.FALSE);
+        }
+
+        return response;
+    }
+
+
 
 
 }

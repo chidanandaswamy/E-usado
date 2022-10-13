@@ -9,7 +9,8 @@ import java.util.UUID;
 
 public interface ProductService {
     ResponseEntity<String> createProduct(String product, MultipartFile image1);
-    ResponseEntity<?> getProducts(int pageNumber,
+    ResponseEntity<?> getProducts(String search,
+                                  int pageNumber,
                                   int pageSize,
                                   String productBrand,
                                   String productCategory,

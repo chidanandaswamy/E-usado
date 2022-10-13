@@ -20,7 +20,7 @@ public class EmailServiceApplication {
 	@Autowired
 	private EmailService service;
 
-	@PostMapping("/sendingEmail")
+	@PostMapping("/EmailService/OrderConformation")
 	public MailResponse sendEmail(@RequestBody MailRequest request) {
 		Map<String, Object> model = new HashMap<>();
 		model.put("name", request.getName());
@@ -29,6 +29,17 @@ public class EmailServiceApplication {
 
 		return service.sendEmail(request, model);
 	}
+
+
+	@PostMapping("/EmailService/Thankyou")
+	public MailResponse sendEmailThank(@RequestBody MailRequest request1) {
+		Map<String, Object> model = new HashMap<>();
+		model.put("name", request1.getName());
+		model.put("location", "Banglore, India");
+
+		return service.sendEmailThankyou(request1, model);
+	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(EmailServiceApplication.class, args);

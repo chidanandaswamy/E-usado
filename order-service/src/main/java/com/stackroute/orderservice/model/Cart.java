@@ -21,7 +21,7 @@ public class Cart {
     @Id
     private long cartId;
     private String userName;
-    private String productName;
+    private Product product;
 
 
 }

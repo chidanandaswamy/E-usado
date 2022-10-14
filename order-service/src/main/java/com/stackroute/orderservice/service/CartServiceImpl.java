@@ -11,12 +11,11 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
+
 @Service
 public class CartServiceImpl implements CartService{
 
@@ -34,32 +33,34 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public ResponseEntity<String> createCart(Cart cart) {
+    public void createCart(Cart cart) {
         Cart cart1= cartRepository.save(cart);
         if(cart1 != null ){
-            return new ResponseEntity<>("Cart is added successfully.", HttpStatus.CREATED);
+            System.out.println("Cart is added successfully.");
         } else {
-            return new ResponseEntity<>("Cart Creation terminated.", HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println("Cart Creation terminated.");
         }
     }
 
     @Override
-    public ResponseEntity<Cart>  getCartById(long cartId) {
-        Optional<Cart> orders = cartRepository.findByCartId(cartId);
-        if(orders.isPresent()){
-            return new ResponseEntity<>(orders.get(), HttpStatus.OK);
-        } else {
-            throw new CartNotFoundException("Cart with id " + cartId + " is not found.");
+    public Cart  getCartById(long cartId) {
+        Cart carts = cartRepository.findByCartId(cartId);
+        if (carts != null ) {
+            return carts;
+
+        }
+        else{
+            throw new CartNotFoundException("user email doesn't exist");
         }
     }
 
     @Override
-    public ResponseEntity<String> deleteCartById(long cartId) {
-        Optional<Cart> carted = cartRepository.findByCartId(cartId);
-        if(carted.isPresent()){
+    public boolean deleteCartById(long cartId) {
+        Cart carted = cartRepository.findByCartId(cartId);
+        if(carted != null){
             cartRepository.deleteByCartId(cartId);
 
-            return new ResponseEntity<>("Cart with id " + cartId + " deleted successfully", HttpStatus.OK);
+            return true;
         } else {
             throw new CartNotFoundException("Cart with id " + cartId + " is not found.");
         }

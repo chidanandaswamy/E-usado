@@ -1,9 +1,10 @@
 package com.stackroute.orderservice.controller;
 
 
+import com.stackroute.orderservice.config.Consumer;
 import com.stackroute.orderservice.model.Cart;
 import com.stackroute.orderservice.service.CartServiceImpl;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     @Autowired
-    RabbitTemplate rabbitTemplate;
+    private Consumer consumer;
+
     private ResponseEntity responseEntity;
     @Autowired
     public CartServiceImpl cartServiceImpl;

@@ -6,24 +6,25 @@
 <body>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td align="center" valign="top" bgcolor="#000000"
+			<td align="center" valign="top" bgcolor="#cdb558"
 				style="background-color: #838383;"><br> <br>
 				<table width="600" border="0" cellspacing="0" cellpadding="0">
 					<tr>
-						<td align="center" valign="top" bgcolor="#E0FFFF"
-							style="background-color: #E0FFFF; font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #000000; padding: 0px 15px 10px 15px;">
+						<td align="center" valign="top" bgcolor="#e5d8a7"
+							style="background-color: #e5d8a7; font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #000000; padding: 0px 15px 10px 15px;">
 							
 							<div style="font-size: 48px; color:blue;">
 								<b>    E-Usado    </b>
 							</div>
 							
 							<div style="font-size: 24px; color: #555100;">
-								<br> Thank you for registering 
+								<br>  Your Slot As Been Booked Successfully     ...
 								           <b>     E-usado!!! <br>
 							</div>
 							<div>
-								<br> Thank you for Registering in E-usado
-								product on<br> 'Shop more on E-usado get attractive rewards on all electronics<br>
+								<br>      Your product successfully added in E-usado selling flatform
+								product on<br> Add more product and sell your old product
+								                    at best price<br>
 								xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 								<br> ""project build using microservice
 								to gain the knowledge open the back end code"<br>

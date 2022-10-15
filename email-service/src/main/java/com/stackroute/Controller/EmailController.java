@@ -21,17 +21,21 @@ public class EmailController {
     public MailResponse sendEmail(@RequestBody MailRequest request) {
         Map<String, Object> model = new HashMap<>();
         model.put("name", request.getName());
-
         model.put("location", "Banglore, India");
 
         return service.sendEmail(request, model);
     }
 
-    @PostMapping("/Thankyou")
+    @PostMapping("/ThankYouForRegister")
     public MailResponse sendEmailThank(@RequestBody MailRequest request1) {
         Map<String, Object> model = new HashMap<>();
         model.put("name", request1.getName());
         model.put("location", "Banglore, India");
+        model.put("productName", request1.getProductName());
+        model.put("userName", request1.getUserName());
+
+
+
 
         return service.sendEmailThankyou(request1, model);
     }
@@ -41,8 +45,23 @@ public class EmailController {
         Map<String, Object> model = new HashMap<>();
         model.put("name", request1.getName());
         model.put("location", "Banglore, India");
-
+        model.put("productId", request1.getProductName());
+        model.put("productName", request1.getProductName());
+        model.put("userEmail", request1.getUserEmail());
+        model.put("userName", request1.getUserName());
+        model.put("slotTime", request1.getSlotTime());
         return service.sendEmailSlotBooking(request1, model);
+    }
+
+    @PostMapping("/ProductAdded")
+    public MailResponse ProductAddedConforming(@RequestBody MailRequest request1) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("name", request1.getName());
+        model.put("location", "Banglore, India");
+        model.put("productId", request1.getProductName());
+        model.put("productName", request1.getProductName());
+
+        return service.sendEmailProductAdded(request1, model);
     }
 
 

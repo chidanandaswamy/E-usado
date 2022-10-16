@@ -31,12 +31,13 @@ public class EmailController {
         Map<String, Object> model = new HashMap<>();
         model.put("name", request1.getName());
         model.put("location", "Banglore, India");
+//        model.put("productName", request1.getProductName());
+//        model.put("userName", request1.getUserName());
+        model.put("productId", request1.getProductId());
         model.put("productName", request1.getProductName());
+        model.put("userEmail", request1.getUserEmail());
         model.put("userName", request1.getUserName());
-
-
-
-
+        model.put("slotTime", request1.getSlotTime());
         return service.sendEmailThankyou(request1, model);
     }
 
@@ -45,7 +46,7 @@ public class EmailController {
         Map<String, Object> model = new HashMap<>();
         model.put("name", request1.getName());
         model.put("location", "Banglore, India");
-        model.put("productId", request1.getProductName());
+        model.put("productId", request1.getProductId());
         model.put("productName", request1.getProductName());
         model.put("userEmail", request1.getUserEmail());
         model.put("userName", request1.getUserName());

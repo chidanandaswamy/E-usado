@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class loginController {
 
     @Autowired
@@ -43,15 +43,18 @@ public class loginController {
 
     @PostMapping("/authenticate")
     public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
+        User retrievedUser=null;
         try {
-            if(authRequest!=null && authRequest.getUserName()!=null)
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword()));
-            else
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword()));
+            if (authRequest != null && authRequest.getUserName() != null) {
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword()));
+            } else {
+                retrievedUser= repository.findByEmailAndPassword(authRequest.getEmailId(),authRequest.getPassword());
+            }
         } catch (Exception ex) {
             throw new Exception("inavalid username/password");
         }
-        return jwtUtil.generateToken(authRequest.getUserName());
+        return jwtUtil.generateToken(retrievedUser.getPassword());
     }
 }
 

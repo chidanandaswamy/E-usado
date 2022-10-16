@@ -6,16 +6,33 @@ public class MailRequest {
     private String from;
     private String subject;
 
+    private String productId;
+
+    private String productName;
+
+    private String userName;
+
+    private String OrderId;
+
+    private String SlotTime;
+    private String UserEmail;
+
     public MailRequest() {
      super();
     }
 
-    public MailRequest(String name, String to, String from, String subject) {
-         super();
+    public MailRequest(String name, String to, String from, String subject, String productId, String productName, String userName, String orderId, String slotTime, String userEmail) {
+       super();
         this.name = name;
         this.to = to;
         this.from = from;
         this.subject = subject;
+        this.productId = productId;
+        this.productName = productName;
+        this.userName = userName;
+        OrderId = orderId;
+        SlotTime = slotTime;
+        UserEmail = userEmail;
     }
 
     public String getName() {
@@ -48,5 +65,53 @@ public class MailRequest {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getOrderId() {
+        return OrderId;
+    }
+
+    public void setOrderId(String orderId) {
+        OrderId = orderId;
+    }
+
+    public String getSlotTime() {
+        return SlotTime;
+    }
+
+    public void setSlotTime(String slotTime) {
+        SlotTime = slotTime;
+    }
+
+    public String getUserEmail() {
+        return UserEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        UserEmail = userEmail;
     }
 }

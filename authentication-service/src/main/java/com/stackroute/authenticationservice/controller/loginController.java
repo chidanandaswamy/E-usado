@@ -7,14 +7,12 @@ import com.stackroute.authenticationservice.utill.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 
 @RestController
+@RequestMapping("/api/v1")
 public class loginController {
 
     @Autowired
@@ -32,6 +30,8 @@ public class loginController {
         if (user!=null) {
             repository.save(user);
 
+        }else{
+            throw new Exception("User details is empty");
         }
         return "User Deatils saved successfully";
     }
@@ -43,15 +43,18 @@ public class loginController {
 
     @PostMapping("/authenticate")
     public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
+        User retrievedUser=null;
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
-            );
-
+            if (authRequest != null && authRequest.getUserName() != null) {
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword()));
+            } else {
+                retrievedUser= repository.findByEmailAndPassword(authRequest.getEmailId(),authRequest.getPassword());
+            }
         } catch (Exception ex) {
             throw new Exception("inavalid username/password");
         }
-        return jwtUtil.generateToken(authRequest.getUserName());
+        return jwtUtil.generateToken(retrievedUser.getPassword());
     }
 }
 

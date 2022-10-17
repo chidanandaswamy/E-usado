@@ -7,8 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -30,8 +29,7 @@ public class CreateSlot {
     private String buyerName;
     private String buyerEmailId;
     private SlotStatus status;
+    private List<DateTimeSlots> dateTimeSlots;
     private String date;
-    private String startTime;
-    private String endTime;
     private String description;
 }

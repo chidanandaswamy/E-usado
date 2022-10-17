@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 //@ToString
-
 @Data
 @Document(value="newSlot")
 public class CreateSlot {

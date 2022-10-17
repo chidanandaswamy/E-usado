@@ -5,7 +5,7 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    void addUser(User user);
+    void addUser(User user) ;
 //    HashSet<User> findAllUsers();
     List<User> findAllUsers();
     User findByEmail(String email) ;

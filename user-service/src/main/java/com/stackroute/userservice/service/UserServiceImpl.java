@@ -16,10 +16,12 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public void addUser(User user) {
-
+    public void addUser(User user)  {
         user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
+        System.out.println("success");
         userRepository.save(user);
+        System.out.println(user);
+
 
     }
 

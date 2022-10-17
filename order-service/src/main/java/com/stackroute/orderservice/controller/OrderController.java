@@ -3,6 +3,7 @@ package com.stackroute.orderservice.controller;
 import com.stackroute.orderservice.model.Order;
 import com.stackroute.orderservice.service.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class OrderController {
 
+    private ResponseEntity responseEntity;
     @Autowired
     OrderServiceImpl orderService;
 
@@ -25,7 +27,8 @@ public class OrderController {
     }
     @GetMapping("/getOrders")
     public ResponseEntity<?> getAllOrders() {
-        return orderService.getAllOrders();
+        responseEntity= new ResponseEntity<>(orderService.getAllOrders(), HttpStatus.OK);
+        return responseEntity;
     }
 
     @PutMapping("/updateOrder")

@@ -1,16 +1,12 @@
 package com.stackroute.productservice.controller;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
-import com.stackroute.productservice.model.Product;
 import com.stackroute.productservice.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.math.BigDecimal;
+;
 import java.util.UUID;
 
 @RestController
@@ -58,7 +54,7 @@ public class ProductController {
         return productServiceImpl.getProductById(id);
     }
 
-    @RequestMapping(value = "/product/{ownerEmail}", method= RequestMethod.GET)
+    @RequestMapping(value = "/products/{ownerEmail}", method= RequestMethod.GET)
     public ResponseEntity<?> getProductsByOwnerEmail(@PathVariable String ownerEmail,
                                                      @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
                                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,

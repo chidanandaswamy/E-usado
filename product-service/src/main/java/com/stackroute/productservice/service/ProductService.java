@@ -4,7 +4,6 @@ import com.stackroute.productservice.model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.math.BigDecimal;
 import java.util.UUID;
 

@@ -5,14 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
-
+import java.util.List;
 
 
 @Service
 public interface OrderService {
 
     ResponseEntity<String>createOrder(Order order);
-    ResponseEntity<?> getAllOrders();
+    List<Order> getAllOrders();
 
     ResponseEntity<Order>  getOrderById(long id);
 

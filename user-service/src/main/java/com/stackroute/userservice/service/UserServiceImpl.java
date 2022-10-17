@@ -5,12 +5,13 @@ import com.stackroute.userservice.model.User;
 import com.stackroute.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService{
     @Autowired
     UserRepository userRepository;
+
 
 
 
@@ -23,11 +24,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public HashSet<User> findAllUsers() {
-        HashSet<User> userList=new HashSet();
-       userRepository.findAll().forEach(user -> userList.add(user));
-       return userList;
-    }
+    public List<User> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        if(users.isEmpty()){
+            throw new UserNotFoundException("User Not Found !!");
+        }
+        return users;    }
+
 
     @Override
     public User findByEmail(String email) {
@@ -67,7 +70,6 @@ public class UserServiceImpl implements UserService{
     }
 
 }
-
 
 
 

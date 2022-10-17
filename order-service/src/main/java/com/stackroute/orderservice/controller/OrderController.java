@@ -7,18 +7,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/v1")
 public class OrderController {
 
     @Autowired
     OrderServiceImpl orderService;
 
-    @PostMapping("/add")
+    @PostMapping("/addOrder")
     public ResponseEntity<String>createOrder(@RequestBody Order order) {
         order.setId(orderService.getSequenceNumber(Order.SEQUENCE_NAME));
         return orderService.createOrder(order);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/getOrder/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable long id) {
         return orderService.getOrderById(id) ;
     }
@@ -27,16 +28,16 @@ public class OrderController {
         return orderService.getAllOrders();
     }
 
-    @PutMapping("/update")
+    @PutMapping("/updateOrder")
     public ResponseEntity<String> updateOrder(@RequestBody Order order) {
        return orderService.updateOrder(order);
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/deleteOrder/{id}")
     public ResponseEntity<?> deleteOrderById(@PathVariable long id) {
         return orderService.deleteOrderById(id);
 
     }
-    @DeleteMapping("/deleteAll")
+    @DeleteMapping("/deleteAllOrders")
     public ResponseEntity<?> deleteAll(Order order) {
         return orderService.deleteAll(order);
     }

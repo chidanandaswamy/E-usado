@@ -17,9 +17,11 @@ import java.util.HashSet;
 public class CreateSlotController {
     ResponseEntity responseEntity;
     @Autowired
+
     CreateSlotServiceImp createSlotServiceImp;
 
-    @RequestMapping(value = "/add", method= RequestMethod.POST)
+   // @RequestMapping(value = "/add", method= RequestMethod.POST)
+    @PostMapping("/add")
     public ResponseEntity<?> addCreateSlot(@RequestBody CreateSlot createSlot){
         createSlot.setSlotId(createSlotServiceImp.getSequenceNumber(createSlot.SEQUENCE_NAME));
         return createSlotServiceImp.addCreateSlot(createSlot);
@@ -30,7 +32,8 @@ public class CreateSlotController {
 //        return createSlotServiceImp.getAllSlots();
 //    }
 
-    @RequestMapping(value="/users" ,method=RequestMethod.GET)
+   // @RequestMapping(value="/users" ,method=RequestMethod.GET)
+    @GetMapping("/users")
     public HashSet<CreateSlot> findAll() {
         return createSlotServiceImp.findAllUsers();
     }
@@ -42,7 +45,8 @@ public class CreateSlotController {
 //    }
 
 
-    @RequestMapping(value = "/getSlotById/{slotId}", method= RequestMethod.GET)
+   // @RequestMapping(value = "/getSlotById/{slotId}", method= RequestMethod.GET)
+    @GetMapping("/getSlotById/{slotId}")
     public ResponseEntity<?> getById(@PathVariable long slotId, HttpSession session) {
         try {
             return new ResponseEntity<CreateSlot>(createSlotServiceImp.getById(slotId), HttpStatus.CREATED);
@@ -60,7 +64,8 @@ public class CreateSlotController {
 
 
 
-    @RequestMapping(value="/users/update/{slotId}",method=RequestMethod.PUT)
+    //@RequestMapping(value="/users/update/{slotId}",method=RequestMethod.PUT)
+    @PutMapping("/users/update/{slotId}")
     public ResponseEntity<CreateSlot> UpdateSlotById( @RequestBody CreateSlot createSlot,@PathVariable long slotId){
         responseEntity=new ResponseEntity<CreateSlot>(createSlotServiceImp.UpdateSlotById(createSlot,slotId),HttpStatus.OK);
         return responseEntity;
@@ -74,7 +79,8 @@ public class CreateSlotController {
     }
 
 
-    @RequestMapping(value = "/deleteById/{slotId}", method= RequestMethod.DELETE)
+    //@RequestMapping(value = "/deleteById/{slotId}", method= RequestMethod.DELETE)
+    @DeleteMapping("/deleteById/{slotId}")
     public ResponseEntity<?> deleteCreatedSlotById(@PathVariable long slotId){
                  return createSlotServiceImp.deleteCreatedSlotById(slotId);
 }

@@ -16,10 +16,9 @@ import java.util.List;
 public class Chat {
 
 
-
-    private long productId;
     @Id
     private long questionId;
+    private long productId;
     private String question;
     private List reply;
     private String userEmail;

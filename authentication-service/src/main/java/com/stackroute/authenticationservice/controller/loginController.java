@@ -41,6 +41,25 @@ public class loginController {
         return "Welcome to usado !!";
     }
 
+
+    @PostMapping("/forgrtPasword")
+    public String forgotPassword(AuthRequest authRequest) throws Exception {
+        User retrievedUser=null;
+    if(authRequest!=null){
+        retrievedUser= repository.findByEmailAndPassword(authRequest.getEmailId(),authRequest.getPassword());
+        if(retrievedUser!=null){
+            retrievedUser.setEmail(authRequest.getEmailId());
+            retrievedUser.setPassword(authRequest.getChangePassword());
+            repository.save(retrievedUser);
+        }else{
+            throw new Exception("inavalid username/password");
+        }
+    }else{
+        throw new Exception("request is empty");
+    }
+    return null;
+    }
+
     @PostMapping("/authenticate")
     public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
         User retrievedUser=null;

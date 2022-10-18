@@ -1,7 +1,9 @@
 package com.stackroute.userservice.service;
 import com.fasterxml.uuid.Generators;
+import com.stackroute.userservice.config.Producer;
 import com.stackroute.userservice.exception.UserNotFoundException;
 import com.stackroute.userservice.model.User;
+import com.stackroute.userservice.model.UserDTO;
 import com.stackroute.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +15,17 @@ public class UserServiceImpl implements UserService{
     @Autowired
     UserRepository userRepository;
 
-
+    @Autowired
+    Producer p;
 
 
     @Override
     public void addUser(User user)  {
         user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
-        System.out.println("success");
+        UserDTO u=new UserDTO();
+        u.setEmail(u.getEmail());
+        u.setPassword(u.getPassword());
+        p.sendMessageToRabbitMq(u);
         userRepository.save(user);
         System.out.println(user);
 

@@ -12,10 +12,10 @@ import com.stackroute.authenticationservice.repository.UserRepository;
 @Component
 public class Consumer {
     private static Logger logger = LogManager.getLogger(Consumer.class.toString());
-    private static final String registerQueue="user_queue";
+
     @Autowired
     private UserRepository Repository;
-    @RabbitListener(queues = registerQueue)
+    @RabbitListener(queues = "user_queue")
     public void getUserDetailsFromRabbitmq(UserDTO user) {
         logger.info("user listener invoked - Consuming Message with user Identifier : " + user.getEmail(),
                 user.getPassword());

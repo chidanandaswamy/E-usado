@@ -17,6 +17,7 @@ import java.util.HashSet;
 public class CreateSlotController {
     ResponseEntity responseEntity;
     @Autowired
+
     CreateSlotServiceImp createSlotServiceImp;
 
     @PostMapping("/add")
@@ -42,7 +43,6 @@ public class CreateSlotController {
 //    }
 
 
-
     @GetMapping("/getSlotById/{slotId}")
     public ResponseEntity<?> getById(@PathVariable long slotId, HttpSession session) {
         try {
@@ -61,7 +61,6 @@ public class CreateSlotController {
 
 
 
-
     @PutMapping("/users/update/{slotId}")
     public ResponseEntity<CreateSlot> UpdateSlotById( @RequestBody CreateSlot createSlot,@PathVariable long slotId){
         responseEntity=new ResponseEntity<CreateSlot>(createSlotServiceImp.UpdateSlotById(createSlot,slotId),HttpStatus.OK);
@@ -74,7 +73,6 @@ public class CreateSlotController {
     public void deleteCreateSlots(){
         createSlotServiceImp.deleteAllCreateSlots();
     }
-
 
 
     @DeleteMapping("/deleteById/{slotId}")

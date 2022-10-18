@@ -46,18 +46,23 @@ public class ProductServiceImpl implements ProductService{
 
         Product product = JSON.parseObject(productAsJSONString, Product.class);
         product.setId(Generators.timeBasedGenerator().generate());
-        try {
-            Binary[] tempImageBinary = new Binary[images.length];
-            int i=0;
-            for(MultipartFile image : images){
-                tempImageBinary[i] = new Binary(BsonBinarySubType.BINARY, image.getBytes());
-                i++;
+
+        if(images != null && images.length > 0){
+            try {
+                Binary[] tempImageBinary = new Binary[images.length];
+                int i=0;
+                for(MultipartFile image : images){
+                    tempImageBinary[i] = new Binary(BsonBinarySubType.BINARY, image.getBytes());
+                    i++;
+                }
+                product.setProductImages(tempImageBinary);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            product.setProductImages(tempImageBinary);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+
         Product savedProduct = productRepository.save(product);
+
         if(savedProduct != null && savedProduct.getId() != null){
             rabbitTemplate.convertAndSend(exchange, routingKey, product);
             return new ResponseEntity<>("Product added successfully.", HttpStatus.CREATED);
@@ -213,7 +218,7 @@ public class ProductServiceImpl implements ProductService{
             Product product = JSON.parseObject(productAsJSONString, Product.class);
             product.setId(id);
 
-            if(images.length > 0){
+            if(images != null && images.length > 0){
                 try {
                     Binary[] tempImageBinary = new Binary[images.length];
                     int i=0;

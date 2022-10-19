@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Producer {
 
+    private static final String ROUTING_KEY="User_routingkey";
     private RabbitTemplate rabbitTemplate;
     private DirectExchange exchange;
 
@@ -23,7 +24,7 @@ public class Producer {
 
     public void sendMessageToRabbitMq(UserDTO userDTO)
     {
-        rabbitTemplate.convertAndSend(exchange.getName(),"user_routing",userDTO);
+        rabbitTemplate.convertAndSend(exchange.getName(),ROUTING_KEY,userDTO);
     }
 
 }

@@ -1,132 +1,207 @@
 package com.stackroute.productservice.test.controller;
 
+import com.alibaba.fastjson2.JSON;
 import com.stackroute.productservice.controller.ProductController;
+import com.stackroute.productservice.exception.ProductNotFoundException;
 import com.stackroute.productservice.model.Location;
 import com.stackroute.productservice.model.Product;
-import com.stackroute.productservice.repository.ProductRepository;
 import com.stackroute.productservice.service.ProductServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.*;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.mockito.Mockito.when;
+@RunWith(SpringRunner.class)
+@WebMvcTest
 public class ProductControllerTest {
+    @Autowired
     private MockMvc mockMvc;
 
-    @Mock
-    private ProductRepository productRepository;
-
+    @MockBean
+    private Product product;
+    @MockBean
+    private Location location;
+    @MockBean
+    private ProductServiceImpl productServiceImpl;
     @InjectMocks
     private ProductController productController;
-
-    @Mock
-    private ProductServiceImpl productServiceImpl;
-
-    Product product1 = new Product(UUID.fromString("fd449384-4a12-11ed-883d-155c4e30b5e7"),
-            "samsung mobile update second time",
-            25000.00,
-            "samsung",
-            "tv",
-            "lg best quality refrigerator",
-            new HashMap<String, String>(){{
-               put("motorSpeed","1000rpm");
-            }},
-            "2015",
-            1475484883L,
-            "xyz@abc.com",
-            0.0F,
-            true,
-            35.0F,
-            new Location("mangalore", new Double[]{-88.00, -90.90}),
-            null,
-            true,
-            1475484883L);
-
-    Product product2 = new Product(UUID.fromString("fd449384-4a12-11ed-883d-155c4e30b5e7"),
-            "sony light",
-            25500.00,
-            "sony",
-            "light",
-            "best light",
-            new HashMap<String, String>(){{
-                put("motorSpeed","1000rpm");
-            }},
-            "2015",
-            1475484883L,
-            "abc@abc.com",
-            0.0F,
-            true,
-            35.0F,
-            new Location("mangalore", new Double[]{-88.00, -90.90}),
-            null,
-            true,
-            1475484883L);
-
-    Product product3 = new Product(UUID.fromString("fd449384-4a12-11ed-883d-155c4e30b5e7"),
-            "samsung",
-            25000.00,
-            "samsung",
-            "tv",
-            "samsung best quality refrigerator",
-            new HashMap<String, String>(){{
-                put("motorSpeed","1000rpm");
-            }},
-            "2015",
-            1475484883L,
-            "xyz@abc.com",
-            0.0F,
-            true,
-            35.0F,
-            new Location("mangalore", new Double[]{-88.00, -90.90}),
-            null,
-            true,
-            1475484883L);
+    private List<Product> products;
 
 
     @Before
-    public void setUp(){
+    public void setUp() {
+
         MockitoAnnotations.initMocks(this);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+
+        location = new Location("mangalore", new Double[]{-88.00, -90.90});
+
+        product = new Product(UUID.fromString("fd449384-4a12-11ed-883d-155c4e30b5e7"),
+                "samsung mobile update second time",
+                25000.00,
+                "samsung",
+                "tv",
+                "lg best quality refrigerator",
+                new HashMap<String, String>(){{
+                    put("motorSpeed","1000rpm");
+                }},
+                "2015",
+                1475484883L,
+                "xyz@abc.com",
+                0.0F,
+                true,
+                35.0F,
+                location,
+                null,
+                true,
+                1475484883L);
+
+        products = new ArrayList<>();
+        products.add(product);
+
     }
 
+
     @Test
-    public void getAllProductsSuccess() throws Exception{
-        List<Product> products = new ArrayList<>(Arrays.asList(product1, product2, product2));
-
-        Mockito.when(productRepository.findAll()).thenReturn(products);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/products")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)));
+    public void createProductSuccess() throws Exception {
+        when(productServiceImpl.createProduct(JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Product added successfully.", HttpStatus.CREATED));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/product-service/product").contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(JSON.toJSONString(product)))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(MockMvcResultHandlers.print());
 
     }
 
+
     @Test
-    public void getProductByIdSuccess() throws Exception{
+    public void createProductFailure() throws Exception {
+        when(productServiceImpl.createProduct(JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Could not create product.", HttpStatus.INTERNAL_SERVER_ERROR));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/product-service/product").contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(JSON.toJSONString(product)))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(MockMvcResultHandlers.print());
+    }
 
-        Mockito.when(productRepository.findById(UUID.fromString("fd449384-4a12-11ed-883d-155c4e30b5e7"))).thenReturn(Optional.of(product1));
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
+    @Test
+    public void deleteProductSuccess() throws Exception {
+
+        when(productServiceImpl.deleteProductById(product.getId())).thenReturn(new ResponseEntity<>("Product with id " + product.getId() + " deleted successfully", HttpStatus.OK));
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", notNullValue()));
-
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
     }
+
+
+    @Test
+    public void deleteProductFailure() throws Exception {
+
+        when(productServiceImpl.deleteProductById(product.getId())).thenReturn(new ResponseEntity<>("Product with id " + product.getId() + " is not found.", HttpStatus.NOT_FOUND));
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void updateProductSuccess() throws Exception {
+
+        when(productServiceImpl.updateProductById(product.getId(), JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Product with id " + product.getId() + " updated successfully", HttpStatus.OK));
+        product.setProductDescription("Mumbai Indians vs RCB match game cd");
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(JSON.toJSONString(product)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+
+    @Test
+    public void updateProductFailure() throws Exception {
+
+        when(productServiceImpl.updateProductById(product.getId(), JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Product with id " + product.getId() + " is not found.", HttpStatus.NOT_FOUND));
+        product.setProductDescription("Mumbai Indians vs RCB match game cd");
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(JSON.toJSONString(product)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void updateProductInternalFailure() throws Exception {
+
+        when(productServiceImpl.updateProductById(product.getId(), JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Product with id " + product.getId() + " is not found.", HttpStatus.INTERNAL_SERVER_ERROR));
+        product.setProductDescription("Mumbai Indians vs RCB match game cd");
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(JSON.toJSONString(product)))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+
+    @Test
+    public void getProductByIdSuccess() throws Exception {
+
+        when(productServiceImpl.getProductById(product.getId())).thenReturn(new ResponseEntity<>(product, HttpStatus.OK));
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+
+    @Test
+    public void getProductByIdFailure() throws Exception {
+
+        when(productServiceImpl.getProductById(product.getId())).thenThrow(ProductNotFoundException.class);;
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
+//
+//    @Test
+//    public void getAllNotesByUserIdSuccess() throws Exception {
+//        when(noteService.getAllNoteByUserId("Jhon123")).thenReturn(noteList);
+//        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/note/Jhon123")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andDo(MockMvcResultHandlers.print());
+//    }
+//
+//    @Test
+//    public void getAllNotesByUserIdFailure() throws Exception {
+//        when(noteService.getAllNoteByUserId("Jhon123")).thenReturn(null);
+//        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/note/Jhon123")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andDo(MockMvcResultHandlers.print());
+//    }
+//
+//    private static String asJsonString(final Object obj) {
+//        try {
+//            return new ObjectMapper().writeValueAsString(obj);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }

@@ -46,7 +46,7 @@ public class UserServiceImplTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        user = new User();
+       User user = new User();
         address=new Address();
         user.setName("Ashu");
         user.setEmail("ashu@gmail.com");

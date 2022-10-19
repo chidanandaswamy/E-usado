@@ -1,5 +1,10 @@
 package com.stackroute.dto;
 
+import lombok.Data;
+
+import java.util.HashMap;
+import java.util.UUID;
+@Data
 public class MailRequest {
     private String name;
     private String to;
@@ -114,4 +119,19 @@ public class MailRequest {
     public void setUserEmail(String userEmail) {
         UserEmail = userEmail;
     }
+
+    private UUID id;
+//    private String productName;
+    private Double productPrice;
+    private String productBrand;
+    private String productCategory;
+    private String productDescription;
+    private HashMap<String, String> productSpecs;
+    private String productManufacturedYear;
+    private Long productPurchasedDate;
+    private String productOwnerEmail;
+    private Float productDiscount;
+    private Boolean warrantyStatus;
+    private Float productDamageLevel;
+//    private Binary[] productImages;
 }

@@ -237,7 +237,7 @@ public class ProductServiceImpl implements ProductService{
 
             Product savedProduct = productRepository.save(product);
             if(savedProduct != null && savedProduct.getId() != null){
-                return new ResponseEntity<>("Product with id " + id + " updated successfully", HttpStatus.ACCEPTED);
+                return new ResponseEntity<>("Product with id " + id + " updated successfully", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Update of product with id " + id + " failed", HttpStatus.INTERNAL_SERVER_ERROR);
             }

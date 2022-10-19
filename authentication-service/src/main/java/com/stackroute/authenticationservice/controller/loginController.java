@@ -17,11 +17,11 @@ public class loginController {
 
     @Autowired
     private JwtUtil jwtUtil;
-    @Autowired
+
     private AuthenticationManager authenticationManager;
 
     @Autowired
-   private UserRepository repository;
+    private UserRepository repository;
 
 
 
@@ -33,7 +33,7 @@ public class loginController {
         }else{
             throw new Exception("User details is empty");
         }
-        return "User Deatils saved successfully";
+        return "User Details saved successfully";
     }
 
     @GetMapping("/login")
@@ -71,7 +71,7 @@ public class loginController {
                 retrievedUser= repository.findByEmailAndPassword(authRequest.getEmailId(),authRequest.getPassword());
             }
         } catch (Exception ex) {
-            throw new Exception("inavalid username/password");
+            throw new Exception("invalid username/password");
         }
         return jwtUtil.generateToken(retrievedUser.getPassword());
     }

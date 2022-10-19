@@ -17,7 +17,7 @@ public class loginController {
 
     @Autowired
     private JwtUtil jwtUtil;
-    @Autowired
+
     private AuthenticationManager authenticationManager;
 
     @Autowired

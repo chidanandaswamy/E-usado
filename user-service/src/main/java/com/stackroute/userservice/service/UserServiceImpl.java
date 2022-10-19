@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService{
     public void addUser(User user)  {
         user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
         UserDTO u=new UserDTO();
-        u.setEmail(u.getEmail());
-        u.setPassword(u.getPassword());
+        u.setEmail(user.getEmail());
+        u.setPassword(user.getPassword());
         p.sendMessageToRabbitMq(u);
         userRepository.save(user);
         System.out.println(user);

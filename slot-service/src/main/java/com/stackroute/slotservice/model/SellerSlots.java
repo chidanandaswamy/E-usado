@@ -14,4 +14,6 @@ public class SellerSlots {
     private String slotId;
     private String startTime;
     private String endTime;
+
 }
+

@@ -1,4 +1,4 @@
-package com.stackroute.config;
+package com.stackroute.RabbitMQConfig;
 
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
@@ -11,7 +11,6 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
 @Configuration
 @EnableRabbit
 public class RabbitMqConfiguration implements RabbitListenerConfigurer {
-
     @Bean
     public MappingJackson2MessageConverter jackson2Converter() {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();

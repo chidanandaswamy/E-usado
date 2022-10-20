@@ -4,17 +4,43 @@ package com.stackroute.chatservice.service;
 
 import com.stackroute.chatservice.exception.ChatNotFoundException;
 import com.stackroute.chatservice.model.Chat;
+import com.stackroute.chatservice.model.DatabaseSequence;
 import com.stackroute.chatservice.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+
+
+
+import org.springframework.data.mongodb.core.query.Criteria;
+
+import org.springframework.data.mongodb.core.query.Update;
+
+
+import java.util.Objects;
 import java.util.Optional;
+
+import java.util.Optional;
+
+import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 
 
 @Service
 public class ChatServiceImpl implements ChatService{
    @Autowired
    private ChatRepository chatRepository;
+
+    @Autowired
+    private MongoOperations mongoOperations;
+    public int getSequenceNumber(String sequenceName)
+    {
+        Query query = new Query(Criteria.where("id").is(sequenceName));
+        Update update = new Update().inc("seq", 1);
+        DatabaseSequence counter = mongoOperations.findAndModify(query, update, options().returnNew(true).upsert(true), DatabaseSequence.class);
+        return !Objects.isNull(counter)?counter.getSeq() : 1;
+    }
 
 
     @Autowired

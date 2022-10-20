@@ -1,48 +1,44 @@
 package com.stackroute.authenticationservice.Rabbitmqconfig;
 
 
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
+
 @Configuration
 public class MessageConfiguration {
-    public static final String EXCHANGE = "user_exchange";
-    public static final String QUEUE = "user_queue";
-    public static final String ROUTING_KEY = "user_routing_key";
+
+    public static final String QUEUE = "User_queue";
+    public static final String EXCHANGE = "User_exchange";
+    public static final String ROUTING_KEY = "User_routingkey";
 
     @Bean
-    public Queue queue() {
-        return new Queue(QUEUE);
+    public Queue queue(){
+        return new Queue(QUEUE,false);
     }
-
     @Bean
-    public TopicExchange exchange() {
-        return new TopicExchange(EXCHANGE);
+    public DirectExchange exchange(){
+
+        return new DirectExchange(EXCHANGE);
     }
-
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
+    public Binding binding(Queue queue, DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
-
     @Bean
-    public MessageConverter converter() {
+    public Jackson2JsonMessageConverter converter(){
         return new Jackson2JsonMessageConverter();
     }
-
     @Bean
-    public AmqpTemplate template(ConnectionFactory connectionFactory) {
-        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+    public AmqpTemplate template(ConnectionFactory connectionFactory){
+        final RabbitTemplate rabbitTemplate=new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(converter());
         return rabbitTemplate;
     }
 }
+

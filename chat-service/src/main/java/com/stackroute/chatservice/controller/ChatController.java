@@ -65,4 +65,9 @@ public class ChatController {
         return new ResponseEntity<Chat>(chatService.getChatByProductId(productId), HttpStatus.OK);
     }
 
+    @GetMapping
+    public String getMessage(){
+        return "BSDBFVKSBD";
+    }
+
 }

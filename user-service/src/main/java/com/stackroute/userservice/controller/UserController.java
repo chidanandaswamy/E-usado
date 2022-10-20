@@ -1,5 +1,4 @@
 package com.stackroute.userservice.controller;
-import com.stackroute.userservice.config.MessageConfiguration;
 import com.stackroute.userservice.exception.UserNotFoundException;
 import com.stackroute.userservice.model.User;
 import com.stackroute.userservice.service.UserServiceImpl;
@@ -23,10 +22,12 @@ public class UserController {
     @Autowired
     UserServiceImpl userServiceImpl;
 
-    @RequestMapping(value="/users/add",method = RequestMethod.POST)
+
+
+    @RequestMapping(value="/users/register",method = RequestMethod.POST)
+
     public void adduser(@RequestBody User user)throws Exception {
         userServiceImpl.addUser(user);
-        rabbitTemplate.convertAndSend(MessageConfiguration.EXCHANGE, MessageConfiguration.ROUTING_KEY,user);
 
     }
 

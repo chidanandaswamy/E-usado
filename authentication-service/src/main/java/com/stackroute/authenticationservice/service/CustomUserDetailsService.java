@@ -32,6 +32,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
 
+    public User register(User user)  {
+//        if (repository.findByEmail(user.getEmail()).isPresent()) {
+//            throw new UserAlreadyExistsException();
+//        }
+        return repository.save(user);
+    }
+
+
 }
 
 

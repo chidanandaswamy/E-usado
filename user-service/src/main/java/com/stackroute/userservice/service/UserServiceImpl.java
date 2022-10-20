@@ -1,26 +1,44 @@
 package com.stackroute.userservice.service;
 import com.fasterxml.uuid.Generators;
+import com.stackroute.userservice.config.Producer;
 import com.stackroute.userservice.exception.UserNotFoundException;
 import com.stackroute.userservice.model.User;
+import com.stackroute.userservice.model.UserDTO;
 import com.stackroute.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+
 
 @Service
 public class UserServiceImpl implements UserService{
     @Autowired
     UserRepository userRepository;
 
-
+    @Autowired
+    Producer p;
 
 
     @Override
-    public void addUser(User user)  {
-        user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
-        System.out.println("success");
-        userRepository.save(user);
-        System.out.println(user);
+    public void addUser(User user) {
+        User user1=userRepository.findByEmail(user.getEmail());
+        if(user1 != null && user1.getEmail()!=null){
+            throw new UserNotFoundException("User with email " +user.getEmail() +" already exists.");
+
+        }
+
+
+        else {
+            user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
+            UserDTO u=new UserDTO();
+            u.setEmail(user.getEmail());
+            u.setPassword(user.getPassword());
+            p.sendMessageToRabbitMq(u);
+            userRepository.save(user);
+            System.out.println(user);
+
+        }
+
 
 
     }
@@ -70,6 +88,9 @@ public class UserServiceImpl implements UserService{
         else{throw new UserNotFoundException("User with email " + user + " doesn't exist.");}
 
     }
+
+
+
 
 }
 

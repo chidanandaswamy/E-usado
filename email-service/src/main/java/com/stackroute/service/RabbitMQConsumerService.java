@@ -12,3 +12,7 @@ public class RabbitMQConsumerService {
         System.out.println("Recieved Message From RabbitMQ: " + product);
     }
 }
+//    @RabbitListener(queues = "testQueue")
+//    public void receiveMessage(HashMap<String, String> message) {
+//        System.out.println("Received <" + message + ">");
+//    }

@@ -24,15 +24,10 @@ public class UserController {
 
 
 
-    @RequestMapping(value="/users/add",method = RequestMethod.POST)
+    @RequestMapping(value="/users/register",method = RequestMethod.POST)
 
     public void adduser(@RequestBody User user)throws Exception {
-
-//        rabbitTemplate.convertAndSend(MessageConfiguration.EXCHANGE, MessageConfiguration.ROUTING_KEY,user);
-
         userServiceImpl.addUser(user);
-
-
 
     }
 

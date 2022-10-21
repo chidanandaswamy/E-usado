@@ -15,9 +15,6 @@ public class Consumer {
     @Autowired
     CartServiceImpl cartServiceImpl;
 
-
-
-
     @RabbitListener(queues = "e-usado.product.rabbitmq.queue")
     public void getProducts(Product product) {
         System.out.println("Message received from queue : " + product);

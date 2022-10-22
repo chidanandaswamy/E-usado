@@ -46,14 +46,14 @@ public class EmailService {
             Template t = config.getTemplate("email-template.ftl");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            helper.setTo(request.getTo());
+            helper.setTo(request.getProductOwnerEmail());
             helper.setText(html, true);
             helper.setSubject("Order Confirmation Email");
             helper.setFrom("eusado3@gmail.com");
 
             sender.send(message);
 
-            response.setMessage("mail send to : " + request.getTo());
+            response.setMessage("mail send to : " + request.getProductOwnerEmail());
             response.setStatus(Boolean.TRUE);
 
         } catch (MessagingException | IOException | TemplateException e) {
@@ -79,14 +79,14 @@ public class EmailService {
             Template t = config.getTemplate("email-ThankYouRegistration.ftl");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            helper.setTo(request1.getTo());
+            helper.setTo(request1.getProductOwnerEmail());
             helper.setText(html, true);
             helper.setSubject("Thank You for Registration");
             helper.setFrom("eusado3@gmail.com");
 
 	            sender.send(message);
 
-            response.setMessage("mail send to : " + request1.getTo());
+            response.setMessage("mail send to : " + request1.getProductOwnerEmail());
             response.setStatus(Boolean.TRUE);
 
         } catch (MessagingException | IOException | TemplateException e) {
@@ -112,14 +112,14 @@ public class EmailService {
             Template t = config.getTemplate("email-slot.ftl");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            helper.setTo(request1.getTo());
+            helper.setTo(request1.getProductOwnerEmail());
             helper.setText(html, true);
             helper.setSubject("Slot Booked Successfully");
             helper.setFrom("eusado3@gmail.com");
 
             sender.send(message);
 
-            response.setMessage("mail send to : " + request1.getTo());
+            response.setMessage("mail send to : " + request1.getProductOwnerEmail());
             response.setStatus(Boolean.TRUE);
 
         } catch (MessagingException | IOException | TemplateException e) {
@@ -145,14 +145,14 @@ public class EmailService {
             Template t = config.getTemplate("email-ProductAdded.ftl");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            helper.setTo(request1.getTo());
+            helper.setTo(request1.getProductOwnerEmail());
             helper.setText(html, true);
             helper.setSubject("Product added successfully");
             helper.setFrom("eusado3@gmail.com");
 
             sender.send(message);
 
-            response.setMessage("mail send to : " + request1.getTo());
+            response.setMessage("mail send to : " + request1.getProductOwnerEmail());
             response.setStatus(Boolean.TRUE);
 
         } catch (MessagingException | IOException | TemplateException e) {

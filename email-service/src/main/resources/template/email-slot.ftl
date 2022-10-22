@@ -21,6 +21,14 @@
 								<br> Your Slot As Been Booked Successfully      ...
 								           <b>     E-usado!!! <br>
 							</div>
+							<pre>
+							product Id:${productId}
+							product Name:${productName}
+							Email:${userEmail}
+							Name:${userName}
+							slot time:${slotTime}
+
+							</pre>
 							<div>
 								<br> Your Slot As Been Booked Successfully
 								product on<br> 'Shop more on E-usado get attractive rewards on all electronics<br>

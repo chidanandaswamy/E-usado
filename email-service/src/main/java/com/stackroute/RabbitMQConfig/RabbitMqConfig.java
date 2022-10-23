@@ -1,44 +1,38 @@
-package com.stackroute.orderservice.config;
+package com.stackroute.RabbitMQConfig;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-//import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class RabbitMqConfiguration {
+public class RabbitMqConfig {
 
 
-    public static final String QUEUE = "e-usado.product.rabbitmq.queue";
-    public static final String EXCHANGE = "e-usado.product-service.rabbitmq.exchange";
-    public static final String ROUTING_KEY = "e-usado.product.rabbitmq.routingkey";
+    @Value("${e-usado.product.rabbitmq.queue}")
+    private String queue;
 
-//    @Value("${e-usado.product.rabbitmq.queue}")
-//   private String queue;
-//
-//    @Value("${e-usado.product-service.rabbitmq.exchange}")
-//    private String exchange;
-//
-//    @Value("${e-usado.product.rabbitmq.routingkey}")
-//    private String routingKey;
+    @Value("${e-usado.product-service.rabbitmq.exchange}")
+    private String exchange;
+
+    @Value("${e-usado.product.rabbitmq.routingkey}")
+    private String routingKey;
 
     @Bean
     public Queue queue(){
-        return new Queue(QUEUE);
+        return new Queue(queue);
     }
 
     @Bean
     public TopicExchange exchange(){
-        return new TopicExchange(EXCHANGE);
+        return new TopicExchange(exchange);
     }
 
     @Bean
     public Binding binding(Queue queue, TopicExchange exchange){
-        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+        return BindingBuilder.bind(queue).to(exchange).with(routingKey);
     }
 
     @Bean
@@ -53,4 +47,3 @@ public class RabbitMqConfiguration {
         return rabbitTemplate;
     }
 }
-

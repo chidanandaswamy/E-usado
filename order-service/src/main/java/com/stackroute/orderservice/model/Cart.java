@@ -23,7 +23,7 @@ public class Cart {
     @Id
     private long cartId;
     private String userName;
-    private String product;
+    private Product product;
 
 
 }

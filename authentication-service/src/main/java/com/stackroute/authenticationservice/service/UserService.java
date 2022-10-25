@@ -10,6 +10,8 @@ public interface UserService {
     //user name and pwd is in db ot not, if not save
     User findByEmailAndPassword(String email,String password) throws InvalidCredentialsException;
 
+    User findByEmail(String email) throws InvalidCredentialsException;
+
 
 
 }

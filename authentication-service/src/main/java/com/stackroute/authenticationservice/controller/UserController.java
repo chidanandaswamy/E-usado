@@ -47,8 +47,10 @@ public class UserController {
     @PostMapping("/forgetPassword")
     public String forgotPassword(@RequestBody AuthRequest authRequest) throws Exception, UserAlreadyExistsException {
         User retrievedUser=null;
+        String loggedInUser =null;
         if(authRequest!=null){
-            retrievedUser= userService.findByEmailAndPassword(authRequest.getEmailId(),authRequest.getPassword());
+            retrievedUser= userService.findByEmail(authRequest.getEmailId());
+            loggedInUser=    retrievedUser.getEmail();
             if(retrievedUser!=null){
                 retrievedUser.setPassword(authRequest.getChangePassword());
                 userService.saveUser(retrievedUser);
@@ -58,7 +60,7 @@ public class UserController {
         }else{
             throw new Exception("request is empty");
         }
-        return null;
+        return loggedInUser + "password has been Changed Successfully";
     }
 
 

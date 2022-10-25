@@ -11,6 +11,8 @@ import com.stackroute.authenticationservice.exception.InvalidCredentialsExceptio
 import com.stackroute.authenticationservice.exception.UserAlreadyExistsException;
 import com.stackroute.authenticationservice.repository.UserRepository;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -43,5 +45,15 @@ public class UserServiceImpl implements UserService {
         }
 
         return loggedInUser;
+    }
+
+    @Override
+    public User findByEmail(String email) throws InvalidCredentialsException {
+        User user = userRepository.findByEmail(email);
+        if(user == null)
+        {
+            throw new InvalidCredentialsException();
+        }
+        return user;
     }
 }

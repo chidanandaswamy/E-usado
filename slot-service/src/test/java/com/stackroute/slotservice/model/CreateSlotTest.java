@@ -11,19 +11,38 @@ public class CreateSlotTest {
 
     private CreateSlot createSlot;
     private DateTimeSlots dateTimeSlots;
+    private SellerSlots sellerSlots;
+    private List<SellerSlots> sellerSlotsList;
+    private List<DateTimeSlots> dateTimeSlotsList;
 
     @Before
     public  void setUp() throws Exception {
-        createSlot = new CreateSlot();
 
+       sellerSlots =new SellerSlots();
+
+
+        sellerSlots.setSlotId("1");
+        sellerSlots.setStartTime("12:00");
+        sellerSlots.setEndTime("1:00");
+
+        sellerSlotsList.add(sellerSlots);
+        dateTimeSlots = new DateTimeSlots();
+        dateTimeSlots.setSlotDate("12/08/22");
+
+         dateTimeSlots.setSellerSlots(sellerSlotsList);
+         dateTimeSlotsList.add(dateTimeSlots);
+
+        createSlot = new CreateSlot();
         createSlot.setSellerName("bittu");
         createSlot.setSellerEmailId("bittu@gmail.com");
         createSlot.setBuyerName("Raju");
         createSlot.setBuyerEmailId("rk@gmail.com");
-        createSlot.getStatus();
-        createSlot.setDateTimeSlots(new ArrayList<>());
+        createSlot.setStatus(SlotStatus.BOOKED);
+        createSlot.setDateTimeSlots(dateTimeSlotsList);
         createSlot.setDate("12/12/22");
         createSlot.setDescription("created slot");
+
+
 
     }
 

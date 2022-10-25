@@ -19,7 +19,8 @@ public class MailRequest {
     private Float productDiscount;
     private Boolean warrantyStatus;
     private Float productDamageLevel;
-//    private Binary[] productImages;
+
+
 
 
     public MailRequest() {
@@ -165,4 +166,5 @@ public class MailRequest {
                 ", productDamageLevel=" + productDamageLevel +
                 '}';
     }
+
 }

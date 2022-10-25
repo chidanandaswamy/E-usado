@@ -29,29 +29,26 @@ public class RabbitMQConsumerService {
         model.put("productDiscount", request1.getProductDiscount());
         model.put("productManufacturedYear", request1.getProductManufacturedYear());
         model.put("DamageLevel", request1.getProductDamageLevel());
-       model.put("productSpecs", request1.getProductOwnerEmail());
+       model.put("productSpecs", request1.getProductSpecs());
+
 
 
          service.sendEmailProductAdded(request1, model);
     }
             //for registration conformation mail
 //    @RabbitListener(queues = "User_queue")
-//    public void sendEmailThank(MailRequest request1) {
+//    public void sendEmailThank(MailRequest request2) {
 //
 //        Map<String, Object> model = new HashMap<>();
-//        model.put("name", request1.getProductName());
-//        model.put("location", "Banglore, India");
-//        model.put("productPrice", request1.getProductPrice());
-//        model.put("productName", request1.getProductDescription());
-//        model.put("productBrand", request1.getProductBrand());
-//        model.put("productDiscount", request1.getProductDiscount());
-//        model.put("productManufacturedYear", request1.getProductManufacturedYear());
-//        model.put("DamageLevel", request1.getProductDamageLevel());
-//        model.put("productSpecs", request1.getProductSpecs());
+//        model.put("Username", request2.getUserName());
+//        model.put("UserEmail", request2.getUserEmail());
 //
 //
-//         service.sendEmailThankyou(request1, model);
+//
+//         service.sendEmailThankyou(request2, model);
 //    }
+
+
 //
 //
 //    //slot booked conformation mail

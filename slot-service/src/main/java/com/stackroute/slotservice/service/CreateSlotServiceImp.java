@@ -3,6 +3,7 @@ import com.stackroute.slotservice.exception.SlotNotFoundException;
 import com.stackroute.slotservice.model.CreateSlot;
 import com.stackroute.slotservice.model.DbSequence;
 import com.stackroute.slotservice.repository.CreateSlotRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -26,6 +27,9 @@ public class CreateSlotServiceImp implements CreateSlotService{
 
     @Autowired
     CreateSlotRepository createSlotRepository;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
 
     @Autowired
@@ -87,10 +91,18 @@ public class CreateSlotServiceImp implements CreateSlotService{
 
     @Override
     public ResponseEntity<String> addCreateSlot(CreateSlot createSlot) {
+
+
+
         CreateSlot savedSlot = createSlotRepository.save(createSlot);
         if(savedSlot != null ){
+
+            rabbitTemplate.convertAndSend("User_exchange","User_routingkey",createSlot);
             return new ResponseEntity<>("slot added successfully.", HttpStatus.CREATED);
-        } else {
+        }
+
+
+        else {
             return new ResponseEntity<>("Could not create slot.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

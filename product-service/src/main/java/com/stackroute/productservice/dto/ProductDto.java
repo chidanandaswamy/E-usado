@@ -31,3 +31,4 @@ public class ProductDto {
     private Boolean productAvailability;
     private Long productAddedTime;
 }
+

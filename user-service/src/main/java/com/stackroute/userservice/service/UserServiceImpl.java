@@ -20,14 +20,25 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public void addUser(User user)  {
-        user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
-        UserDTO u=new UserDTO();
-        u.setEmail(user.getEmail());
-        u.setPassword(user.getPassword());
-        p.sendMessageToRabbitMq(u);
-        userRepository.save(user);
-        System.out.println(user);
+    public void addUser(User user) {
+        User user1=userRepository.findByEmail(user.getEmail());
+        if(user1 != null && user1.getEmail()!=null){
+            throw new UserNotFoundException("User with email " +user.getEmail() +" already exists.");
+
+        }
+
+
+        else {
+            user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
+            UserDTO u=new UserDTO();
+            u.setEmail(user.getEmail());
+            u.setPassword(user.getPassword());
+            p.sendMessageToRabbitMq(u);
+            userRepository.save(user);
+            System.out.println(user);
+
+        }
+
 
 
     }

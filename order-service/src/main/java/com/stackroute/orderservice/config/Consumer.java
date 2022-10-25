@@ -22,8 +22,5 @@ public class Consumer {
     public void getProducts(Product product) {
         System.out.println("Message received from queue : " + product);
 
-
-
-
     }
 }

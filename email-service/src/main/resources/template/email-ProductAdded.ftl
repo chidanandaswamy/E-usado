@@ -18,10 +18,23 @@
 							</div>
 							
 							<div style="font-size: 24px; color: #555100;">
-								<br>  Your Slot As Been Booked Successfully     ...
+								<br>  Your product add to E-usado Successfully     ...
 								           <b>     E-usado!!! <br>
 							</div>
 							<div>
+
+							<pre>
+							Product Name:                ${productName}
+							Product price:               ${productPrice}
+							Product Description:         ${productDescription}
+							Product Brand:               ${productBrand}
+							Product Discount:            ${productDiscount}
+							Product Manufactured Year:   ${productManufacturedYear}
+							Product Level:               ${DamageLevel}
+
+							Product specifications:
+
+							</pre>
 								<br>      Your product successfully added in E-usado selling flatform
 								product on<br> Add more product and sell your old product
 								                    at best price<br>

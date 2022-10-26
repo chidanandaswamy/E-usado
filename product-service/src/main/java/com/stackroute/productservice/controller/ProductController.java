@@ -10,18 +10,18 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/product-service")
+@RequestMapping("/api/v1")
 public class ProductController {
 
     @Autowired
     private ProductServiceImpl productServiceImpl;
 
-    @RequestMapping(value = "/product", method= RequestMethod.POST)
+    @PostMapping("/product")
     public ResponseEntity<?> createProduct(@RequestParam String productAsJSONString, @RequestParam MultipartFile[] images){
         return productServiceImpl.createProduct(productAsJSONString, images);
     }
 
-    @RequestMapping(value = "/products", method= RequestMethod.GET)
+    @GetMapping("/products")
     public ResponseEntity<?> getProducts(@RequestParam(name = "search", defaultValue = "none") String search,
                                          @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
                                          @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
@@ -49,12 +49,12 @@ public class ProductController {
                 productAvailability);
     }
 
-    @RequestMapping(value = "/product/{id}", method= RequestMethod.GET)
+    @GetMapping("/product/{id}")
     public ResponseEntity<?> getProductById(@PathVariable UUID id){
         return productServiceImpl.getProductById(id);
     }
 
-    @RequestMapping(value = "/products/{ownerEmail}", method= RequestMethod.GET)
+    @GetMapping("/products/{ownerEmail}")
     public ResponseEntity<?> getProductsByOwnerEmail(@PathVariable String ownerEmail,
                                                      @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
                                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
@@ -62,26 +62,19 @@ public class ProductController {
         return productServiceImpl.getProductsByOwnerEmail(ownerEmail, pageNumber, pageSize, productAddedTime);
     }
 
-    @RequestMapping(value = "/product/{id}", method= RequestMethod.PUT)
+    @PutMapping("/product/{id}")
     public ResponseEntity<?> updateProductById(@PathVariable UUID id, @RequestParam String productAsJSONString, @RequestParam MultipartFile[] images){
         return productServiceImpl.updateProductById(id, productAsJSONString, images);
     }
 
-    @RequestMapping(value = "/product/{id}", method= RequestMethod.DELETE)
+    @DeleteMapping("/product/{id}")
     public ResponseEntity<?> deleteProductById(@PathVariable UUID id){
         return productServiceImpl.deleteProductById(id);
     }
 
-    @RequestMapping(value = "/product", method= RequestMethod.DELETE)
+    @DeleteMapping("/product")
     public ResponseEntity<?> deleteAllProducts(){
         return productServiceImpl.deleteAllProducts();
     }
 
-    @RequestMapping(value = "/test", method= RequestMethod.GET,
-            params = {"pageNumber", "pageSize", "productBrand"})
-    public void test(@RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
-                     @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-                     @RequestParam(name = "pageNumber", defaultValue = "none") String search){
-
-    }
 }

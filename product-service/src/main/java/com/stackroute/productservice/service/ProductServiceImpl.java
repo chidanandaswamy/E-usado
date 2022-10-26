@@ -3,6 +3,7 @@ package com.stackroute.productservice.service;
 import com.alibaba.fastjson2.JSON;
 import com.fasterxml.uuid.Generators;
 import com.mongodb.BasicDBList;
+import com.stackroute.productservice.dto.ProductDto;
 import com.stackroute.productservice.exception.ProductNotFoundException;
 import com.stackroute.productservice.model.Product;
 import com.stackroute.productservice.repository.ProductRepository;
@@ -38,14 +39,21 @@ public class ProductServiceImpl implements ProductService{
     @Value("${e-usado.product-service.rabbitmq.exchange}")
     private String exchange;
 
-    @Value("${e-usado.product.rabbitmq.routingkey}")
-    private String routingKey;
+    @Value("${e-usado.product.rabbitmq.chat-routing-key}")
+    private String chatRoutingKey;
+
+    @Value("${e-usado.product.rabbitmq.mail-routing-key}")
+    private String mailRoutingKey;
+
+    @Value("${e-usado.product.rabbitmq.order-routing-key}")
+    private String orderRoutingKey;
 
     @Override
     public ResponseEntity<String> createProduct(String productAsJSONString, MultipartFile[] images) {
 
         Product product = JSON.parseObject(productAsJSONString, Product.class);
         product.setId(Generators.timeBasedGenerator().generate());
+        product.setProductAddedTime(System.currentTimeMillis());
 
         if(images != null && images.length > 0){
             try {
@@ -64,7 +72,12 @@ public class ProductServiceImpl implements ProductService{
         Product savedProduct = productRepository.save(product);
 
         if(savedProduct != null && savedProduct.getId() != null){
-            rabbitTemplate.convertAndSend(exchange, routingKey, product);
+            ProductDto productDto = JSON.parseObject(productAsJSONString, ProductDto.class);
+            productDto.setId(product.getId());
+            productDto.setProductAddedTime(product.getProductAddedTime());
+            rabbitTemplate.convertAndSend(exchange, mailRoutingKey, product);
+            rabbitTemplate.convertAndSend(exchange, chatRoutingKey, productDto);
+            rabbitTemplate.convertAndSend(exchange, orderRoutingKey, productDto);
             return new ResponseEntity<>("Product added successfully.", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("Could not create product.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -292,11 +305,5 @@ public class ProductServiceImpl implements ProductService{
         } else {
             return new ResponseEntity<String>("User " + ownerEmail + " has no products", HttpStatus.OK);
         }
-    }
-
-    public void test(){
-        String filter = "{\"productBrand\":\"LG\"}";
-        BasicQuery q = new BasicQuery(filter);
-        System.out.println(mongoTemplate.find(q, Product.class));
     }
 }

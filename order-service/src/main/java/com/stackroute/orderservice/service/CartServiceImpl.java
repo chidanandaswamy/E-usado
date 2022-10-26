@@ -14,6 +14,8 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -33,13 +35,25 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public void createCart(Cart cart) {
+    public Cart createCart(Cart cart, Map<String, Object> model) {
+//        Map<String, Object> model = new HashMap<>();
+        model.put("name", cart.getProductName());
+        model.put("location", "Banglore, India");
+        model.put("productPrice", cart.getProductPrice());
+        model.put("productName", cart.getProductDescription());
+        model.put("productBrand", cart.getProductBrand());
+        model.put("productDiscount", cart.getProductDiscount());
+        model.put("productManufacturedYear", cart.getProductManufacturedYear());
+        model.put("DamageLevel", cart.getProductDamageLevel());
+        model.put("productSpecs", cart.getProductSpecs());
+
         Cart cart1= cartRepository.save(cart);
         if(cart1 != null ){
             System.out.println("Cart is added successfully.");
         } else {
             System.out.println("Cart Creation terminated.");
         }
+        return cart;
     }
 
     @Override

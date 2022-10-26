@@ -24,23 +24,24 @@ public class CartController {
     public CartServiceImpl cartServiceImpl;
 
     @PostMapping("/addToCart")
-    public void createCart(@RequestBody Cart cart) {
+    public ResponseEntity<Cart> createCart(@RequestBody Cart cart) {
         cart.setCartId(cartServiceImpl.getSequenceNumber(Cart.SEQUENCE_NAME));
 
-//        Map<String, Object> model = new HashMap<>();
-//        model.put("name", cart.getProduct());
-//        model.put("location", "Banglore, India");
-//        model.put("productPrice", cart.g());
-//        model.put("productName", request1.getProductDescription());
-//        model.put("productBrand", request1.getProductBrand());
-//        model.put("productDiscount", request1.getProductDiscount());
-//        model.put("productManufacturedYear", request1.getProductManufacturedYear());
-//        model.put("DamageLevel", request1.getProductDamageLevel());
-//        model.put("productSpecs", request1.getProductSpecs());
-//
-//
+        Map<String, Object> model = new HashMap<>();
+        model.put("name", cart.getProductName());
+        model.put("location", "Banglore, India");
+        model.put("productPrice", cart.getProductPrice());
+        model.put("productName", cart.getProductDescription());
+        model.put("productBrand", cart.getProductBrand());
+        model.put("productDiscount", cart.getProductDiscount());
+        model.put("productManufacturedYear", cart.getProductManufacturedYear());
+        model.put("DamageLevel", cart.getProductDamageLevel());
+        model.put("productSpecs", cart.getProductSpecs());
+
+
 //        return service.sendEmailProductAdded(request1, model);
-        cartServiceImpl.createCart(cart);
+        responseEntity= new ResponseEntity<>( cartServiceImpl.createCart(cart, model), HttpStatus.CREATED);
+        return responseEntity;
     }
     @GetMapping("/getCart/{cartId}")
     public ResponseEntity<?> getCartById(@PathVariable long cartId) {

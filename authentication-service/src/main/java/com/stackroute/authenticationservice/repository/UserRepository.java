@@ -6,4 +6,6 @@ import com.stackroute.authenticationservice.domain.User;
 
 public interface UserRepository extends JpaRepository<User,String> {
 User findByEmailAndPassword(String email, String password);
+
+User findByEmail (String email);
 }

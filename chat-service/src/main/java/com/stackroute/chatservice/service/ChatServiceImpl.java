@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 
@@ -82,14 +83,14 @@ public class ChatServiceImpl implements ChatService{
     public void deleteChatByQuestionId(long questionId) {
         //check whether a chat exist in db
         chatRepository.findById(questionId).orElseThrow(()
-                -> new ChatNotFoundException("There is no chat found by Id" + questionId));
+                -> new ChatNotFoundException("There is no chat found by Id " + questionId));
       chatRepository.deleteById(questionId);
     }
 
     @Override
     public Chat replyChat(Chat chat, long questionId) {
          Chat existingChat = chatRepository.findById(questionId).orElseThrow(
-                 () -> new ChatNotFoundException("Chat does not Exist with Id" +questionId));
+                 () -> new ChatNotFoundException("Chat does not Exist with Id " +questionId));
 
          existingChat.setReply(chat.getReply());
          //save
@@ -102,7 +103,7 @@ public class ChatServiceImpl implements ChatService{
         Optional <Chat> chat = chatRepository.findById(productId);
 
         return chatRepository.findById(productId).orElseThrow(()
-                -> new ChatNotFoundException("Chat is not present with Product Id" + productId));
+                -> new ChatNotFoundException("Chat is not present with Product Id " + productId));
     }
 
 

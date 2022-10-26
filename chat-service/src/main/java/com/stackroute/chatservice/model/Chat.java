@@ -8,7 +8,10 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
+import javax.xml.stream.Location;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -20,6 +23,7 @@ public class Chat {
     public static final String SEQUENCE_NAME = "booking_sequence";
     @Id
     private long questionId;
+
     private long productId;
     private String question;
     private List reply;

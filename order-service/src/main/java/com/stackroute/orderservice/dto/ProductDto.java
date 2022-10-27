@@ -1,6 +1,7 @@
-package com.stackroute.productservice.dto;
+package com.stackroute.orderservice.dto;
 
-import com.stackroute.productservice.model.Location;
+
+import com.stackroute.orderservice.model.Location;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,4 +32,3 @@ public class ProductDto {
     private Boolean productAvailability;
     private Long productAddedTime;
 }
-

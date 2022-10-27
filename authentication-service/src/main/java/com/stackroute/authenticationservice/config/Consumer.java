@@ -15,7 +15,7 @@ public class Consumer {
     @Autowired
     private UserServiceImpl userService;
 
-    @RabbitListener(queues = "user_queue")
+    @RabbitListener(queues = "User_queue")
     public void getUserDtoFromRabbitMq(UserDTO userDto) throws UserAlreadyExistsException {
         System.out.println(userDto.toString());
         User user = new User();

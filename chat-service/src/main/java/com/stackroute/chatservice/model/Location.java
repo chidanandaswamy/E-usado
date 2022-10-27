@@ -1,16 +1,16 @@
-package com.stackroute.userservice.model;
+package com.stackroute.chatservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @ToString
-public class UserDTO {
-    private String email;
-    private String password;
+public class Location {
     private String name;
+    private Double[] coordinates;
 }

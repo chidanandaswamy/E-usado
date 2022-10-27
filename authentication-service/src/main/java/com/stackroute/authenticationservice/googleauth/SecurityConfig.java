@@ -1,5 +1,6 @@
-/*
+
 package com.stackroute.authenticationservice.googleauth;
+
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -7,16 +8,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
+
+   @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and().oauth2Login();
+       http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST)
+               .permitAll().anyRequest().authenticated()
+               .and().oauth2Login();
     }
 
   @Override
@@ -29,6 +31,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/webjars/**");
     }
 
-
-
-}*/
+}

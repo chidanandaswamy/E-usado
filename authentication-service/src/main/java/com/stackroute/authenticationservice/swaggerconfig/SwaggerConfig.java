@@ -33,4 +33,13 @@ public class SwaggerConfig {
                 .licenseUrl("azhar@gmail.com").version("1.0").build();
     }
 
+    /*public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**");
+    }*/
+
 }

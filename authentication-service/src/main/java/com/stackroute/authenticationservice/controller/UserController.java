@@ -6,6 +6,7 @@ import com.stackroute.authenticationservice.exception.UserAlreadyExistsException
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.stackroute.authenticationservice.domain.User;
@@ -30,7 +31,20 @@ public class UserController {
         this.securityTokenGenerator = securityTokenGenerator;
     }
 
+    /*@GetMapping("/login")
+    public String index() {
+        OAuth2User user = getCurrentUser();
+        return "Hello " + user.getAttributes().get("name") + ". Your email is " + user.getAttributes().get("email")
+                + " and your profile picture is <img src='"+user.getAttributes().get("picture")+"' /> <br />"
+                + "<a href='/logout'>logout</a>";
+    }
 
+
+    public OAuth2User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return ((OAuth2AuthenticationToken)auth).getPrincipal();
+    }
+*/
     @PostMapping("/authenticate")
     public ResponseEntity<?> loginUser(@RequestBody User user) throws InvalidCredentialsException
     {
@@ -47,8 +61,10 @@ public class UserController {
     @PostMapping("/forgetPassword")
     public String forgotPassword(@RequestBody AuthRequest authRequest) throws Exception, UserAlreadyExistsException {
         User retrievedUser=null;
+        String loggedInUser =null;
         if(authRequest!=null){
-            retrievedUser= userService.findByEmailAndPassword(authRequest.getEmailId(),authRequest.getPassword());
+            retrievedUser= userService.findByEmail(authRequest.getEmailId());
+            loggedInUser=    retrievedUser.getEmail();
             if(retrievedUser!=null){
                 retrievedUser.setPassword(authRequest.getChangePassword());
                 userService.saveUser(retrievedUser);
@@ -58,7 +74,7 @@ public class UserController {
         }else{
             throw new Exception("request is empty");
         }
-        return null;
+        return loggedInUser + " "+ "password has been Changed Successfully";
     }
 
 

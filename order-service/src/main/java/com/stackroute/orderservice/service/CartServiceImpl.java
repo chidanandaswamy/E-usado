@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import org.springframework.stereotype.Service;
 
+
 import java.util.Objects;
 
 @Service
@@ -32,14 +33,17 @@ public class CartServiceImpl implements CartService{
         return !Objects.isNull(counter) ? counter.getSeq():1;
     }
 
+
+
     @Override
-    public void createCart(Cart cart) {
+    public Cart createCart(Cart cart) {
         Cart cart1= cartRepository.save(cart);
         if(cart1 != null ){
             System.out.println("Cart is added successfully.");
         } else {
             System.out.println("Cart Creation terminated.");
         }
+        return cart;
     }
 
     @Override

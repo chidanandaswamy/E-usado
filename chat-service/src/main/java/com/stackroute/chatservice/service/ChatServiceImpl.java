@@ -4,17 +4,44 @@ package com.stackroute.chatservice.service;
 
 import com.stackroute.chatservice.exception.ChatNotFoundException;
 import com.stackroute.chatservice.model.Chat;
+import com.stackroute.chatservice.model.DatabaseSequence;
 import com.stackroute.chatservice.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+
+
+
+import org.springframework.data.mongodb.core.query.Criteria;
+
+import org.springframework.data.mongodb.core.query.Update;
+
+
+import java.util.Objects;
 import java.util.Optional;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 
 
 @Service
 public class ChatServiceImpl implements ChatService{
    @Autowired
    private ChatRepository chatRepository;
+
+    @Autowired
+    private MongoOperations mongoOperations;
+    public int getSequenceNumber(String sequenceName)
+    {
+        Query query = new Query(Criteria.where("id").is(sequenceName));
+        Update update = new Update().inc("seq", 1);
+        DatabaseSequence counter = mongoOperations.findAndModify(query, update, options().returnNew(true).upsert(true), DatabaseSequence.class);
+        return !Objects.isNull(counter)?counter.getSeq() : 1;
+    }
 
 
     @Autowired
@@ -56,14 +83,14 @@ public class ChatServiceImpl implements ChatService{
     public void deleteChatByQuestionId(long questionId) {
         //check whether a chat exist in db
         chatRepository.findById(questionId).orElseThrow(()
-                -> new ChatNotFoundException("There is no chat found by Id" + questionId));
+                -> new ChatNotFoundException("There is no chat found by Id " + questionId));
       chatRepository.deleteById(questionId);
     }
 
     @Override
     public Chat replyChat(Chat chat, long questionId) {
          Chat existingChat = chatRepository.findById(questionId).orElseThrow(
-                 () -> new ChatNotFoundException("Chat does not Exist with Id" +questionId));
+                 () -> new ChatNotFoundException("Chat does not Exist with Id " +questionId));
 
          existingChat.setReply(chat.getReply());
          //save
@@ -76,7 +103,7 @@ public class ChatServiceImpl implements ChatService{
         Optional <Chat> chat = chatRepository.findById(productId);
 
         return chatRepository.findById(productId).orElseThrow(()
-                -> new ChatNotFoundException("Chat is not present with Product Id" + productId));
+                -> new ChatNotFoundException("Chat is not present with Product Id " + productId));
     }
 
 

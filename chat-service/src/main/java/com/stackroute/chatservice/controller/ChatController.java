@@ -5,10 +5,13 @@ package com.stackroute.chatservice.controller;
 
 import com.stackroute.chatservice.model.Chat;
 import com.stackroute.chatservice.service.ChatService;
+import com.stackroute.chatservice.service.ChatServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 
 @RestController
@@ -16,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class ChatController {
      @Autowired
      private ChatService chatService;
+
+    @Autowired
+    private ChatServiceImpl chatServiceImpl;
 
     public ChatController(ChatService chatService) {
         super();
@@ -25,6 +31,7 @@ public class ChatController {
   // build add question rest api
     @PostMapping("/question")
     public ResponseEntity<Chat> saveChat(@RequestBody Chat chat){
+        chat.setQuestionId(chatServiceImpl.getSequenceNumber(Chat.SEQUENCE_NAME));
         return new ResponseEntity<Chat>(chatService.saveChat(chat), HttpStatus.CREATED);
     }
   // update reply to the question
@@ -58,6 +65,11 @@ public class ChatController {
     @GetMapping("{productId}")
     public ResponseEntity<Chat> getChatByProductId(@PathVariable("productId") long productId){
         return new ResponseEntity<Chat>(chatService.getChatByProductId(productId), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public String getMessage(){
+        return "BSDBFVKSBD";
     }
 
 }

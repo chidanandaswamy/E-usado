@@ -81,3 +81,16 @@ services:
 #      - mongodb
       - eureka-server
     restart: always
+
+  authentication-service:
+    container_name: authentication-service
+    build: ./authentication-service
+    hostname: localhost
+    network_mode: host
+    ports:
+      - 8081:8081
+    depends_on:
+#      - mysqlservice
+      - eureka-server
+#      - rabbitmq
+    restart: always

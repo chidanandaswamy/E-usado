@@ -6,7 +6,8 @@
 		<groupId>com.stackroute</groupId>
 		<artifactId>e-usado</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
+		<relativePath>../pom.xml</relativePath>
+		<!--  lookup parent from repository  -->
 	</parent>
 	<groupId>com.stackroute</groupId>
 	<artifactId>authentication-service</artifactId>
@@ -39,6 +40,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

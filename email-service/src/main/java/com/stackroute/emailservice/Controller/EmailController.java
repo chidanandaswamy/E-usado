@@ -3,6 +3,7 @@ package com.stackroute.emailservice.Controller;
 
 import com.stackroute.emailservice.dto.MailRequest;
 import com.stackroute.emailservice.dto.MailResponse;
+import com.stackroute.emailservice.model.OrderService;
 import com.stackroute.emailservice.model.SlotBooking;
 import com.stackroute.emailservice.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +22,18 @@ public class EmailController {
     private EmailService service;
 
     @PostMapping("/OrderConformation")
-    public MailResponse sendEmail(@RequestBody MailRequest request) {
+    public MailResponse sendEmail(@RequestBody OrderService request2) {
         Map<String, Object> model = new HashMap<>();
-        model.put("name", request.getProductName());
+        model.put("orderID", request2.getId());
         model.put("location", "Banglore, India");
-        model.put("productPrice", request.getProductPrice());
-        model.put("productName", request.getProductDescription());
-        model.put("productBrand", request.getProductBrand());
-        model.put("productDiscount", request.getProductDiscount());
-        model.put("productManufacturedYear", request.getProductManufacturedYear());
-        model.put("DamageLevel", request.getProductDamageLevel());
-        model.put("productSpecs", request.getProductSpecs());
+        model.put("orderedProducts", request2.getProducts());
+        model.put("orderBuyerEmailId", request2.getBuyerEmail());
+        model.put("orderDate", request2.getOrderDate());
+        model.put("OrderPaymentStatus", request2.getPaymentStatus());
+        model.put("orderTotalAmount", request2.getTotalAmount());
+        model.put("OrderStatus", request2.getOrderStatus());
 
-        return service.OrderConformationsendEmail(request, model);
+       return service.OrderConformationsendEmail(request2, model);
     }
 
     @PostMapping("/ThankYouForRegister")

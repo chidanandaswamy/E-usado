@@ -3,6 +3,7 @@ package com.stackroute.emailservice.service;
 
 import com.stackroute.emailservice.dto.MailRequest;
 import com.stackroute.emailservice.dto.MailResponse;
+import com.stackroute.emailservice.model.OrderService;
 import com.stackroute.emailservice.model.SlotBooking;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -30,7 +31,7 @@ public class EmailService {
     private Configuration config;
 
 
-    public MailResponse OrderConformationsendEmail(MailRequest request, Map<String, Object> model) {
+    public MailResponse OrderConformationsendEmail(OrderService request, Map<String, Object> model) {
 
         MailResponse response = new MailResponse();
         MimeMessage message = sender.createMimeMessage();
@@ -45,14 +46,14 @@ public class EmailService {
             Template t = config.getTemplate("email-template.ftl");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            helper.setTo(request.getProductOwnerEmail());
+            helper.setTo(request.getBuyerEmail());
             helper.setText(html, true);
             helper.setSubject("Order Confirmation Email");
             helper.setFrom("eusado3@gmail.com");
 
             sender.send(message);
 
-            response.setMessage("mail send to : " + request.getProductOwnerEmail());
+            response.setMessage("mail send to : " + request.getBuyerEmail());
             response.setStatus(Boolean.TRUE);
 
         } catch (MessagingException | IOException | TemplateException e) {

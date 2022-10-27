@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 
 @RestController
-//@RequestMapping("/api/v1")
+@RequestMapping("/api/v1")
 public class UserController {
 
     private ResponseEntity responseEntity;
@@ -24,15 +24,23 @@ public class UserController {
 
 
 
-    @RequestMapping(value="/users/register",method = RequestMethod.POST)
 
-    public void adduser(@RequestBody User user)throws Exception {
-        userServiceImpl.addUser(user);
 
+
+
+
+    @RequestMapping(value="/users/register" ,method=RequestMethod.POST)
+
+    public ResponseEntity<?> register(@RequestBody User user) throws UserNotFoundException{
+
+        responseEntity= new ResponseEntity<>(userServiceImpl.addUser(user), HttpStatus.OK);
+        return responseEntity;
     }
 
 
+
     @RequestMapping(value="/users" ,method=RequestMethod.GET)
+
     public ResponseEntity<?> findAll() throws UserNotFoundException{
 
             responseEntity= new ResponseEntity<>(userServiceImpl.findAllUsers(), HttpStatus.OK);

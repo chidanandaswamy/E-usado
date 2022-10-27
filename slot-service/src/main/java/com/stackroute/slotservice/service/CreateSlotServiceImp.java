@@ -97,7 +97,7 @@ public class CreateSlotServiceImp implements CreateSlotService{
         CreateSlot savedSlot = createSlotRepository.save(createSlot);
         if(savedSlot != null ){
 
-            rabbitTemplate.convertAndSend("User_exchange","User_routingkey",createSlot);
+            rabbitTemplate.convertAndSend("Slot_exchange","Slot_routingkey",createSlot);
             return new ResponseEntity<>("slot added successfully.", HttpStatus.CREATED);
         }
 

@@ -13,9 +13,9 @@ import org.springframework.amqp.support.converter.MessageConverter;
 public class RabbitMqConfiguration {
 
 
-    public static final String QUEUE = "User_queue";
-    public static final String EXCHANGE = "User_exchange";
-    public static final String ROUTING_KEY = "User_routingkey";
+    public static final String QUEUE = "Slot_queue";
+    public static final String EXCHANGE = "Slot_exchange";
+    public static final String ROUTING_KEY = "Slot_routingkey";
 
     @Bean
     public Queue queue(){

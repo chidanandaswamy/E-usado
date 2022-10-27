@@ -1,33 +1,96 @@
-version: '2'
+version: "2"
 services:
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
-
-  mysqlservice:
-    image: mysql:latest
-    container_name: mysql
-    restart: always
-    hostname: localhost
-    network_mode: "host"
-    ports:
-      - 3306:3306
-      #    cap_add:
-      #      - SYS_NICE
-    environment:
-      MYSQL_ROOT_PASSWORD: 'Password'
-      MYSQL_PASSWORD: root
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-
   mongodb:
     image: mongo:latest
-    container_name: mongo-container
+    container_name: mongo
     network_mode: host
     hostname: localhost
     ports:
       - 27017:27017
+
+  mysqlservice:
+    image: mysql:latest
+    container_name: mysql-container
+    restart: always
+    network_mode: "host"
+    hostname: localhost
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USERNAME: 'root'
+    #      MYSQL_PASSWORD: root
+    #      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+
+
+  rabbitmq:
+    image: rabbitmq:3.7.5-management
+    container_name: rabbitmq
+    network_mode: "host"
+    hostname: localhost
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_VHOST:
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+
+  eureka-server:
+    build: ./eureka-server
+    container_name: eureka-server
+    restart: always
+    network_mode: host
+    hostname: localhost
+    ports:
+      - 8761:8761
+
+  api-gateway:
+    container_name: api-gateway
+    build: ./api-gateway
+    hostname: localhost
+    network_mode: host
+    ports:
+      - 8080:8080
+    depends_on:
+      - eureka-server
+    restart: always
+
+  config-server:
+    container_name: config-server
+    build: ./config-server
+    hostname: localhost
+    network_mode: host
+    restart: always
+    depends_on:
+      - eureka-server
+    ports:
+      - 8888:8888
+
+  user-service:
+    container_name: user-service
+    build: ./user-service
+    hostname: localhost
+    network_mode: host
+    ports:
+      - 8091:8091
+    depends_on:
+#      - mongodb
+      - eureka-server
+    restart: always
+
+  authentication-service:
+    container_name: authentication-service
+    build: ./authentication-service
+    hostname: localhost
+    network_mode: host
+    ports:
+      - 8081:8081
+    depends_on:
+#      - mysqlservice
+      - eureka-server
+#      - rabbitmq
+    restart: always

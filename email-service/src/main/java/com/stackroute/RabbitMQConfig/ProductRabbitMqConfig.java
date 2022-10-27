@@ -8,7 +8,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
-public class RabbitMqConfig {
+public class ProductRabbitMqConfig {
 
 
     @Value("${e-usado.product.rabbitmq.queue}")

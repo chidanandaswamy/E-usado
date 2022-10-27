@@ -52,7 +52,7 @@ public class RabbitMQConsumerService {
 //
 //
 //    //slot booked conformation mail
-//    @RabbitListener(queues = "Slot-booking_queue")
+//    @RabbitListener(queues = "User-booking_queue")
 //    public void sendEmailSlot(MailRequest request1) {
 //        Map<String, Object> model = new HashMap<>();
 //        model.put("name", request1.getProductName());

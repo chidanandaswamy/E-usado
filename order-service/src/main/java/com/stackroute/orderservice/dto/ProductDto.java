@@ -1,18 +1,20 @@
-package rabbitmqdto;
+package com.stackroute.orderservice.dto;
 
 
+import com.stackroute.orderservice.model.Location;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import java.util.HashMap;
 import java.util.UUID;
 
-import org.bson.types.Binary;
-import java.util.HashMap;
-
-
 @Data
-public class Product {
-
-
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class ProductDto {
     private UUID id;
     private String productName;
     private Double productPrice;
@@ -26,6 +28,7 @@ public class Product {
     private Float productDiscount;
     private Boolean warrantyStatus;
     private Float productDamageLevel;
-    private Binary[] productImages;
-
+    private Location location;
+    private Boolean productAvailability;
+    private Long productAddedTime;
 }

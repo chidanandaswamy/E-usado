@@ -1,19 +1,18 @@
-package com.stackroute.service;
+package com.stackroute.emailservice.service;
 
-import com.stackroute.dto.MailRequest;
-import com.stackroute.dto.MailResponse;
+
+import com.stackroute.emailservice.dto.MailRequest;
+import com.stackroute.emailservice.dto.MailResponse;
+import com.stackroute.emailservice.model.SlotBooking;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-
-
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
-
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -31,7 +30,7 @@ public class EmailService {
     private Configuration config;
 
 
-    public MailResponse sendEmail(MailRequest request, Map<String, Object> model) {
+    public MailResponse OrderConformationsendEmail(MailRequest request, Map<String, Object> model) {
 
         MailResponse response = new MailResponse();
         MimeMessage message = sender.createMimeMessage();
@@ -97,7 +96,7 @@ public class EmailService {
         return response;
     }
 
-    public MailResponse sendEmailSlotBooking(MailRequest request1, Map<String, Object> model) {
+    public MailResponse sendEmailSlotBooking(SlotBooking request1, Map<String, Object> model) {
 
         MailResponse response = new MailResponse();
         MimeMessage message = sender.createMimeMessage();
@@ -112,14 +111,14 @@ public class EmailService {
             Template t = config.getTemplate("email-slot.ftl");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            helper.setTo(request1.getProductOwnerEmail());
+            helper.setTo(request1.getBuyerEmailId());
             helper.setText(html, true);
             helper.setSubject("Slot Booked Successfully");
             helper.setFrom("eusado3@gmail.com");
 
             sender.send(message);
 
-            response.setMessage("mail send to : " + request1.getProductOwnerEmail());
+            response.setMessage("mail send to : " + request1.getBuyerEmailId());
             response.setStatus(Boolean.TRUE);
 
         } catch (MessagingException | IOException | TemplateException e) {

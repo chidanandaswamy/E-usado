@@ -1,5 +1,7 @@
-package com.stackroute.model;
+package com.stackroute.orderservice.dto;
 
+
+import com.stackroute.orderservice.model.Location;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,25 +10,16 @@ import lombok.ToString;
 import java.util.HashMap;
 import java.util.UUID;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Product {
-
-
+public class ProductDto {
     private UUID id;
-
-
     private String productName;
     private Double productPrice;
-
-
     private String productBrand;
     private String productCategory;
-
-
     private String productDescription;
     private HashMap<String, String> productSpecs;
     private String productManufacturedYear;
@@ -36,7 +29,6 @@ public class Product {
     private Boolean warrantyStatus;
     private Float productDamageLevel;
     private Location location;
-   // private Binary[] productImages;
     private Boolean productAvailability;
     private Long productAddedTime;
 }

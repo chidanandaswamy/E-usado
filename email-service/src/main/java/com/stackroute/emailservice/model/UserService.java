@@ -1,4 +1,4 @@
-package com.stackroute.model;
+package com.stackroute.emailservice.model;
 
 //@NoArgsConstructor
 //@AllArgsConstructor

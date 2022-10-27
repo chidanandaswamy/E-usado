@@ -1,4 +1,4 @@
-package com.stackroute.model;
+package com.stackroute.emailservice.model;
 
 import com.stackroute.slotservice.model.DateTimeSlots;
 
@@ -21,6 +21,7 @@ public class SlotBooking {
     }
 
     public SlotBooking(long slotId, String sellerName, String sellerEmailId, String buyerName, String buyerEmailId, List<DateTimeSlots> dateTimeSlots, String date, String description) {
+        super();
         this.slotId = slotId;
         this.sellerName = sellerName;
         this.sellerEmailId = sellerEmailId;

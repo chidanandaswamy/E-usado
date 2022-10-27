@@ -1,12 +1,16 @@
-package com.stackroute.service;
+package com.stackroute.emailservice.service;
 
-import com.stackroute.dto.MailRequest;
+
+import com.stackroute.emailservice.dto.MailRequest;
+import com.stackroute.emailservice.model.SlotBooking;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+
+;
 
 @Component
 public class RabbitMQConsumerService {
@@ -16,7 +20,7 @@ public class RabbitMQConsumerService {
 
 
     //product added conformation mail
-    @RabbitListener(queues = "productServiceQueue")
+    @RabbitListener(queues = "productMailQueue")
     public void ProductAddedConforming(MailRequest request1) {
 
         Map<String, Object> model = new HashMap<>();
@@ -53,7 +57,7 @@ public class RabbitMQConsumerService {
 //
 //    //slot booked conformation mail
 //    @RabbitListener(queues = "User-booking_queue")
-//    public void sendEmailSlot(MailRequest request1) {
+//    public void OrderConformation(MailRequest request1) {
 //        Map<String, Object> model = new HashMap<>();
 //        model.put("name", request1.getProductName());
 //        model.put("location", "Banglore, India");
@@ -63,10 +67,18 @@ public class RabbitMQConsumerService {
 //        service.sendEmailSlotBooking(request1, model);
 //    }
 //
-//    @RabbitListener(queues = "Slot-booking_queue")
-//    public void OrderConformation(MailRequest request1) {
-//        Map<String, Object> model = new HashMap<>();
-//        model.put("name", request1.getProductName());
-//
-//    }
+    @RabbitListener(queues = "Slot_queue")
+    public void sendEmailSlot(SlotBooking request1) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("slotId", request1.getSlotId());
+        model.put("buyerName", request1.getBuyerName());
+        model.put("BuyerEmailId", request1.getBuyerEmailId());
+        model.put("slotDate", request1.getDate());
+        model.put("SlotTime", request1.getDateTimeSlots());
+        model.put("sellerName", request1.getSellerName());
+        model.put("sellerEmail", request1.getSellerEmailId());
+        model.put("SlotDescription", request1.getDescription());
+        System.out.println(request1);
+        service.sendEmailSlotBooking(request1, model);
+    }
 }

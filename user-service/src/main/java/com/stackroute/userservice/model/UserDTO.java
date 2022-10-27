@@ -5,6 +5,7 @@ package com.stackroute.userservice.model;
 //@Data
 //@ToString
 public class UserDTO {
+<<<<<<< HEAD
     private String UserEmail;
     private String UserPassword;
     private String UserName;
@@ -52,4 +53,9 @@ public class UserDTO {
                 ", UserName='" + UserName + '\'' +
                 '}';
     }
+=======
+    private String email;
+    private String password;
+    private String name;
+>>>>>>> 8de7206d5d4af8497fe20faa0e69d52108846c58
 }

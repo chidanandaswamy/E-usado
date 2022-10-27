@@ -34,19 +34,10 @@ public class CartServiceImpl implements CartService{
         return !Objects.isNull(counter) ? counter.getSeq():1;
     }
 
-    @Override
-    public Cart createCart(Cart cart, Map<String, Object> model) {
-//        Map<String, Object> model = new HashMap<>();
-        model.put("name", cart.getProductName());
-        model.put("location", "Banglore, India");
-        model.put("productPrice", cart.getProductPrice());
-        model.put("productName", cart.getProductDescription());
-        model.put("productBrand", cart.getProductBrand());
-        model.put("productDiscount", cart.getProductDiscount());
-        model.put("productManufacturedYear", cart.getProductManufacturedYear());
-        model.put("DamageLevel", cart.getProductDamageLevel());
-        model.put("productSpecs", cart.getProductSpecs());
 
+
+    @Override
+    public Cart createCart(Cart cart) {
         Cart cart1= cartRepository.save(cart);
         if(cart1 != null ){
             System.out.println("Cart is added successfully.");

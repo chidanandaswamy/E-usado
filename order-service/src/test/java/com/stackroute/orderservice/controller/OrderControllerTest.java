@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,17 +33,18 @@ public class OrderControllerTest {
     private OrderController orderController;
 
 
-    private List<Order> orders;
+    private Order orders;
 
-    @Before
-    public void setUp() {
+//    @Before
+//    public void setUp() {
+//
+//        MockitoAnnotations.initMocks(this);
+//        mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
+//        orders = new Order(50L,"qwe@gmail.com","12","tv",25000.00,"successful","confirmed");
+//
+//        orders = new Order();
+//
 
-        MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
-        orders = new Order(long.fromString("50"),buyerEmail:"qwe@gmail.com",orderDate:"12"
 
 
-
-                )
-    }
 }

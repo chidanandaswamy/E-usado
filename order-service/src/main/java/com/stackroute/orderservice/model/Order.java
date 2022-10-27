@@ -27,7 +27,7 @@ public class Order {
     private String buyerEmail;
     private String orderDate;
     private String products;
-    private Long totalAmount;
+    private Double totalAmount;
     private String paymentStatus;
     private String orderStatus;
 }

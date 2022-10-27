@@ -16,13 +16,13 @@ public class ConsumerService {
     @Autowired
    public CartServiceImpl cartServiceImpl;
 
-//    @RabbitListener(queues = "productServiceQueue")
+//    @RabbitListener(queues = "productOrderQueue")
 //    public void receiveMessage(HashMap<String, Object> message) {
 //        System.out.println("Received <" + message + ">");
 //    }
 
 
-    @RabbitListener(queues = "productServiceQueue")
+    @RabbitListener(queues = "productOrderQueue")
     public void createCart(Cart cart) {
 
         Map<String, Object> model = new HashMap<>();
@@ -37,8 +37,7 @@ public class ConsumerService {
         model.put("DamageLevel", cart.getProductDamageLevel());
         model.put("productSpecs", cart.getProductOwnerEmail());
 
-//    System.out.println(request1);
 
-        cartServiceImpl.createCart(cart, model);
+        cartServiceImpl.createCart(cart);
     }
 }

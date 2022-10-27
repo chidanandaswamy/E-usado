@@ -10,7 +10,9 @@ import java.util.Map;
 @Service
 public interface CartService {
 
-    Cart createCart(Cart cart, Map<String, Object> model);
+    Cart createCart(Cart cart);
+
+
 
 
     Cart getCartById(long cartId);

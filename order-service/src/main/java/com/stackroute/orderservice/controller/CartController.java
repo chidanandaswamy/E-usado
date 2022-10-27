@@ -39,8 +39,7 @@ public class CartController {
         model.put("productSpecs", cart.getProductSpecs());
 
 
-//        return service.sendEmailProductAdded(request1, model);
-        responseEntity= new ResponseEntity<>( cartServiceImpl.createCart(cart, model), HttpStatus.CREATED);
+        responseEntity= new ResponseEntity<>( cartServiceImpl.createCart(cart), HttpStatus.CREATED);
         return responseEntity;
     }
     @GetMapping("/getCart/{cartId}")

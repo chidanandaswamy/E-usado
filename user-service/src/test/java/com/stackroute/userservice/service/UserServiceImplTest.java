@@ -121,35 +121,35 @@ public class UserServiceImplTest {
     }
 
 
-    @Test
-    public void updateusertest() throws UserNotFoundException
-    {
-
-
-        user.setPassword("ashutosh@123");
-        user.setGender("MALE");
-        user.setEmail("ashu@gmail.com");
-        user.setPassword("password123");
-        user.setName("Arnav");
-        user.setContactNo(9337138976L);
-        Address address=new Address();
-        address.setAddressID(Generators.timeBasedGenerator().generate());
-        address.setCity("Jeypore");
-        address.setLandmark("NSrinivas");
-        address.setBuildingName("SR Sri");
-        address.setHouseNumber(1);
-        address.setStreetName("A");
-        address.setPinCode(764001);
-        address.setState("Odisha");
-      user.setAddress(address);
-        when(userRepository.findById(user.getEmail())).thenReturn(options);
-        System.out.println(options);
-        User fetch=userServiceImpl.UpdateByEmail(user, user.getEmail());
-        System.out.println(fetch);
-        System.out.println("********");
-        System.out.println(user.getContactNo());
-        assertEquals(user, fetch);
-    }
+//    @Test
+//    public void updateusertest() throws UserNotFoundException
+//    {
+//
+//
+//        user.setPassword("ashutosh@123");
+//        user.setGender("MALE");
+//        user.setEmail("ashu@gmail.com");
+//        user.setPassword("password123");
+//        user.setName("Arnav");
+//        user.setContactNo(9337138976L);
+//        Address address=new Address();
+//        address.setAddressID(Generators.timeBasedGenerator().generate());
+//        address.setCity("Jeypore");
+//        address.setLandmark("NSrinivas");
+//        address.setBuildingName("SR Sri");
+//        address.setHouseNumber(1);
+//        address.setStreetName("A");
+//        address.setPinCode(764001);
+//        address.setState("Odisha");
+//      user.setAddress(address);
+//        when(userRepository.findById(user.getEmail())).thenReturn(options);
+//        System.out.println(options);
+//        User fetch=userServiceImpl.UpdateByEmail(user, user.getEmail());
+//        System.out.println(fetch);
+//        System.out.println("********");
+//        System.out.println(user.getContactNo());
+//        assertEquals(user, fetch);
+//    }
 
 
 

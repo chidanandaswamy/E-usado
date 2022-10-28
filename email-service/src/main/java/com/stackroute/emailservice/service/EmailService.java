@@ -5,6 +5,7 @@ import com.stackroute.emailservice.dto.MailRequest;
 import com.stackroute.emailservice.dto.MailResponse;
 import com.stackroute.emailservice.model.OrderService;
 import com.stackroute.emailservice.model.SlotBooking;
+import com.stackroute.emailservice.model.UserService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -64,7 +65,7 @@ public class EmailService {
         return response;
     }
 
-    public MailResponse sendEmailThankyou(MailRequest request1, Map<String, Object> model) {
+    public MailResponse sendEmailThankyou(UserService request1, Map<String, Object> model) {
 
         MailResponse response = new MailResponse();
         MimeMessage message = sender.createMimeMessage();
@@ -79,14 +80,14 @@ public class EmailService {
             Template t = config.getTemplate("email-ThankYouRegistration.ftl");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            helper.setTo(request1.getProductOwnerEmail());
+            helper.setTo(request1.getEmail());
             helper.setText(html, true);
             helper.setSubject("Thank You for Registration");
             helper.setFrom("eusado3@gmail.com");
 
 	            sender.send(message);
 
-            response.setMessage("mail send to : " + request1.getProductOwnerEmail());
+            response.setMessage("mail send to : " + request1.getEmail());
             response.setStatus(Boolean.TRUE);
 
         } catch (MessagingException | IOException | TemplateException e) {

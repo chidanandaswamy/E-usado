@@ -2,6 +2,8 @@ package com.stackroute.productservice.service;
 
 import com.stackroute.productservice.model.Product;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductService {
@@ -23,4 +25,5 @@ public interface ProductService {
     ResponseEntity<String> deleteProductById(String id);
     ResponseEntity<String> deleteAllProducts();
     ResponseEntity<?> getProductsByOwnerEmail(String ownerEmail, int pageNumber, int pageSize, Long productAddedTime);
+    ResponseEntity<?> addProductToCart(String id, String email);
 }

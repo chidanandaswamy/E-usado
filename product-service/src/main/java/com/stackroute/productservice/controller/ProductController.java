@@ -18,6 +18,11 @@ public class ProductController {
         return productServiceImpl.createProduct(productAsJSONString, images);
     }
 
+    @PostMapping("/product/add-to-cart/product-id/{id}/user-email/{email}")
+    public ResponseEntity<?> addProductToCart(@PathVariable String id, @PathVariable String email){
+        return productServiceImpl.addProductToCart(id, email);
+    }
+
     @GetMapping("/products")
     public ResponseEntity<?> getProducts(@RequestParam(name = "search", defaultValue = "none") String search,
                                          @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,

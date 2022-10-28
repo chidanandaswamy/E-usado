@@ -3,6 +3,7 @@ package com.stackroute.productservice.service;
 import com.alibaba.fastjson2.JSON;
 import com.fasterxml.uuid.Generators;
 import com.mongodb.BasicDBList;
+import com.stackroute.productservice.dto.CartDto;
 import com.stackroute.productservice.dto.ProductDto;
 import com.stackroute.productservice.exception.ProductNotFoundException;
 import com.stackroute.productservice.model.Product;
@@ -51,7 +52,7 @@ public class ProductServiceImpl implements ProductService{
     public ResponseEntity<String> createProduct(String productAsJSONString, MultipartFile[] images) {
 
         Product product = JSON.parseObject(productAsJSONString, Product.class);
-        product.setId(Generators.timeBasedGenerator().generate().toString());
+        product.setProductId(Generators.timeBasedGenerator().generate().toString());
         product.setProductAddedTime(System.currentTimeMillis());
 
         if(images != null && images.length > 0){
@@ -70,13 +71,12 @@ public class ProductServiceImpl implements ProductService{
 
         Product savedProduct = productRepository.save(product);
 
-        if(savedProduct != null && savedProduct.getId() != null){
+        if(savedProduct != null && savedProduct.getProductId() != null){
             ProductDto productDto = JSON.parseObject(productAsJSONString, ProductDto.class);
-            productDto.setId(product.getId());
+            productDto.setId(product.getProductId());
             productDto.setProductAddedTime(product.getProductAddedTime());
             rabbitTemplate.convertAndSend(exchange, mailRoutingKey, product);
             rabbitTemplate.convertAndSend(exchange, chatRoutingKey, productDto);
-            rabbitTemplate.convertAndSend(exchange, orderRoutingKey, productDto);
             return new ResponseEntity<>("Product added successfully.", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("Could not create product.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -228,7 +228,7 @@ public class ProductServiceImpl implements ProductService{
         System.out.println(productOptional.isPresent());
         if(productOptional.isPresent()){
             Product product = JSON.parseObject(productAsJSONString, Product.class);
-            product.setId(id);
+            product.setProductId(id);
 
             if(images != null && images.length > 0){
                 try {
@@ -248,7 +248,7 @@ public class ProductServiceImpl implements ProductService{
             }
 
             Product savedProduct = productRepository.save(product);
-            if(savedProduct != null && savedProduct.getId() != null){
+            if(savedProduct != null && savedProduct.getProductId() != null){
                 return new ResponseEntity<>("Product with id " + id + " updated successfully", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Update of product with id " + id + " failed", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -303,6 +303,19 @@ public class ProductServiceImpl implements ProductService{
             return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("User " + ownerEmail + " has no products", HttpStatus.OK);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> addProductToCart(String id, String email){
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isPresent()){
+            CartDto cartDto = JSON.parseObject(JSON.toJSONString(productOptional.get()), CartDto.class);
+            cartDto.setCartOwnerEmail(email);
+            rabbitTemplate.convertAndSend(exchange, orderRoutingKey, cartDto);
+            return new ResponseEntity<>("Product with id " + id + " added to cart successfully", HttpStatus.OK);
+        } else {
+            throw new ProductNotFoundException("Product with id " + id + " is not found.");
         }
     }
 }

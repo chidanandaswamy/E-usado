@@ -2,7 +2,6 @@ package com.stackroute.emailservice.service;
 
 
 import com.stackroute.emailservice.dto.MailRequest;
-import com.stackroute.emailservice.model.OrderService;
 import com.stackroute.emailservice.model.SlotBooking;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,19 +67,19 @@ public class RabbitMQConsumerService {
 
 
     //slot booked conformation mail
-    @RabbitListener(queues = "Order_queue")
-    public void OrderConformation(OrderService request2) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("orderID", request2.getId());
-        model.put("location", "Banglore, India");
-        model.put("orderedProducts", request2.getProducts());
-        model.put("orderBuyerEmailId", request2.getBuyerEmail());
-        model.put("orderDate", request2.getOrderDate());
-        model.put("OrderPaymentStatus", request2.getPaymentStatus());
-        model.put("orderTotalAmount", request2.getTotalAmount());
-        model.put("OrderStatus", request2.getOrderStatus());
-
-        service.OrderConformationsendEmail(request2, model);
-    }
+//    @RabbitListener(queues = "Order_queue")
+//    public void OrderConformation(OrderService request2) {
+//        Map<String, Object> model = new HashMap<>();
+//        model.put("orderID", request2.getId());
+//        model.put("location", "Banglore, India");
+//        model.put("orderedProducts", request2.getProducts());
+//        model.put("orderBuyerEmailId", request2.getBuyerEmail());
+//        model.put("orderDate", request2.getOrderDate());
+//        model.put("OrderPaymentStatus", request2.getPaymentStatus());
+//        model.put("orderTotalAmount", request2.getTotalAmount());
+//        model.put("OrderStatus", request2.getOrderStatus());
+//
+//        service.OrderConformationsendEmail(request2, model);
+//    }
 
 }

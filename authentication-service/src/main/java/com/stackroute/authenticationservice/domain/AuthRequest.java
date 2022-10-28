@@ -10,7 +10,6 @@ import lombok.Setter;
 @Setter
 public class AuthRequest {
     private String emailId;
-    private String password;
     private String ChangePassword;
 
 }

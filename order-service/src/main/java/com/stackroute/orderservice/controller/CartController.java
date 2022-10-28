@@ -1,7 +1,6 @@
 package com.stackroute.orderservice.controller;
 
 
-import com.stackroute.orderservice.config.Consumer;
 import com.stackroute.orderservice.model.Cart;
 import com.stackroute.orderservice.service.CartServiceImpl;
 
@@ -11,21 +10,37 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1")
 public class CartController {
 
-    @Autowired
-    private Consumer consumer;
+
 
     private ResponseEntity responseEntity;
     @Autowired
     public CartServiceImpl cartServiceImpl;
 
     @PostMapping("/addToCart")
-    public void createCart(@RequestBody Cart cart) {
+    public ResponseEntity<Cart> createCart(@RequestBody Cart cart) {
         cart.setCartId(cartServiceImpl.getSequenceNumber(Cart.SEQUENCE_NAME));
-        cartServiceImpl.createCart(cart);
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("name", cart.getProductName());
+        model.put("location", "Banglore, India");
+        model.put("productPrice", cart.getProductPrice());
+        model.put("productName", cart.getProductDescription());
+        model.put("productBrand", cart.getProductBrand());
+        model.put("productDiscount", cart.getProductDiscount());
+        model.put("productManufacturedYear", cart.getProductManufacturedYear());
+        model.put("DamageLevel", cart.getProductDamageLevel());
+        model.put("productSpecs", cart.getProductSpecs());
+
+
+        responseEntity= new ResponseEntity<>( cartServiceImpl.createCart(cart), HttpStatus.CREATED);
+        return responseEntity;
     }
     @GetMapping("/getCart/{cartId}")
     public ResponseEntity<?> getCartById(@PathVariable long cartId) {

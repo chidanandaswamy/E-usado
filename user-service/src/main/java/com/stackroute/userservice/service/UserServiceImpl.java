@@ -7,7 +7,8 @@ import com.stackroute.userservice.model.UserDTO;
 import com.stackroute.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import java.util.*;
 
 
 @Service
@@ -18,28 +19,31 @@ public class UserServiceImpl implements UserService{
     @Autowired
     Producer p;
 
+    List<User> l=new ArrayList<>();
 
     @Override
-    public void addUser(User user) {
+    public User addUser(User user) {
         User user1=userRepository.findByEmail(user.getEmail());
         if(user1 != null && user1.getEmail()!=null){
             throw new UserNotFoundException("User with email " +user.getEmail() +" already exists.");
-
         }
-
 
         else {
             user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
             UserDTO u=new UserDTO();
+<<<<<<< HEAD
+            u.setUserEmail(user.getEmail());
+            u.setUserPassword(user.getPassword());
+           u.setUserName(user.getName());
+=======
             u.setEmail(user.getEmail());
             u.setPassword(user.getPassword());
+            u.setName(user.getName());
+>>>>>>> 8de7206d5d4af8497fe20faa0e69d52108846c58
             p.sendMessageToRabbitMq(u);
-            userRepository.save(user);
-            System.out.println(user);
+            return userRepository.save(user);
 
         }
-
-
 
     }
 
@@ -73,7 +77,7 @@ public class UserServiceImpl implements UserService{
     return true;
         }
           else{ throw new UserNotFoundException("User with email " + email + " doesn't exist.");}
-//
+
     }
 
     @Override
@@ -88,8 +92,6 @@ public class UserServiceImpl implements UserService{
         else{throw new UserNotFoundException("User with email " + user + " doesn't exist.");}
 
     }
-
-
 
 
 }

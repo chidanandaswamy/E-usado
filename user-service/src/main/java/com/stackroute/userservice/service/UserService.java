@@ -5,7 +5,10 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    void addUser(User user) ;
+//    void addUser(User user) ;
+
+    User addUser(User user);
+
 //    HashSet<User> findAllUsers();
     List<User> findAllUsers();
     User findByEmail(String email) ;
@@ -13,5 +16,7 @@ public interface UserService {
     boolean deleteUserByEmail(String email);
 
     User UpdateByEmail(User user,String email);
+
+
 
 }

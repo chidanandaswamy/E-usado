@@ -1,8 +1,8 @@
-package com.stackroute.userservice.controller;
+//package com.stackroute.userservice.controller;
 //import static org.mockito.Mockito.any;
 //import static org.mockito.Mockito.when;
 //import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//
+////
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.stackroute.userservice.model.Address;
 //import com.stackroute.userservice.model.User;
@@ -20,12 +20,12 @@ package com.stackroute.userservice.controller;
 //import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 //import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 //import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-public class UserControllerTest {
-
+//
+//public class UserControllerTest {
+//
 //    @Autowired
 //    private UserController userController;
-
+//
 //    @MockBean
 //    private UserServiceImpl userServiceImpl;
 //
@@ -37,7 +37,7 @@ public class UserControllerTest {
 //    UserService userService;
 //    @InjectMocks
 //    UserController userController;
-
+//
 //    @Test
 //    public void deleteUserSuccess() throws Exception {
 //        when(userService.deleteUserByEmail("ashu@gmail.com")).thenReturn(true);
@@ -47,7 +47,7 @@ public class UserControllerTest {
 //                .andDo(MockMvcResultHandlers.print());
 //
 //    }
-//
+////
 //
 //    @Test
 //    public void deleteUserFailure() throws Exception {
@@ -58,4 +58,4 @@ public class UserControllerTest {
 //                .andDo(MockMvcResultHandlers.print());
 //
 //    }
-}
+//}

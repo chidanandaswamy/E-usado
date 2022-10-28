@@ -2,7 +2,6 @@ package com.stackroute.emailservice.service;
 
 
 import com.stackroute.emailservice.dto.MailRequest;
-import com.stackroute.emailservice.model.OrderService;
 import com.stackroute.emailservice.model.SlotBooking;
 import com.stackroute.emailservice.model.UserService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -37,41 +36,7 @@ public class RabbitMQConsumerService {
         model.put("DamageLevel", request1.getProductDamageLevel());
        model.put("productSpecs", request1.getProductSpecs());
 
-
-
          service.sendEmailProductAdded(request1, model);
-    }
-//            for registration conformation mail
-    @RabbitListener(queues = "User_queue")
-    public void sendEmailThank(UserService request2) {
-
-        Map<String, Object> model = new HashMap<>();
-        model.put("UserEmail", request2.getEmail());
-        model.put("UserName", request2.getName());
-
-
-
-
-         service.sendEmailThankyou(request2, model);
-    }
-
-
-
-
-    //slot booked conformation mail
-    @RabbitListener(queues = "Order_queue")
-    public void OrderConformation(OrderService request2) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("orderID", request2.getId());
-        model.put("location", "Banglore, India");
-        model.put("orderedProducts", request2.getProducts());
-        model.put("orderBuyerEmailId", request2.getBuyerEmail());
-        model.put("orderDate", request2.getOrderDate());
-        model.put("OrderPaymentStatus", request2.getPaymentStatus());
-        model.put("orderTotalAmount", request2.getTotalAmount());
-        model.put("OrderStatus", request2.getOrderStatus());
-
-        service.OrderConformationsendEmail(request2, model);
     }
 
     @RabbitListener(queues = "Slot_queue")
@@ -88,4 +53,34 @@ public class RabbitMQConsumerService {
         System.out.println(request1);
         service.sendEmailSlotBooking(request1, model);
     }
+
+
+//            for registration conformation mail
+    @RabbitListener(queues = "User_queue")
+    public void sendEmailThank(UserService request2) {
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("UserEmail", request2.getEmail());
+        model.put("UserName", request2.getName());
+
+         service.sendEmailThankyou(request2, model);
+    }
+
+
+    //slot booked conformation mail
+//    @RabbitListener(queues = "Order_queue")
+//    public void OrderConformation(OrderService request2) {
+//        Map<String, Object> model = new HashMap<>();
+//        model.put("orderID", request2.getId());
+//        model.put("location", "Banglore, India");
+//        model.put("orderedProducts", request2.getProducts());
+//        model.put("orderBuyerEmailId", request2.getBuyerEmail());
+//        model.put("orderDate", request2.getOrderDate());
+//        model.put("OrderPaymentStatus", request2.getPaymentStatus());
+//        model.put("orderTotalAmount", request2.getTotalAmount());
+//        model.put("OrderStatus", request2.getOrderStatus());
+//
+//        service.OrderConformationsendEmail(request2, model);
+//    }
+
 }

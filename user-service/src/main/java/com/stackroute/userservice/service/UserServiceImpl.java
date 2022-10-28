@@ -31,15 +31,11 @@ public class UserServiceImpl implements UserService{
         else {
             user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
             UserDTO u=new UserDTO();
-<<<<<<< HEAD
-            u.setUserEmail(user.getEmail());
-            u.setUserPassword(user.getPassword());
-           u.setUserName(user.getName());
-=======
+
             u.setEmail(user.getEmail());
             u.setPassword(user.getPassword());
             u.setName(user.getName());
->>>>>>> 8de7206d5d4af8497fe20faa0e69d52108846c58
+
             p.sendMessageToRabbitMq(u);
             return userRepository.save(user);
 

@@ -46,7 +46,7 @@ public class ProductServiceImplTest {
 
         location = new Location("mangalore", new Double[]{-88.00, -90.90});
 
-        product = new Product(UUID.fromString("fd449384-4a12-11ed-883d-155c4e30b5e7"),
+        product = new Product("fd449384-4a12-11ed-883d-155c4e30b5e7",
                 "samsung mobile update second time",
                 25000.00,
                 "samsung",
@@ -95,15 +95,15 @@ public class ProductServiceImplTest {
 
     @Test
     public void deleteProductSuccess() {
-        when(productRepository.findById(product.getId())).thenReturn(productOptional);
-        ResponseEntity<?> response = productServiceImpl.deleteProductById(product.getId());
+        when(productRepository.findById(product.getProductId())).thenReturn(productOptional);
+        ResponseEntity<?> response = productServiceImpl.deleteProductById(product.getProductId());
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test(expected = NullPointerException.class)
     public void deleteProductFailure() {
-        when(productRepository.findById(product.getId())).thenReturn(null);
-        ResponseEntity<?> response = productServiceImpl.deleteProductById(product.getId());
+        when(productRepository.findById(product.getProductId())).thenReturn(null);
+        ResponseEntity<?> response = productServiceImpl.deleteProductById(product.getProductId());
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
@@ -111,33 +111,33 @@ public class ProductServiceImplTest {
     @Test
     public void updateProductSuccess() throws ProductNotFoundException {
 
-        when(productRepository.findById(UUID.fromString("fd449384-4a12-11ed-883d-155c4e30b5e7"))).thenReturn(productOptional);
+        when(productRepository.findById("fd449384-4a12-11ed-883d-155c4e30b5e7")).thenReturn(productOptional);
         product.setProductDescription("Heavy weight product");
-        ResponseEntity<?> response = productServiceImpl.updateProductById(product.getId(), JSON.toJSONString(product), null);
+        ResponseEntity<?> response = productServiceImpl.updateProductById(product.getProductId(), JSON.toJSONString(product), null);
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test(expected = ProductNotFoundException.class)
     public void updateNoteFailure() throws ProductNotFoundException {
 
-        when(productRepository.findById(product.getId())).thenThrow(NoSuchElementException.class);
+        when(productRepository.findById(product.getProductId())).thenThrow(NoSuchElementException.class);
         product.setProductDescription("Heavy weight product");
-        ResponseEntity<?> response = productServiceImpl.updateProductById(product.getId(), JSON.toJSONString(product), null);
+        ResponseEntity<?> response = productServiceImpl.updateProductById(product.getProductId(), JSON.toJSONString(product), null);
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
     }
 
     @Test
     public void getProductByIdSuccess() throws ProductNotFoundException {
-        when(productRepository.findById(product.getId())).thenReturn(productOptional);
-        ResponseEntity<?> response = productServiceImpl.getProductById(product.getId());
+        when(productRepository.findById(product.getProductId())).thenReturn(productOptional);
+        ResponseEntity<?> response = productServiceImpl.getProductById(product.getProductId());
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test(expected = ProductNotFoundException.class)
     public void getProductByIdFailure() throws ProductNotFoundException {
-        when(productRepository.findById(product.getId())).thenReturn(null);
-        ResponseEntity<?> response = productServiceImpl.getProductById(product.getId());
+        when(productRepository.findById(product.getProductId())).thenReturn(null);
+        ResponseEntity<?> response = productServiceImpl.getProductById(product.getProductId());
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 //

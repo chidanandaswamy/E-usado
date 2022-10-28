@@ -1,7 +1,6 @@
-package com.stackroute.orderservice.dto;
+package com.stackroute.productservice.dto;
 
-
-import com.stackroute.orderservice.model.Location;
+import com.stackroute.productservice.model.Location;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,8 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductDto {
-    private UUID id;
+public class CartDto {
+
+    private String productId;
     private String productName;
     private Double productPrice;
     private String productBrand;
@@ -31,4 +31,5 @@ public class ProductDto {
     private Location location;
     private Boolean productAvailability;
     private Long productAddedTime;
+    private String cartOwnerEmail;
 }

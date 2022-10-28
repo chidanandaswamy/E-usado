@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService{
     public User UpdateByEmail(User user,String email) {
         User u= userRepository.findByEmail(email);
         System.out.println(user);
-        if(u!=null &&u.getEmail()!=null  ){
+        if(u!=null){
             user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
           return  userRepository.save(user);
         }

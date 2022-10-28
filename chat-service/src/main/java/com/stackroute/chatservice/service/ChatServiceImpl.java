@@ -19,10 +19,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
 
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
@@ -32,6 +32,7 @@ import static org.springframework.data.mongodb.core.FindAndModifyOptions.options
 public class ChatServiceImpl implements ChatService{
    @Autowired
    private ChatRepository chatRepository;
+
 
     @Autowired
     private MongoOperations mongoOperations;
@@ -48,6 +49,7 @@ public class ChatServiceImpl implements ChatService{
     public ChatServiceImpl(ChatRepository chatRepository) {
         super();
         this.chatRepository = chatRepository;
+
     }
 
     @Override
@@ -98,13 +100,36 @@ public class ChatServiceImpl implements ChatService{
         return existingChat;
     }
 
-    @Override
-    public Chat getChatByProductId(long productId) {
+
+
+   /* @Override
+    public Chat getChatByProductId(UUID productId) {
         Optional <Chat> chat = chatRepository.findById(productId);
 
         return chatRepository.findById(productId).orElseThrow(()
                 -> new ChatNotFoundException("Chat is not present with Product Id " + productId));
+    }*/
+
+    @Override
+    public List<Chat> getChatByProductId(String productId) {
+        List<Chat> chat= chatRepository.findByProductId(productId);
+        if(chat!=null&&chat.size() > 0){
+            return chat;
+        }else{
+            throw new ChatNotFoundException(" Chat not is not present  with Product Id " + productId);
+        }
+
+
     }
 
+    /*if(chat.isPresent()){
+            return chat.get();
+        }else{
+            throw new ChatNotFoundException("No reply found by Question with Id " + questionId);
+        }
 
+       */
+
+    //return chatRepository.findById(productId).orElseThrow(()
+    //      -> new ChatNotFoundException("Chat is not present with Product Id "  + productId));
 }

@@ -23,8 +23,7 @@ public class Chat {
     public static final String SEQUENCE_NAME = "booking_sequence";
     @Id
     private long questionId;
-
-    private long productId;
+    private String productId;
     private String question;
     private List reply;
     private String userEmail;

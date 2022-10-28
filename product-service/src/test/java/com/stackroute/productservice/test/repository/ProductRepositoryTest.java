@@ -33,7 +33,7 @@ public class ProductRepositoryTest {
 
         location = new Location("mangalore", new Double[]{-88.00, -90.90});
 
-        product = new Product(id,
+        product = new Product(id.toString(),
                 "samsung mobile update second time",
                 25000.00,
                 "samsung",
@@ -67,7 +67,7 @@ public class ProductRepositoryTest {
     public void createProductTest() {
         productRepository.insert(product);
         List<Product> products = productRepository.findAll();
-        Assert.assertEquals(this.products.get(0).getId(), products.get(0).getId());
+        Assert.assertEquals(this.products.get(0).getProductId(), products.get(0).getProductId());
     }
 
 
@@ -75,9 +75,9 @@ public class ProductRepositoryTest {
     public void deleteProductTest() {
         productRepository.insert(product);
         List<Product> products = productRepository.findAll();
-        Assert.assertEquals(this.products.get(0).getId(), products.get(0).getId());
+        Assert.assertEquals(this.products.get(0).getProductId(), products.get(0).getProductId());
 
-        productRepository.deleteById(product.getId());
+        productRepository.deleteById(product.getProductId());
 
         products = productRepository.findAll();
 
@@ -90,12 +90,12 @@ public class ProductRepositoryTest {
     public void updateProductTest() {
         productRepository.insert(product);
         List<Product> products = productRepository.findAll();
-        Assert.assertEquals(this.products.get(0).getId(), products.get(0).getId());
+        Assert.assertEquals(this.products.get(0).getProductId(), products.get(0).getProductId());
         Iterator iterator = products.listIterator();
         while (iterator.hasNext()) {
             product = (Product) iterator.next();
 
-            if (product.getId().equals(id))
+            if (product.getProductId().equals(id))
                 product.setProductDescription("lorem ipsum");
         }
 
@@ -109,6 +109,6 @@ public class ProductRepositoryTest {
     public void getAllNotesByUserId() {
         productRepository.insert(product);
         List<Product> products = productRepository.findAll();
-        Assert.assertEquals(this.products.get(0).getId(), products.get(0).getId());
+        Assert.assertEquals(this.products.get(0).getProductId(), products.get(0).getProductId());
     }
 }

@@ -6,7 +6,7 @@
 <body>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td align="center" valign="top" bgcolor="#cdb558"
+			<td align="center" valign="top" bgcolor="#838383"
 				style="background-color: #838383;"><br> <br>
 				<table width="600" border="0" cellspacing="0" cellpadding="0">
 					<tr>
@@ -31,8 +31,10 @@
 							Product Discount:            ${productDiscount}
 							Product Manufactured Year:   ${productManufacturedYear}
 							Product Level:               ${DamageLevel}
-
-							Product specifications:
+							  <#list     productSpecs?keys as key>
+                               <tr> <td>${key}</td>  <td>${productSpecs[key]}</td>
+                               </tr>
+                                     </#list>
 
 							</pre>
 								<br>      Your product successfully added in E-usado selling flatform

@@ -22,11 +22,17 @@
 								           <b>     E-usado!!! <br>
 							</div>
 							<pre>
-							product Id:${productId}
-							product Name:${productName}
-							Email:${userEmail}
-							Name:${userName}
-							slot time:${slotTime}
+							Slot Id:${slotId}
+							Buyer Name:${buyerName}
+							Buyer Email Id:${BuyerEmailId}
+							slot Date:${slotDate}
+
+							seller Name:${sellerName}
+						    seller Email:${sellerEmail}
+						     seller Email:${SlotDescription}
+
+
+
 
 							</pre>
 							<div>
@@ -36,7 +42,7 @@
 								<br> ""project build using microservice
 								to gain the knowledge open the back end code"<br>
 								<br>"Sharing the knowledge is biggest learning" <br> <br>
-								<br> <br> <b>${name}</b><br>${location}<br>
+								<br> <br> <b>E-Usado</b><br>Bengalore<br>
 								<br>
 							</div>
 						</td>

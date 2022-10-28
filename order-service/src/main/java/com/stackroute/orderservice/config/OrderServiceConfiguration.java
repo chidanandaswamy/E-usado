@@ -1,20 +1,20 @@
-package com.stackroute.slotservice.configuration;
+package com.stackroute.orderservice.config;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration
-public class RabbitMqConfiguration {
+public class OrderServiceConfiguration {
 
 
-    public static final String QUEUE = "Slot_queue";
-    public static final String EXCHANGE = "Slot_exchange";
-    public static final String ROUTING_KEY = "Slot_routingkey";
+    public static final String QUEUE = "Order_queue";
+    public static final String EXCHANGE = "Order_exchange";
+    public static final String ROUTING_KEY = "Order_routing key";
 
     @Bean
     public Queue queue(){
@@ -29,12 +29,10 @@ public class RabbitMqConfiguration {
     public Binding binding(Queue queue, DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
-
     @Bean
-    public Jackson2JsonMessageConverter converter(){
+    public MessageConverter converter(){
         return new Jackson2JsonMessageConverter();
     }
-
     @Bean
     public AmqpTemplate template(ConnectionFactory connectionFactory){
         final RabbitTemplate rabbitTemplate=new RabbitTemplate(connectionFactory);

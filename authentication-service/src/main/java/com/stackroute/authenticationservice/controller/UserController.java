@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import com.stackroute.authenticationservice.domain.User;
@@ -31,7 +35,7 @@ public class UserController {
         this.securityTokenGenerator = securityTokenGenerator;
     }
 
-    /*@GetMapping("/login")
+    @GetMapping("/login")
     public String index() {
         OAuth2User user = getCurrentUser();
         return "Hello " + user.getAttributes().get("name") + ". Your email is " + user.getAttributes().get("email")
@@ -44,7 +48,7 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return ((OAuth2AuthenticationToken)auth).getPrincipal();
     }
-*/
+
     @PostMapping("/authenticate")
     public ResponseEntity<?> loginUser(@RequestBody User user) throws InvalidCredentialsException
     {

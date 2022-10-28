@@ -16,19 +16,40 @@ public class OrderServiceConfiguration {
     public static final String EXCHANGE = "Order_exchange";
     public static final String ROUTING_KEY = "Order_routing key";
 
+
+//    public static final String CQUEUE = "Cart-queue";
+
     @Bean
     public Queue queue(){
         return new Queue(QUEUE,false);
     }
+
+//    @Bean
+//    public Queue Cqueue(){
+//        return new Queue(CQUEUE,false);
+//    }
+
+
     @Bean
     public DirectExchange exchange(){
 
         return new DirectExchange(EXCHANGE);
     }
+
+
+
+
     @Bean
     public Binding binding(Queue queue, DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
+
+//    @Bean
+//    public Binding Cbinding(Queue Cqueue, DirectExchange exchange){
+//        return BindingBuilder.bind(Cqueue).to(exchange).with(ROUTING_KEY);
+//    }
+
+
     @Bean
     public MessageConverter converter(){
         return new Jackson2JsonMessageConverter();

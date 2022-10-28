@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class OrderDto {
-    private long id;
+    private String id;
     private String buyerEmail;
     private String orderDate;
     private String products;

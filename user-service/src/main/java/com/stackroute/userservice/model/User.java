@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Data
 @ToString
-@Document(value="user_1234")
+@Document(value="eusado_user")
 public class User {
 
     @NotNull(message = "Enter your email")

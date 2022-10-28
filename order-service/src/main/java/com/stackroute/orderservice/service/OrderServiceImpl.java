@@ -1,10 +1,10 @@
 package com.stackroute.orderservice.service;
 
 
-
 import com.stackroute.orderservice.exception.OrderNotFoundException;
 import com.stackroute.orderservice.model.DbSequence;
 import com.stackroute.orderservice.model.Order;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -30,6 +30,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private MongoOperations mongoOperations;
 
+
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     public int getSequenceNumber(String sequenceName){
         Query query=new Query(Criteria.where("id").is(sequenceName));
         Update update=new Update().inc("seq", 1);
@@ -43,6 +48,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order ordered= orderRepository.save(order);
         if(ordered != null ){
+            rabbitTemplate.convertAndSend("Order_exchange","Order_routing key",order);
             return new ResponseEntity<>("Order is added successfully.", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("Order Creation terminated.", HttpStatus.INTERNAL_SERVER_ERROR);

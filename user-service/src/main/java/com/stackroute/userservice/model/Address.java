@@ -1,10 +1,13 @@
 package com.stackroute.userservice.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class Address {
 
@@ -20,6 +23,7 @@ public class Address {
     private long pinCode;
     private String city;
     private String state;
+
 
 
 }

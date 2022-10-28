@@ -1,4 +1,4 @@
-package com.stackroute.dto;
+package com.stackroute.emailservice.dto;
 
 public class MailResponse {
 

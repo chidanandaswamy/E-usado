@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -52,7 +51,7 @@ public class ProductServiceImpl implements ProductService{
     public ResponseEntity<String> createProduct(String productAsJSONString, MultipartFile[] images) {
 
         Product product = JSON.parseObject(productAsJSONString, Product.class);
-        product.setId(Generators.timeBasedGenerator().generate());
+        product.setId(Generators.timeBasedGenerator().generate().toString());
         product.setProductAddedTime(System.currentTimeMillis());
 
         if(images != null && images.length > 0){
@@ -214,7 +213,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ResponseEntity<Product> getProductById(UUID id) {
+    public ResponseEntity<Product> getProductById(String id) {
         Optional<Product> productOptional = productRepository.findById(id);
         if(productOptional.isPresent()){
             return new ResponseEntity<>(productOptional.get(), HttpStatus.OK);
@@ -224,7 +223,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ResponseEntity<String> updateProductById(UUID id, String productAsJSONString, MultipartFile[] images) {
+    public ResponseEntity<String> updateProductById(String id, String productAsJSONString, MultipartFile[] images) {
         Optional<Product> productOptional = productRepository.findById(id);
         System.out.println(productOptional.isPresent());
         if(productOptional.isPresent()){
@@ -260,7 +259,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ResponseEntity<String> deleteProductById(UUID id) {
+    public ResponseEntity<String> deleteProductById(String id) {
         Optional<Product> productOptional = productRepository.findById(id);
         if(productOptional.isPresent()){
             productRepository.deleteById(id);

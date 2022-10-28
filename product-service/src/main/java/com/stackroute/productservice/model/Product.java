@@ -21,7 +21,7 @@ import java.util.UUID;
 public class Product {
 
     @Id
-    private UUID id;
+    private String id;
 
     @TextIndexed
     private String productName;

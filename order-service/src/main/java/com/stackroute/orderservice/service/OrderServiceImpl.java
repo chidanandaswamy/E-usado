@@ -1,10 +1,10 @@
 package com.stackroute.orderservice.service;
 
 
-
 import com.stackroute.orderservice.exception.OrderNotFoundException;
 import com.stackroute.orderservice.model.DbSequence;
 import com.stackroute.orderservice.model.Order;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -30,11 +30,17 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private MongoOperations mongoOperations;
 
-    public int getSequenceNumber(String sequenceName){
-        Query query=new Query(Criteria.where("id").is(sequenceName));
-        Update update=new Update().inc("seq", 1);
-        DbSequence counter = mongoOperations.findAndModify(query,update, FindAndModifyOptions.options().returnNew(true).upsert(true),DbSequence.class);
-        return !Objects.isNull(counter) ? counter.getSeq():1;
+
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    public String getSequenceNumber(String seqName){
+        Query qry=new Query(Criteria.where("id").is(seqName));
+        Update update=new Update().inc("seq",1);
+        DbSequence counter = mongoOperations
+                .findAndModify(qry,update,FindAndModifyOptions.options().returnNew(true).upsert(true),DbSequence.class);
+        return !Objects.isNull(counter)?counter.getSeq():String.valueOf(1);
     }
 
 
@@ -43,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order ordered= orderRepository.save(order);
         if(ordered != null ){
+            rabbitTemplate.convertAndSend("Order_exchange","Order_routing key",order);
             return new ResponseEntity<>("Order is added successfully.", HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>("Order Creation terminated.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -60,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity<Order>  getOrderById(long id) {
+    public ResponseEntity<Order>  getOrderById(String id) {
         Optional<Order> orders = orderRepository.findById(id);
         if(orders.isPresent()){
             return new ResponseEntity<>(orders.get(), HttpStatus.OK);
@@ -77,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity<String> deleteOrderById(long id) {
+    public ResponseEntity<String> deleteOrderById(String id) {
         Optional<Order> orders = orderRepository.findById(id);
         if(orders.isPresent()){
             orderRepository.deleteById(id);

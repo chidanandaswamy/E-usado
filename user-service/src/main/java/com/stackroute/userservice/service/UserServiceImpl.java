@@ -31,9 +31,15 @@ public class UserServiceImpl implements UserService{
         else {
             user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
             UserDTO u=new UserDTO();
+<<<<<<< HEAD
+            u.setUserEmail(user.getEmail());
+            u.setUserPassword(user.getPassword());
+           u.setUserName(user.getName());
+=======
             u.setEmail(user.getEmail());
             u.setPassword(user.getPassword());
             u.setName(user.getName());
+>>>>>>> 8de7206d5d4af8497fe20faa0e69d52108846c58
             p.sendMessageToRabbitMq(u);
             return userRepository.save(user);
 
@@ -78,7 +84,7 @@ public class UserServiceImpl implements UserService{
     public User UpdateByEmail(User user,String email) {
         User u= userRepository.findByEmail(email);
         System.out.println(user);
-        if(u!=null &&u.getEmail()!=null  ){
+        if(u!=null){
             user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
           return  userRepository.save(user);
         }

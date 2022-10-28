@@ -4,6 +4,7 @@ package com.stackroute.chatservice.service;
 import com.stackroute.chatservice.model.Chat;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,7 +20,7 @@ public interface ChatService {
 
    Chat replyChat(Chat chat, long questionId);
 
-   Chat getChatByProductId(long productId);
+   List<Chat> getChatByProductId(String productId);
 
 }
 

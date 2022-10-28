@@ -52,7 +52,7 @@ public class ProductControllerTest {
 
         location = new Location("mangalore", new Double[]{-88.00, -90.90});
 
-        product = new Product(UUID.fromString("fd449384-4a12-11ed-883d-155c4e30b5e7"),
+        product = new Product("fd449384-4a12-11ed-883d-155c4e30b5e7",
                 "samsung mobile update second time",
                 25000.00,
                 "samsung",
@@ -102,7 +102,7 @@ public class ProductControllerTest {
     @Test
     public void deleteProductSuccess() throws Exception {
 
-        when(productServiceImpl.deleteProductById(product.getId())).thenReturn(new ResponseEntity<>("Product with id " + product.getId() + " deleted successfully", HttpStatus.OK));
+        when(productServiceImpl.deleteProductById(product.getProductId())).thenReturn(new ResponseEntity<>("Product with id " + product.getProductId() + " deleted successfully", HttpStatus.OK));
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -113,7 +113,7 @@ public class ProductControllerTest {
     @Test
     public void deleteProductFailure() throws Exception {
 
-        when(productServiceImpl.deleteProductById(product.getId())).thenReturn(new ResponseEntity<>("Product with id " + product.getId() + " is not found.", HttpStatus.NOT_FOUND));
+        when(productServiceImpl.deleteProductById(product.getProductId())).thenReturn(new ResponseEntity<>("Product with id " + product.getProductId() + " is not found.", HttpStatus.NOT_FOUND));
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -123,7 +123,7 @@ public class ProductControllerTest {
     @Test
     public void updateProductSuccess() throws Exception {
 
-        when(productServiceImpl.updateProductById(product.getId(), JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Product with id " + product.getId() + " updated successfully", HttpStatus.OK));
+        when(productServiceImpl.updateProductById(product.getProductId(), JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Product with id " + product.getProductId() + " updated successfully", HttpStatus.OK));
         product.setProductDescription("Mumbai Indians vs RCB match game cd");
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
                         .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -136,7 +136,7 @@ public class ProductControllerTest {
     @Test
     public void updateProductFailure() throws Exception {
 
-        when(productServiceImpl.updateProductById(product.getId(), JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Product with id " + product.getId() + " is not found.", HttpStatus.NOT_FOUND));
+        when(productServiceImpl.updateProductById(product.getProductId(), JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Product with id " + product.getProductId() + " is not found.", HttpStatus.NOT_FOUND));
         product.setProductDescription("Mumbai Indians vs RCB match game cd");
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
                         .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -148,7 +148,7 @@ public class ProductControllerTest {
     @Test
     public void updateProductInternalFailure() throws Exception {
 
-        when(productServiceImpl.updateProductById(product.getId(), JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Product with id " + product.getId() + " is not found.", HttpStatus.INTERNAL_SERVER_ERROR));
+        when(productServiceImpl.updateProductById(product.getProductId(), JSON.toJSONString(product), null)).thenReturn(new ResponseEntity<>("Product with id " + product.getProductId() + " is not found.", HttpStatus.INTERNAL_SERVER_ERROR));
         product.setProductDescription("Mumbai Indians vs RCB match game cd");
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
                         .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -161,7 +161,7 @@ public class ProductControllerTest {
     @Test
     public void getProductByIdSuccess() throws Exception {
 
-        when(productServiceImpl.getProductById(product.getId())).thenReturn(new ResponseEntity<>(product, HttpStatus.OK));
+        when(productServiceImpl.getProductById(product.getProductId())).thenReturn(new ResponseEntity<>(product, HttpStatus.OK));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -172,7 +172,7 @@ public class ProductControllerTest {
     @Test
     public void getProductByIdFailure() throws Exception {
 
-        when(productServiceImpl.getProductById(product.getId())).thenThrow(ProductNotFoundException.class);;
+        when(productServiceImpl.getProductById(product.getProductId())).thenThrow(ProductNotFoundException.class);;
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/product-service/product/fd449384-4a12-11ed-883d-155c4e30b5e7")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())

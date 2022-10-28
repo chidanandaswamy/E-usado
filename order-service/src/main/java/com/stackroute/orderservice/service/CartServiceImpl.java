@@ -1,6 +1,9 @@
 package com.stackroute.orderservice.service;
 
 
+//import com.stackroute.orderservice.config.CartProducer;
+//import com.stackroute.orderservice.dto.CartDto;
+
 import com.stackroute.orderservice.exception.CartNotFoundException;
 import com.stackroute.orderservice.model.Cart;
 import com.stackroute.orderservice.model.DbSequence;
@@ -11,9 +14,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-
 import org.springframework.stereotype.Service;
-
 
 import java.util.Objects;
 
@@ -26,28 +27,36 @@ public class CartServiceImpl implements CartService{
     @Autowired
     private MongoOperations mongoOperations;
 
-    public int getSequenceNumber(String sequenceName){
-        Query query=new Query(Criteria.where("id").is(sequenceName));
-        Update update=new Update().inc("seq", 1);
-        DbSequence counter = mongoOperations.findAndModify(query,update, FindAndModifyOptions.options().returnNew(true).upsert(true),DbSequence.class);
-        return !Objects.isNull(counter) ? counter.getSeq():1;
+//    @Autowired
+//    private RabbitTemplate rabbitTemplate;
+
+
+
+    public String getSequenceNumber(String seqName){
+        Query qry=new Query(Criteria.where("id").is(seqName));
+        Update update=new Update().inc("seq",1);
+        DbSequence counter = mongoOperations
+                .findAndModify(qry,update,FindAndModifyOptions.options().returnNew(true).upsert(true),DbSequence.class);
+        return !Objects.isNull(counter)?counter.getSeq():String.valueOf(1);
     }
-
-
 
     @Override
     public Cart createCart(Cart cart) {
+
         Cart cart1= cartRepository.save(cart);
         if(cart1 != null ){
+//            rabbitTemplate.convertAndSend("Order_exchange","Order_routing key",cart);
             System.out.println("Cart is added successfully.");
         } else {
+
+
             System.out.println("Cart Creation terminated.");
         }
         return cart;
     }
 
     @Override
-    public Cart  getCartById(long cartId) {
+    public Cart  getCartById(String cartId) {
         Cart carts = cartRepository.findByCartId(cartId);
         if (carts != null ) {
             return carts;
@@ -59,7 +68,7 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public boolean deleteCartById(long cartId) {
+    public boolean deleteCartById(String cartId) {
         Cart carted = cartRepository.findByCartId(cartId);
         if(carted != null){
             cartRepository.deleteByCartId(cartId);

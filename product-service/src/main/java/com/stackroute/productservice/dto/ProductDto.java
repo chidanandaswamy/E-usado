@@ -7,14 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class ProductDto {
-    private UUID id;
+    private String id;
     private String productName;
     private Double productPrice;
     private String productBrand;

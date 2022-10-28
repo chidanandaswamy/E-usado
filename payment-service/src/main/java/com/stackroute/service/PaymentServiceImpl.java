@@ -1,63 +1,58 @@
 package com.stackroute.service;
 
-import com.razorpay.Order;
-import com.razorpay.RazorpayClient;
-import com.razorpay.RazorpayException;
-import com.stackroute.model.Payment;
-import com.stackroute.repository.PaymentRepository;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.stackroute.dto.Payment;
+import com.stackroute.dto.ResponseDto;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Address;
+import com.stripe.model.Customer;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.CustomerCreateParams;
+import com.stripe.param.PaymentIntentCreateParams;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PaymentServiceImpl implements PaymentService {
 
-    @Autowired
-    private PaymentRepository paymentRepository;
+    @Value("${stripe.secret-key}")
+    private String secretKey;
 
     @Override
-    public ResponseEntity<?> createOrder(Double amount) {
-        try {
-            RazorpayClient client = new RazorpayClient("rzp_test_TSA8K6bFoZcQxj","Y3KCxLSQ4BOlOlbzpm5oZPwr");
+    public ResponseEntity<ResponseDto> createPaymentIntent(Payment payment) throws StripeException {
 
-            JSONObject options = new JSONObject();
-            options.put("amount", amount);
-            options.put("currency", "INR");
-            options.put("receipt", "txn_123456");
+        Stripe.apiKey = secretKey;
 
-            Order order = client.orders.create(options);
+        CustomerCreateParams.Address addressParams = CustomerCreateParams.Address.builder()
+                .setCountry("")
+                .setLine1("")
+                .setLine2("")
+                .setCity("")
+                .setState("")
+                .setPostalCode("").build();
 
-            System.out.println(order);
 
-            //save order details into database
-            Payment payment = new Payment();
-            payment.setAmount(order.get("amount"));
-            payment.setOrderId(order.get("id"));
-            payment.setReceipt(order.get("receipt"));
-            payment.setStatus(order.get("status"));
+        CustomerCreateParams customerParams = new CustomerCreateParams.Builder()
+                .setEmail("")
+                .setName("")
+                .setAddress(addressParams).build();
 
-            paymentRepository.save(payment);
-            return new ResponseEntity<>(order, HttpStatus.OK);
-        } catch (RazorpayException e) {
-            throw new RuntimeException(e);
-        }
-    }
+        Customer customer = Customer.create(customerParams);
 
-    @Override
-    public ResponseEntity<?> updatePayment(Payment payment) {
+        PaymentIntentCreateParams createParams = new
+                PaymentIntentCreateParams.Builder()
+                .setCurrency("INR")
+                .setCustomer(customer.getId())
+                .setDescription("tesing")
+                .putMetadata("featureRequest", payment.getFeatureRequest())
+                .setAmount(payment.getAmount() * 1L)
+                .build();
 
-        Payment savedPayment = paymentRepository.findByOrderId(payment.getOrderId());
-        savedPayment.setPaymentId(payment.getPaymentId());
-        savedPayment.setRazorpaySignature(payment.getRazorpaySignature());
-        savedPayment.setStatus(payment.getStatus());
-
-        paymentRepository.save(savedPayment);
-
-        return new ResponseEntity<>("Updated Successfully", HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<?> getPayments() {
-        return new ResponseEntity<>(paymentRepository.findAll(), HttpStatus.OK);
+        PaymentIntent intent = PaymentIntent.create(createParams);
+        System.out.println("intent " + intent.getClientSecret());
+        return new ResponseEntity<ResponseDto>(new ResponseDto(intent.getClientSecret()), HttpStatus.OK);
     }
 }

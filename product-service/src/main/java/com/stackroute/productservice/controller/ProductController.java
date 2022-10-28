@@ -21,6 +21,11 @@ public class ProductController {
         return productServiceImpl.createProduct(productAsJSONString, images);
     }
 
+    @PostMapping("/product/add-to-cart/product-id/{id}/user-email/{email}")
+    public ResponseEntity<?> addProductToCart(@PathVariable String id, @PathVariable String email){
+        return productServiceImpl.addProductToCart(id, email);
+    }
+
     @GetMapping("/products")
     public ResponseEntity<?> getProducts(@RequestParam(name = "search", defaultValue = "none") String search,
                                          @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
@@ -50,7 +55,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable UUID id){
+    public ResponseEntity<?> getProductById(@PathVariable String id){
         return productServiceImpl.getProductById(id);
     }
 
@@ -63,12 +68,12 @@ public class ProductController {
     }
 
     @PutMapping("/product/{id}")
-    public ResponseEntity<?> updateProductById(@PathVariable UUID id, @RequestParam String productAsJSONString, @RequestParam MultipartFile[] images){
+    public ResponseEntity<?> updateProductById(@PathVariable String id, @RequestParam String productAsJSONString, @RequestParam MultipartFile[] images){
         return productServiceImpl.updateProductById(id, productAsJSONString, images);
     }
 
     @DeleteMapping("/product/{id}")
-    public ResponseEntity<?> deleteProductById(@PathVariable UUID id){
+    public ResponseEntity<?> deleteProductById(@PathVariable String id){
         return productServiceImpl.deleteProductById(id);
     }
 

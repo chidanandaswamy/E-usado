@@ -35,11 +35,12 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public int getSequenceNumber(String sequenceName){
-        Query query=new Query(Criteria.where("id").is(sequenceName));
-        Update update=new Update().inc("seq", 1);
-        DbSequence counter = mongoOperations.findAndModify(query,update, FindAndModifyOptions.options().returnNew(true).upsert(true),DbSequence.class);
-        return !Objects.isNull(counter) ? counter.getSeq():1;
+    public String getSequenceNumber(String seqName){
+        Query qry=new Query(Criteria.where("id").is(seqName));
+        Update update=new Update().inc("seq",1);
+        DbSequence counter = mongoOperations
+                .findAndModify(qry,update,FindAndModifyOptions.options().returnNew(true).upsert(true),DbSequence.class);
+        return !Objects.isNull(counter)?counter.getSeq():String.valueOf(1);
     }
 
 
@@ -66,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity<Order>  getOrderById(long id) {
+    public ResponseEntity<Order>  getOrderById(String id) {
         Optional<Order> orders = orderRepository.findById(id);
         if(orders.isPresent()){
             return new ResponseEntity<>(orders.get(), HttpStatus.OK);
@@ -83,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity<String> deleteOrderById(long id) {
+    public ResponseEntity<String> deleteOrderById(String id) {
         Optional<Order> orders = orderRepository.findById(id);
         if(orders.isPresent()){
             orderRepository.deleteById(id);

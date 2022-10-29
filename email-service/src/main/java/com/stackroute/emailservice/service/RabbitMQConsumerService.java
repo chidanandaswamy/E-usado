@@ -80,6 +80,7 @@ public class RabbitMQConsumerService {
         model.put("orderTotalAmount", request2.getTotalAmount());
         model.put("OrderStatus", request2.getOrderStatus());
 
+        System.out.println(request2);
         service.OrderConformationsendEmail(request2, model);
     }
 

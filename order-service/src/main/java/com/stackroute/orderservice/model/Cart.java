@@ -19,12 +19,11 @@ import java.util.UUID;
 @ToString
 public class Cart {
 
-    @Transient
-    public static final String SEQUENCE_NAME ="user_sequence";
-
+//    @Transient
+//    public static final String SEQUENCE_NAME ="user_sequence";
+//    private String cartId;
     @Id
-    private String cartId;
-    private UUID id;
+    private String productId;
     private String productName;
     private Double productPrice;
     private String productBrand;
@@ -40,6 +39,28 @@ public class Cart {
     private Location location;
     private Boolean productAvailability;
     private Long productAddedTime;
+    private String cartOwnerEmail;
+
+
+
+
+
+//    private UUID id;
+//    private String productName;
+//    private Double productPrice;
+//    private String productBrand;
+//    private String productCategory;
+//    private String productDescription;
+//    private HashMap<String, String> productSpecs;
+//    private String productManufacturedYear;
+//    private Long productPurchasedDate;
+//    private String productOwnerEmail;
+//    private Float productDiscount;
+//    private Boolean warrantyStatus;
+//    private Float productDamageLevel;
+//    private Location location;
+//    private Boolean productAvailability;
+//    private Long productAddedTime;
 
 
 

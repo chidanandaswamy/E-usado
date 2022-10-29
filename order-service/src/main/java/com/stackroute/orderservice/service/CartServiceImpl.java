@@ -8,6 +8,7 @@ import com.stackroute.orderservice.model.Cart;
 import com.stackroute.orderservice.model.DbSequence;
 import com.stackroute.orderservice.repository.CartRepository;
 //import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -29,18 +30,18 @@ public class CartServiceImpl implements CartService{
     @Autowired
     private MongoOperations mongoOperations;
 
-//    @Autowired
-//    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
 
 
-    public String getSequenceNumber(String seqName){
-        Query qry=new Query(Criteria.where("id").is(seqName));
-        Update update=new Update().inc("seq",1);
-        DbSequence counter = mongoOperations
-                .findAndModify(qry,update,FindAndModifyOptions.options().returnNew(true).upsert(true),DbSequence.class);
-        return !Objects.isNull(counter)?counter.getSeq():String.valueOf(1);
-    }
+//    public String getSequenceNumber(String seqName){
+//        Query qry=new Query(Criteria.where("id").is(seqName));
+//        Update update=new Update().inc("seq",1);
+//        DbSequence counter = mongoOperations
+//                .findAndModify(qry,update,FindAndModifyOptions.options().returnNew(true).upsert(true),DbSequence.class);
+//        return !Objects.isNull(counter)?counter.getSeq():String.valueOf(1);
+//    }
 
     @Override
     public Cart createCart(Cart cart) {
@@ -58,8 +59,8 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public Cart  getCartById(String cartId) {
-        Cart carts = cartRepository.findByCartId(cartId);
+    public Cart  getCartById(String productId) {
+        Cart carts = cartRepository.findByCartId(productId);
         if (carts != null ) {
             return carts;
 
@@ -70,14 +71,14 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public boolean deleteCartById(String cartId) {
-        Cart carted = cartRepository.findByCartId(cartId);
+    public boolean deleteCartById(String productId) {
+        Cart carted = cartRepository.findByCartId(productId);
         if(carted != null){
-            cartRepository.deleteByCartId(cartId);
+            cartRepository.deleteByCartId(productId);
 
             return true;
         } else {
-            throw new CartNotFoundException("Cart with id " + cartId + " is not found.");
+            throw new CartNotFoundException("Cart with id " + productId + " is not found.");
         }
     }
 }

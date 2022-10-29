@@ -28,7 +28,7 @@ public class CartController {
 
     @PostMapping("/addToCart")
     public ResponseEntity<Cart> createCart(@RequestBody Cart cart) {
-        cart.setCartId(cartServiceImpl.getSequenceNumber(Cart.SEQUENCE_NAME));
+//        cart.setCartId(cartServiceImpl.getSequenceNumber(Cart.SEQUENCE_NAME));
 
         Map<String, Object> model = new HashMap<>();
         model.put("name", cart.getProductName());
@@ -45,17 +45,17 @@ public class CartController {
         responseEntity= new ResponseEntity<>( cartServiceImpl.createCart(cart), HttpStatus.CREATED);
         return responseEntity;
     }
-    @GetMapping("/getCart/{cartId}")
-    public ResponseEntity<?> getCartById(@PathVariable String cartId) {
-        responseEntity= new ResponseEntity<>(cartServiceImpl.getCartById(cartId), HttpStatus.CREATED);
+    @GetMapping("/getCart/{productId}")
+    public ResponseEntity<?> getCartById(@PathVariable String productId) {
+        responseEntity= new ResponseEntity<>(cartServiceImpl.getCartById(productId), HttpStatus.CREATED);
 
         return responseEntity;
     }
 
 
-    @DeleteMapping("/deleteCart/{cartId}")
-    public ResponseEntity<?> deleteCartById(@PathVariable String cartId) {
-        responseEntity=new ResponseEntity<Boolean>(cartServiceImpl.deleteCartById(cartId), HttpStatus.OK);
+    @DeleteMapping("/deleteCart/{productId}")
+    public ResponseEntity<?> deleteCartById(@PathVariable String productId) {
+        responseEntity=new ResponseEntity<Boolean>(cartServiceImpl.deleteCartById(productId), HttpStatus.OK);
         return responseEntity;
     }
 

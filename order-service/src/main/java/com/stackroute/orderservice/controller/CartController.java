@@ -31,31 +31,36 @@ public class CartController {
 //        cart.setCartId(cartServiceImpl.getSequenceNumber(Cart.SEQUENCE_NAME));
 
         Map<String, Object> model = new HashMap<>();
-        model.put("name", cart.getProductName());
-        model.put("location", "Banglore, India");
+        model.put("productName", cart.getProductName());
         model.put("productPrice", cart.getProductPrice());
-        model.put("productName", cart.getProductDescription());
         model.put("productBrand", cart.getProductBrand());
-        model.put("productDiscount", cart.getProductDiscount());
+        model.put("productDescription", cart.getProductDescription());
         model.put("productManufacturedYear", cart.getProductManufacturedYear());
-        model.put("DamageLevel", cart.getProductDamageLevel());
-        model.put("productSpecs", cart.getProductSpecs());
+        model.put("productPurchasedDate", cart.getProductPurchasedDate());
+//        model.put("productOwnerEmail", cart.getProductOwnerEmail());
+        model.put("productDiscount", cart.getProductDiscount());
+        model.put("warrantyStatus", cart.getWarrantyStatus());
+        model.put("damageLevel", cart.getProductDamageLevel());
+        model.put("location", cart.getLocation());
+        model.put("productAvailability", cart.getProductAvailability());
+        model.put("productAddedTime", cart.getProductAddedTime());
+        model.put("cartOwnerEmail", cart.getCartOwnerEmail());
 
 
         responseEntity= new ResponseEntity<>( cartServiceImpl.createCart(cart), HttpStatus.CREATED);
         return responseEntity;
     }
-    @GetMapping("/getCart/{productId}")
-    public ResponseEntity<?> getCartById(@PathVariable String productId) {
-        responseEntity= new ResponseEntity<>(cartServiceImpl.getCartById(productId), HttpStatus.CREATED);
+    @GetMapping("/getCart/{cartOwnerEmail}")
+    public ResponseEntity<?> getCartById(@PathVariable String cartOwnerEmail) {
+        responseEntity= new ResponseEntity<>(cartServiceImpl.getCartById(cartOwnerEmail), HttpStatus.CREATED);
 
         return responseEntity;
     }
 
 
-    @DeleteMapping("/deleteCart/{productId}")
-    public ResponseEntity<?> deleteCartById(@PathVariable String productId) {
-        responseEntity=new ResponseEntity<Boolean>(cartServiceImpl.deleteCartById(productId), HttpStatus.OK);
+    @DeleteMapping("/deleteCart/{cartOwnerEmail}")
+    public ResponseEntity<?> deleteCartById(@PathVariable String cartOwnerEmail) {
+        responseEntity=new ResponseEntity<Boolean>(cartServiceImpl.deleteCartById(cartOwnerEmail), HttpStatus.OK);
         return responseEntity;
     }
 

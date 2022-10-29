@@ -16,8 +16,8 @@ public interface CartService {
 
 
 
-    Cart getCartById(String productId);
-boolean deleteCartById(String productId);
+    Cart getCartById(String cartOwnerEmail);
+boolean deleteCartById(String cartOwnerEmail);
 
 
 }

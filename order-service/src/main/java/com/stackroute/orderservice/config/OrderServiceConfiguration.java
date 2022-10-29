@@ -19,7 +19,7 @@ public class OrderServiceConfiguration {
 //    public static final String CQUEUE = "Cart-queue";
 
     @Bean
-    public Queue queue(){
+    public Queue Orderqueue(){
         return new Queue(QUEUE,false);
     }
 

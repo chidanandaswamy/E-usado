@@ -2,6 +2,7 @@ package com.stackroute.slotservice.model;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.meanbean.test.BeanTester;
 
 import java.util.*;
@@ -15,7 +16,7 @@ public class CreateSlotTest {
     private List<SellerSlots> sellerSlotsList;
     private List<DateTimeSlots> dateTimeSlotsList;
 
-    @Before
+    @BeforeEach
     public  void setUp() throws Exception {
 
        sellerSlots =new SellerSlots();
@@ -25,7 +26,7 @@ public class CreateSlotTest {
         sellerSlots.setStartTime("12:00");
         sellerSlots.setEndTime("1:00");
 
-        sellerSlotsList.add(sellerSlots);
+        //sellerSlotsList.add(sellerSlots);
         dateTimeSlots = new DateTimeSlots();
         dateTimeSlots.setSlotDate("12/08/22");
 

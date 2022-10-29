@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -62,14 +63,19 @@ public class ChatController {
     }
 
     // get chat by productId
-    @GetMapping("{productId}")
+   /* @GetMapping("{productId}")
     public ResponseEntity<Chat> getChatByProductId(@PathVariable("productId") long productId){
         return new ResponseEntity<Chat>(chatService.getChatByProductId(productId), HttpStatus.OK);
-    }
+    }*/
 
     @GetMapping
     public String getMessage(){
         return "BSDBFVKSBD";
+    }
+    @GetMapping("{productId}")
+    public ResponseEntity<List<Chat>> getChatByProductId(@PathVariable("productId") String productId){
+        System.out.println(productId);
+        return new ResponseEntity<List<Chat>>(chatService.getChatByProductId(productId), HttpStatus.OK);
     }
 
 }

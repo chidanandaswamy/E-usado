@@ -1,4 +1,5 @@
 package com.stackroute.userservice.service;
+import com.fasterxml.uuid.Generators;
 import com.stackroute.userservice.exception.UserNotFoundException;
 import com.stackroute.userservice.model.Address;
 import com.stackroute.userservice.model.User;
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.verify;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
@@ -38,11 +41,7 @@ public class UserServiceImplTest {
 
     Optional<User> options;
 
-//    Optional<User> options;
-
     private User user;
-//    private Address address;
-//
     @BeforeEach
     public void setUp() throws Exception {
 
@@ -54,8 +53,9 @@ public class UserServiceImplTest {
             user.setEmail("ashu@gmail.com");
             user.setPassword("password123");
             user.setContactNo(9876543210L);
-//
+
         Address address=new Address();
+        address.setAddressID(Generators.timeBasedGenerator().generate());
         address.setCity("Jeypore");
         address.setLandmark("Near Public School");
         address.setBuildingName("SR Appartments");
@@ -63,6 +63,7 @@ public class UserServiceImplTest {
         address.setStreetName("A");
         address.setPinCode(764001);
         address.setState("Odisha");
+        options=Optional.of(user);
 
         }
 
@@ -119,32 +120,40 @@ public class UserServiceImplTest {
 
     }
 
-    @Test
-    void testAddUserSuccess() {
-//        when(userRepository.save((User) any())).thenReturn(user);
-//        when(userRepository.findAll()).thenReturn(new ArrayList<>());
 
-        //DatabaseSequence databaseSequence = new DatabaseSequence();
-        //databaseSequence.setId("42");
-        //databaseSequence.setSeq(1);
-        //when(mongoOperations.findAndModify((Query) any(), (UpdateDefinition) any(), (FindAndModifyOptions) any(),
-        // (Class<DatabaseSequence>) any())).thenReturn(databaseSequence);
-
-            when(userRepository.findById(user.getEmail())).thenReturn(options);
-            boolean flag=userServiceImpl.deleteUserByEmail(user.getEmail());
-            assertEquals(true, flag);
-        }
-
+//    @Test
+//    public void updateusertest() throws UserNotFoundException
+//    {
+//
+//
+//        user.setPassword("ashutosh@123");
+//        user.setGender("MALE");
+//        user.setEmail("ashu@gmail.com");
+//        user.setPassword("password123");
+//        user.setName("Arnav");
+//        user.setContactNo(9337138976L);
+//        Address address=new Address();
+//        address.setAddressID(Generators.timeBasedGenerator().generate());
+//        address.setCity("Jeypore");
+//        address.setLandmark("NSrinivas");
+//        address.setBuildingName("SR Sri");
+//        address.setHouseNumber(1);
+//        address.setStreetName("A");
+//        address.setPinCode(764001);
+//        address.setState("Odisha");
+//      user.setAddress(address);
+//        when(userRepository.findById(user.getEmail())).thenReturn(options);
+//        System.out.println(options);
+//        User fetch=userServiceImpl.UpdateByEmail(user, user.getEmail());
+//        System.out.println(fetch);
+//        System.out.println("********");
+//        System.out.println(user.getContactNo());
+//        assertEquals(user, fetch);
+//    }
 
 
 
 
     }
-
-
-
-
-
-
 
 

@@ -13,7 +13,7 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     @Query(value = "{'email' : ?0}",delete = true)
     void deleteByEmail(String email);
-//    boolean existByEmail(String email);
+
 
     @Query("{'email':?1}")
     User updateByEmail(String email,User user);

@@ -22,7 +22,7 @@ public class RabbitMQConsumerService {
 
 
     //product
-    @RabbitListener(queues = "productServiceQueue")
+    @RabbitListener(queues = "productChatQueue")
     public void ProductAddedConforming(Product request1) {
 
 

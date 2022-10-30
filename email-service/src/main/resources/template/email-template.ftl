@@ -22,13 +22,27 @@
 									template !!! <br>
 							</div>
 							<div>
+                               <pre>
+						    Order Id:${orderID}
+							ordered Products Na,e:${orderedProducts}
+							Buyer Email Id:${orderBuyerEmailId}
+							order Date:${orderDate}
+
+							Payment Status:${OrderPaymentStatus}
+						    order Total Amount:${orderTotalAmount}
+						     OrderStatus:${OrderStatus}
+
+
+
+
+							</pre>
 								<br> Thank you for ordering in E-usado
 								product on<br> 'Shop more on E-usado get attractive rewards on all electronics<br>
 								spring ,spring boot ,hibernate , web services and micro service
 								<br> ""project build using microservice
 								to gain the knowledge open the back end code"<br>
 								<br>"Sharing the knowledge is biggest learning" <br> <br>
-								<br> <br> <b>${name}</b><br>${location}<br>
+								<br> <br> <b>E-usado</b><br>${location}<br>
 								<br>
 							</div>
 						</td>

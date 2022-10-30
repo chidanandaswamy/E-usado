@@ -31,10 +31,7 @@ public class UserServiceImpl implements UserService{
         else {
             user.getAddress().setAddressID(Generators.timeBasedGenerator().generate());
             UserDTO u=new UserDTO();
-<<<<<<< HEAD
-=======
 
->>>>>>> 5e487afecbd29993a366b0e8b72ac38b2c98a759
             u.setEmail(user.getEmail());
             u.setPassword(user.getPassword());
             u.setName(user.getName());

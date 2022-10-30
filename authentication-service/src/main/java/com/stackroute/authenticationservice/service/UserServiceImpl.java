@@ -11,7 +11,7 @@ import com.stackroute.authenticationservice.exception.InvalidCredentialsExceptio
 import com.stackroute.authenticationservice.exception.UserAlreadyExistsException;
 import com.stackroute.authenticationservice.repository.UserRepository;
 
-import java.util.Optional;
+
 
 @Service
 public class UserServiceImpl implements UserService {

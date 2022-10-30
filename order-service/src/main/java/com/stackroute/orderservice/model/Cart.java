@@ -41,6 +41,4 @@ public class Cart {
     private Boolean productAvailability;
     private Long productAddedTime;
 
-
-
 }

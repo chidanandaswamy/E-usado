@@ -1,23 +1,15 @@
-package com.stackroute.userservice.model;
+package com.stackroute.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @ToString
-public class UserDTO {
+public class ResponseDto {
 
-
-    private String email;
-    private String password;
-    private String name;
-
-
+    private String clientSecret;
 }
-
-
-

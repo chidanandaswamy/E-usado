@@ -23,7 +23,7 @@ public class Cart {
     public static final String SEQUENCE_NAME ="user_sequence";
 
     @Id
-    private long cartId;
+    private String cartId;
     private UUID id;
     private String productName;
     private Double productPrice;
@@ -40,7 +40,5 @@ public class Cart {
     private Location location;
     private Boolean productAvailability;
     private Long productAddedTime;
-
-
 
 }

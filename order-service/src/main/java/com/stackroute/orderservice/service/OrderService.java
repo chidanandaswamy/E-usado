@@ -14,11 +14,11 @@ public interface OrderService {
     ResponseEntity<String>createOrder(Order order);
     List<Order> getAllOrders();
 
-    ResponseEntity<Order>  getOrderById(long id);
+    ResponseEntity<Order>  getOrderById(String id);
 
     ResponseEntity<String> updateOrder(Order order);
 
-    ResponseEntity<String> deleteOrderById(long id);
+    ResponseEntity<String> deleteOrderById(String id);
 
     ResponseEntity<?>  deleteAll(Order order);
 }

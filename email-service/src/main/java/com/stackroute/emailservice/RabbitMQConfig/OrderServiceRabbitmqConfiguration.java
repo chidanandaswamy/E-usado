@@ -27,9 +27,6 @@ public class OrderServiceRabbitmqConfiguration {
         return new DirectExchange(EXCHANGE);
     }
 
-
-
-
     @Bean
     public Binding bbinding(Queue queue, DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);

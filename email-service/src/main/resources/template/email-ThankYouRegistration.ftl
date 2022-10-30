@@ -43,7 +43,7 @@
                                                                             </pre>
 
 								<br>"Sharing the knowledge is biggest learning" <br> <br>
-								<br> <br> <b>${name}</b><br>${location}<br>
+								<br> <br> <b>${userEmail}</b><br>${userName}<br>
 								<br>
 							</div>
 						</td>

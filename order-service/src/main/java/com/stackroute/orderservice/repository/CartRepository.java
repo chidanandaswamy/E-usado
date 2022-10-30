@@ -10,14 +10,14 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface CartRepository extends MongoRepository<Cart,Long> {
+public interface CartRepository extends MongoRepository<Cart,String> {
 
 
-    @Query(value = "{'cartId' : ?0}",delete = true)
-    Cart deleteByCartId(long cartId);
+    @Query(value = "{'cartOwnerEmail' : ?0}",delete = true)
+    Cart deleteByCartId(String cartOwnerEmail);
 
-    @Query("{'cartId' : ?0}")
-    Cart findByCartId(long cartId);
+    @Query("{'cartOwnerEmail' : ?0}")
+    Cart findByCartId(String cartOwnerEmail);
 
 
 }

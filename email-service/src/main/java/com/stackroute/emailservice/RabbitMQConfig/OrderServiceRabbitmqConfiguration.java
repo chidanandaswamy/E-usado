@@ -1,4 +1,4 @@
-package com.stackroute.orderservice.config;
+package com.stackroute.emailservice.RabbitMQConfig;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class OrderServiceConfiguration {
+public class OrderServiceRabbitmqConfiguration {
 
 
     public static final String QUEUE = "Order_queue";
@@ -16,18 +16,10 @@ public class OrderServiceConfiguration {
     public static final String ROUTING_KEY = "Order_routing key";
 
 
-//    public static final String CQUEUE = "Cart-queue";
-
     @Bean
     public Queue Orderqueue(){
         return new Queue(QUEUE,false);
     }
-
-//    @Bean
-//    public Queue Cqueue(){
-//        return new Queue(CQUEUE,false);
-//    }
-
 
     @Bean
     public DirectExchange eexchange(){
@@ -42,12 +34,6 @@ public class OrderServiceConfiguration {
     public Binding bbinding(Queue queue, DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
-
-//    @Bean
-//    public Binding Cbinding(Queue Cqueue, DirectExchange exchange){
-//        return BindingBuilder.bind(Cqueue).to(exchange).with(ROUTING_KEY);
-//    }
-
 
     @Bean
     public Jackson2JsonMessageConverter cconverter(){

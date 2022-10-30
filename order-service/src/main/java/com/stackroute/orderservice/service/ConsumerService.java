@@ -2,6 +2,7 @@ package com.stackroute.orderservice.service;
 
 
 import com.stackroute.orderservice.model.Cart;
+//import com.stackroute.orderservice.model.Order;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,16 +29,43 @@ public class ConsumerService {
         Map<String, Object> model = new HashMap<>();
         model.put("name", "E-usado");
         model.put("productName", cart.getProductName());
-        model.put("location", "Banglore, India");
         model.put("productPrice", cart.getProductPrice());
-        model.put("productDescription", cart.getProductDescription());
         model.put("productBrand", cart.getProductBrand());
-        model.put("productDiscount", cart.getProductDiscount());
+        model.put("productDescription", cart.getProductDescription());
         model.put("productManufacturedYear", cart.getProductManufacturedYear());
-        model.put("DamageLevel", cart.getProductDamageLevel());
-        model.put("productSpecs", cart.getProductOwnerEmail());
+        model.put("productPurchasedDate", cart.getProductPurchasedDate());
+//        model.put("productOwnerEmail", cart.getProductOwnerEmail());
+        model.put("productDiscount", cart.getProductDiscount());
+        model.put("warrantyStatus", cart.getWarrantyStatus());
+        model.put("damageLevel", cart.getProductDamageLevel());
+        model.put("location", cart.getLocation());
+        model.put("productAvailability", cart.getProductAvailability());
+        model.put("productAddedTime", cart.getProductAddedTime());
+        model.put("cartOwnerEmail", cart.getCartOwnerEmail());
+
 
 
         cartServiceImpl.createCart(cart);
     }
+
+
+
+//    @RabbitListener(queues = "Cart-queue")
+//    public void buy(Order order) {
+//
+//        Map<String, Object> model = new HashMap<>();
+//        model.put("name", "E-usado");
+//        model.put("productName", cart.getProductName());
+//        model.put("location", "Banglore, India");
+//        model.put("productPrice", cart.getProductPrice());
+//        model.put("productDescription", cart.getProductDescription());
+//        model.put("productBrand", cart.getProductBrand());
+//        model.put("productDiscount", cart.getProductDiscount());
+//        model.put("productManufacturedYear", cart.getProductManufacturedYear());
+//        model.put("DamageLevel", cart.getProductDamageLevel());
+//        model.put("productSpecs", cart.getProductOwnerEmail());
+//
+//
+//        cartServiceImpl.createCart(cart);
+//    }
 }

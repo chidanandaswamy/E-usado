@@ -1,4 +1,4 @@
-package com.stackroute.orderservice.dto;
+package com.stackroute.emailservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class OrderDto {
-    private String id;
+public class OrderService {
+    private long id;
     private String buyerEmail;
     private String orderDate;
     private String products;

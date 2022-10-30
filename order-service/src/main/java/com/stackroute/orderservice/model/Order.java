@@ -26,7 +26,9 @@ public class Order {
     private String id;
     private String buyerEmail;
     private String orderDate;
-    private String products;
+    private String productName;
+    private Double productPrice;
+    private String productBrand;
     private Double totalAmount;
     private String paymentStatus;
     private String orderStatus;

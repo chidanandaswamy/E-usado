@@ -65,7 +65,7 @@ spring:
           predicates:
             - Path=/email-service/**
           filters:
-            - RewritePath=/config-server(?<segment>/?.*), $\{segment}
+            - RewritePath=/email-server(?<segment>/?.*), $\{segment}
 
         - id: order-service
           uri: http://localhost:8087

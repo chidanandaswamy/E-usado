@@ -30,7 +30,7 @@ public class OrderServiceConfiguration {
 
 
     @Bean
-    public DirectExchange exchange(){
+    public DirectExchange eexchange(){
 
         return new DirectExchange(EXCHANGE);
     }
@@ -39,7 +39,7 @@ public class OrderServiceConfiguration {
 
 
     @Bean
-    public Binding binding(Queue queue, DirectExchange exchange){
+    public Binding bbinding(Queue queue, DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
 
@@ -50,13 +50,13 @@ public class OrderServiceConfiguration {
 
 
     @Bean
-    public Jackson2JsonMessageConverter converter(){
+    public Jackson2JsonMessageConverter cconverter(){
         return new Jackson2JsonMessageConverter();
     }
     @Bean
-    public AmqpTemplate template(ConnectionFactory connectionFactory){
+    public AmqpTemplate ttemplate(ConnectionFactory connectionFactory){
         final RabbitTemplate rabbitTemplate=new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(converter());
+        rabbitTemplate.setMessageConverter(cconverter());
         return rabbitTemplate;
     }
 }

@@ -5,11 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.HashMap;
-import java.util.UUID;
 
 
 @AllArgsConstructor
@@ -19,12 +16,9 @@ import java.util.UUID;
 @ToString
 public class Cart {
 
-    @Transient
-    public static final String SEQUENCE_NAME ="user_sequence";
 
     @Id
-    private String cartId;
-    private UUID id;
+    private String productId;
     private String productName;
     private Double productPrice;
     private String productBrand;
@@ -40,5 +34,7 @@ public class Cart {
     private Location location;
     private Boolean productAvailability;
     private Long productAddedTime;
+    private String cartOwnerEmail;
+
 
 }

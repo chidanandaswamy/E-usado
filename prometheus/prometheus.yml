@@ -1,0 +1,81 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'eureka_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['eureka-service:8761']
+        labels:
+          applications: 'Eureka service application'
+
+  - job_name: 'api_gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'api-gateway:8080' ]
+        labels:
+          applications: 'API gateway application'
+
+  - job_name: 'authentication_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'authentication-service:8081' ]
+        labels:
+          applications: 'Authentication service application'
+
+  - job_name: 'chat_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'chat-service:8083' ]
+        labels:
+          applications: 'Chat service application'
+
+  - job_name: 'config_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'config-service:8888' ]
+        labels:
+          applications: 'Config service application'
+
+  - job_name: 'email_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'email-service:8085' ]
+        labels:
+          applications: 'Email service application'
+
+  - job_name: 'order_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'order-service:8087' ]
+        labels:
+          applications: 'Order service application'
+
+  - job_name: 'payment_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'payment-service:8088' ]
+        labels:
+          applications: 'Payment service application'
+
+  - job_name: 'product_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'product-service:8089' ]
+        labels:
+          applications: 'Product service application'
+
+  - job_name: 'slot_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'slot-service:8090' ]
+        labels:
+          applications: 'Slot service application'
+
+  - job_name: 'user_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'user-service:8091' ]
+        labels:
+          applications: 'User service application'

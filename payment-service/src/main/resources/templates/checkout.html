@@ -17,6 +17,16 @@
     var amount = /*[[${amount}]]*/ null;
     var email = /*[[${email}]]*/ null;
     var featureRequest = /*[[${featureRequest}]]*/ null;
+    var senderEmail = /*[[${senderEmail}]]*/ null;
+    var paymentDescription = /*[[${paymentDescription}]]*/ null;
+    var senderName = /*[[${senderName}]]*/ null;
+    var receiverEmail = /*[[${receiverEmail}]]*/ null;
+    var receiverName = /*[[${receiverName}]]*/ null;
+    var country = /*[[${country}]]*/ null;
+    var state = /*[[${state}]]*/ null;
+    var city = /*[[${city}]]*/ null;
+    var zipCode = /*[[${zipCode}]]*/ null;
+    var line1 = /*[[${line1}]]*/ null;
 
     /*]]>*/
   </script>
@@ -28,8 +38,18 @@
 <div class="container">
     <div class="form-card">
         <form id="payment-form">
-            <p><b>Credit card details to complete payment</b></p>
-            <p>Press the pay now button to complete your payment of <span th:text="${amount}"></span>USD.</p>
+
+            <div id="billing-details">
+                <h2>Billing details</h2>
+                <br/>
+                <p>Payment Receiver : <span th:text="${receiverName}"></span></p>
+                <br/>
+
+            </div>
+            <br/>
+            <p><b>Enter Credit card details to complete payment</b></p>
+            <p>Press the pay now button to complete your payment of <span th:text="${amount}"></span>INR.</p>
+
             <div id="card-element" class="form-control"><!--Stripe.js injects the Card Element--></div>
             <button id="submit" class="btn btn-primary">
                 <div class="spinner hidden" id="spinner"></div>
@@ -37,8 +57,8 @@
             </button>
             <p id="card-error" role="alert"></p>
             <p class="result-message hidden">
-                Payment succeeded, see the result in your
-                <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
+                Your payment is successful.
+<!--                <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.-->
             </p>
         </form>
 

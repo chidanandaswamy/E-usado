@@ -1,4 +1,4 @@
-package com.stackroute.productservice.configuration;
+package com.stackroute.paymentservice.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,17 +13,16 @@ import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
 @EnableSwagger2
-public class ProductServiceConfiguration {
-
+public class SwaggerConfig {
     @Bean
     public Docket postsApi(){
         return new Docket(DocumentationType.SWAGGER_2).groupName("e-Usado").apiInfo(apiInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("com.stackroute.productservice")).paths(regex("/api/v1/.*")).build();
+                .apis(RequestHandlerSelectors.basePackage("com.stackroute.paymentservice")).paths(regex("/api/v1/.*")).build();
     }
 
     public ApiInfo apiInfo(){
-        return new ApiInfoBuilder().title("Product Service")
-                .description("REST API documentation for product service.")
+        return new ApiInfoBuilder().title("Payment Service")
+                .description("REST API documentation for payment service.")
                 .version("1.0.0")
                 .build();
     }

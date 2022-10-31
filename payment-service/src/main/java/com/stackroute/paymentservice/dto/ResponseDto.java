@@ -1,15 +1,15 @@
-package com.stackroute.dto;
+package com.stackroute.paymentservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Payment {
+@ToString
+public class ResponseDto {
 
-    private Integer amount;
-    private String featureRequest;
-
+    private String clientSecret;
 }

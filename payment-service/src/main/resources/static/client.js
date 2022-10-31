@@ -1,12 +1,25 @@
 // A reference to Stripe.js initialized with your real test publishable API key.
 var stripe = Stripe(stripePublicKey);
 
+console.log(stripePublicKey)
 // The items the customer wants to buy
 var purchase = {
-    email:email,
-    amount: amount,
-    featureRequest: featureRequest
+    senderEmail:senderEmail,
+    amount:amount,
+    paymentDescription:paymentDescription,
+    senderName:senderName,
+    receiverEmail:receiverEmail,
+    receiverName:receiverName,
+    billingAddress:{
+        country:country,
+        state:state,
+        city:city,
+        zipCode:zipCode,
+        line1:line1
+    }
 };
+
+console.log(purchase)
 
 // Disable the button until we have Stripe set up on the page
 document.querySelector("button").disabled = true;
@@ -65,11 +78,11 @@ var payWithCard = function(stripe, card, clientSecret) {
     loading(true);
     stripe
         .confirmCardPayment(clientSecret, {
-            receipt_email: email,
+            receipt_email: receiverEmail,
             payment_method: {
                 card: card,
                 billing_details: {
-                    email: email
+                    email: senderEmail
                 }
             }
         })
@@ -77,6 +90,13 @@ var payWithCard = function(stripe, card, clientSecret) {
             if (result.error) {
                 // Show error to your customer
                 showError(result.error.message);
+                fetch("http://localhost:8088/api/v1/create-payment-intent", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(purchase)
+                })
             } else {
                 // The payment succeeded!
                 orderComplete(result.paymentIntent.id);
@@ -89,12 +109,12 @@ var payWithCard = function(stripe, card, clientSecret) {
 // Shows a success message when the payment is complete
 var orderComplete = function(paymentIntentId) {
     loading(false);
-    document
-        .querySelector(".result-message a")
-        .setAttribute(
-            "href",
-            "https://dashboard.stripe.com/test/payments/" + paymentIntentId
-        );
+//    document
+//        .querySelector(".result-message a")
+//        .setAttribute(
+//            "href",
+//            "https://dashboard.stripe.com/test/payments/" + paymentIntentId
+//        );
     document.querySelector(".result-message").classList.remove("hidden");
     document.querySelector("button").disabled = true;
 };

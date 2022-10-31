@@ -3,20 +3,18 @@ package com.stackroute.orderservice.service;
 
 //import com.stackroute.orderservice.config.CartProducer;
 //import com.stackroute.orderservice.dto.CartDto;
+
 import com.stackroute.orderservice.exception.CartNotFoundException;
 import com.stackroute.orderservice.model.Cart;
 import com.stackroute.orderservice.model.DbSequence;
 import com.stackroute.orderservice.repository.CartRepository;
-//import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-
 import org.springframework.stereotype.Service;
-
 
 import java.util.Objects;
 

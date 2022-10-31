@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Document
+@Document(collection = "Order")
 @ToString
 public class Order {
 
@@ -26,7 +26,9 @@ public class Order {
     private String id;
     private String buyerEmail;
     private String orderDate;
-    private String products;
+    private String productName;
+    private Double productPrice;
+    private String productBrand;
     private Double totalAmount;
     private String paymentStatus;
     private String orderStatus;

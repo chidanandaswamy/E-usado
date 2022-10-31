@@ -4,7 +4,6 @@ import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,7 +19,7 @@ public class OrderServiceConfiguration {
 //    public static final String CQUEUE = "Cart-queue";
 
     @Bean
-    public Queue queue(){
+    public Queue Orderqueue(){
         return new Queue(QUEUE,false);
     }
 
@@ -31,7 +30,7 @@ public class OrderServiceConfiguration {
 
 
     @Bean
-    public DirectExchange exchange(){
+    public DirectExchange eexchange(){
 
         return new DirectExchange(EXCHANGE);
     }
@@ -40,7 +39,7 @@ public class OrderServiceConfiguration {
 
 
     @Bean
-    public Binding binding(Queue queue, DirectExchange exchange){
+    public Binding bbinding(Queue queue, DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
 
@@ -51,13 +50,13 @@ public class OrderServiceConfiguration {
 
 
     @Bean
-    public MessageConverter converter(){
+    public Jackson2JsonMessageConverter cconverter(){
         return new Jackson2JsonMessageConverter();
     }
     @Bean
-    public AmqpTemplate template(ConnectionFactory connectionFactory){
+    public AmqpTemplate ttemplate(ConnectionFactory connectionFactory){
         final RabbitTemplate rabbitTemplate=new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(converter());
+        rabbitTemplate.setMessageConverter(cconverter());
         return rabbitTemplate;
     }
 }

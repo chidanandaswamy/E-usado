@@ -18,7 +18,7 @@ public class ProductServiceConfiguration {
     @Bean
     public Docket postsApi(){
         return new Docket(DocumentationType.SWAGGER_2).groupName("e-Usado").apiInfo(apiInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("com.stackroute.productservice")).paths(regex("/api/v1/product-service.*")).build();
+                .apis(RequestHandlerSelectors.basePackage("com.stackroute.productservice")).paths(regex("/api/v1/.*")).build();
     }
 
     public ApiInfo apiInfo(){

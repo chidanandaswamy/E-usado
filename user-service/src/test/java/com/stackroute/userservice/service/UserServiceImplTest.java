@@ -1,159 +1,583 @@
 package com.stackroute.userservice.service;
-import com.fasterxml.uuid.Generators;
-import com.stackroute.userservice.exception.UserNotFoundException;
-import com.stackroute.userservice.model.Address;
-import com.stackroute.userservice.model.User;
-import com.stackroute.userservice.repository.UserRepository;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.mongodb.core.MongoOperations;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import org.springframework.test.context.ContextConfiguration;
-import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.stackroute.userservice.config.Producer;
+import com.stackroute.userservice.exception.UserNotFoundException;
+import com.stackroute.userservice.model.Address;
+import com.stackroute.userservice.model.User;
+import com.stackroute.userservice.model.UserDTO;
+import com.stackroute.userservice.repository.UserRepository;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ContextConfiguration(classes = {UserServiceImpl.class})
-@ExtendWith(MockitoExtension.class)
-public class UserServiceImplTest {
+@ExtendWith(SpringExtension.class)
+class UserServiceImplTest {
+    @MockBean
+    private Producer producer;
 
-        @MockBean
-        private MongoOperations mongoOperations;
+    @MockBean
+    private UserRepository userRepository;
 
-        @Mock
-        private UserRepository userRepository;
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
-        @InjectMocks
-        private UserServiceImpl userServiceImpl;
-
-    Optional<User> options;
-
-    private User user;
-    @BeforeEach
-    public void setUp() throws Exception {
-
-
-            user = new User();
-            user.setName("Ashu");
-            user.setPassword("ashutosh@123");
-            user.setGender("MALE");
-            user.setEmail("ashu@gmail.com");
-            user.setPassword("password123");
-            user.setContactNo(9876543210L);
-
-        Address address=new Address();
-        address.setAddressID(Generators.timeBasedGenerator().generate());
-        address.setCity("Jeypore");
-        address.setLandmark("Near Public School");
-        address.setBuildingName("SR Appartments");
-        address.setHouseNumber(1);
-        address.setStreetName("A");
-        address.setPinCode(764001);
-        address.setState("Odisha");
-        options=Optional.of(user);
-
-        }
-
+    /**
+     * Method under test: {@link UserServiceImpl#addUser(User)}
+     */
     @Test
-    void testGetAllUsersFailure() {
+    void testAddUser() {
+        doNothing().when(producer).sendMessageToRabbitMq((UserDTO) any());
+
+        User user = new User();
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+
+        User user1 = new User();
+        user1.setAddress(new Address());
+        user1.setContactNo(1L);
+        user1.setEmail("jane.doe@example.org");
+        user1.setGender("Gender");
+        user1.setName("Name");
+        user1.setPassword("iloveyou");
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+        when(userRepository.save((User) any())).thenReturn(user1);
+
+        User user2 = new User();
+        user2.setAddress(new Address());
+        user2.setContactNo(1L);
+        user2.setEmail("jane.doe@example.org");
+        user2.setGender("Gender");
+        user2.setName("Name");
+        user2.setPassword("iloveyou");
+        assertThrows(UserNotFoundException.class, () -> userServiceImpl.addUser(user2));
+        verify(userRepository).findByEmail((String) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#addUser(User)}
+     */
+    @Test
+    void testAddUser2() {
+        doNothing().when(producer).sendMessageToRabbitMq((UserDTO) any());
+        when(userRepository.findByEmail((String) any())).thenThrow(new UserNotFoundException("Msg"));
+        when(userRepository.save((User) any())).thenThrow(new UserNotFoundException("Msg"));
+
+        User user = new User();
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+        assertThrows(UserNotFoundException.class, () -> userServiceImpl.addUser(user));
+        verify(userRepository).findByEmail((String) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#addUser(User)}
+     */
+    @Test
+    void testAddUser3() {
+        doNothing().when(producer).sendMessageToRabbitMq((UserDTO) any());
+        User user = mock(User.class);
+        when(user.getEmail()).thenReturn("jane.doe@example.org");
+        doNothing().when(user).setAddress((Address) any());
+        doNothing().when(user).setContactNo(anyLong());
+        doNothing().when(user).setEmail((String) any());
+        doNothing().when(user).setGender((String) any());
+        doNothing().when(user).setName((String) any());
+        doNothing().when(user).setPassword((String) any());
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+
+        User user1 = new User();
+        user1.setAddress(new Address());
+        user1.setContactNo(1L);
+        user1.setEmail("jane.doe@example.org");
+        user1.setGender("Gender");
+        user1.setName("Name");
+        user1.setPassword("iloveyou");
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+        when(userRepository.save((User) any())).thenReturn(user1);
+
+        User user2 = new User();
+        user2.setAddress(new Address());
+        user2.setContactNo(1L);
+        user2.setEmail("jane.doe@example.org");
+        user2.setGender("Gender");
+        user2.setName("Name");
+        user2.setPassword("iloveyou");
+        assertThrows(UserNotFoundException.class, () -> userServiceImpl.addUser(user2));
+        verify(userRepository).findByEmail((String) any());
+        verify(user).getEmail();
+        verify(user).setAddress((Address) any());
+        verify(user).setContactNo(anyLong());
+        verify(user).setEmail((String) any());
+        verify(user).setGender((String) any());
+        verify(user).setName((String) any());
+        verify(user).setPassword((String) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#addUser(User)}
+     */
+    @Test
+    void testAddUser4() {
+        doNothing().when(producer).sendMessageToRabbitMq((UserDTO) any());
+        User user = mock(User.class);
+        when(user.getEmail()).thenReturn(null);
+        doNothing().when(user).setAddress((Address) any());
+        doNothing().when(user).setContactNo(anyLong());
+        doNothing().when(user).setEmail((String) any());
+        doNothing().when(user).setGender((String) any());
+        doNothing().when(user).setName((String) any());
+        doNothing().when(user).setPassword((String) any());
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+
+        User user1 = new User();
+        user1.setAddress(new Address());
+        user1.setContactNo(1L);
+        user1.setEmail("jane.doe@example.org");
+        user1.setGender("Gender");
+        user1.setName("Name");
+        user1.setPassword("iloveyou");
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+        when(userRepository.save((User) any())).thenReturn(user1);
+
+        User user2 = new User();
+        user2.setAddress(new Address());
+        user2.setContactNo(1L);
+        user2.setEmail("jane.doe@example.org");
+        user2.setGender("Gender");
+        user2.setName("Name");
+        user2.setPassword("iloveyou");
+        assertSame(user1, userServiceImpl.addUser(user2));
+        verify(producer).sendMessageToRabbitMq((UserDTO) any());
+        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).save((User) any());
+        verify(user).getEmail();
+        verify(user).setAddress((Address) any());
+        verify(user).setContactNo(anyLong());
+        verify(user).setEmail((String) any());
+        verify(user).setGender((String) any());
+        verify(user).setName((String) any());
+        verify(user).setPassword((String) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#findAllUsers()}
+     */
+    @Test
+    void testFindAllUsers() {
         when(userRepository.findAll()).thenReturn(new ArrayList<>());
         assertThrows(UserNotFoundException.class, () -> userServiceImpl.findAllUsers());
         verify(userRepository).findAll();
     }
 
+    /**
+     * Method under test: {@link UserServiceImpl#findAllUsers()}
+     */
     @Test
-    void testGetAllUsersSuccess() {
+    void testFindAllUsers2() {
+        User user = new User();
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("User Not Found !!");
+        user.setName("User Not Found !!");
+        user.setPassword("iloveyou");
+
         ArrayList<User> userList = new ArrayList<>();
         userList.add(user);
         when(userRepository.findAll()).thenReturn(userList);
-
-        List<User> actualAllUsers = userServiceImpl.findAllUsers();
-        assertSame(userList, actualAllUsers);
-        assertEquals(1, actualAllUsers.size());
+        List<User> actualFindAllUsersResult = userServiceImpl.findAllUsers();
+        assertSame(userList, actualFindAllUsersResult);
+        assertEquals(1, actualFindAllUsersResult.size());
         verify(userRepository).findAll();
     }
 
+    /**
+     * Method under test: {@link UserServiceImpl#findAllUsers()}
+     */
     @Test
-    void testFindByEmailSuccess() {
+    void testFindAllUsers3() {
+        when(userRepository.findAll()).thenThrow(new UserNotFoundException("User Not Found !!"));
+        assertThrows(UserNotFoundException.class, () -> userServiceImpl.findAllUsers());
+        verify(userRepository).findAll();
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#findByEmail(String)}
+     */
+    @Test
+    void testFindByEmail() {
+        User user = new User();
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
         when(userRepository.findByEmail((String) any())).thenReturn(user);
-        assertSame(user, userServiceImpl.findByEmail("ashu@gmail.com"));
+        assertSame(user, userServiceImpl.findByEmail("jane.doe@example.org"));
         verify(userRepository).findByEmail((String) any());
     }
 
+    /**
+     * Method under test: {@link UserServiceImpl#findByEmail(String)}
+     */
     @Test
-    void testFindByEmailFailure() {
-        when(userRepository.findByEmail((String) any()))
-                .thenThrow(new UserNotFoundException("User Not Found !!"));
-        assertThrows(UserNotFoundException.class, () -> userServiceImpl.findByEmail("ashu@gmail.com"));
-        verify(userRepository).findByEmail((String) any());
-    }
-
-    @Test
-    void testDeleteUserSuccess() {
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
-        boolean flag=userServiceImpl.deleteUserByEmail("ashu@gmail.com");
-        assertEquals(true, flag);
-
-    }
-
-    @Test
-    void testDeleteUserFailure() {
-        Optional<User> ofResult = Optional.of(user);
-        doThrow(new UserNotFoundException("Msg")).when(userRepository).deleteByEmail((String) any());
+    void testFindByEmail2() {
+        User user = mock(User.class);
+        when(user.getEmail()).thenReturn("jane.doe@example.org");
+        doNothing().when(user).setAddress((Address) any());
+        doNothing().when(user).setContactNo(anyLong());
+        doNothing().when(user).setEmail((String) any());
+        doNothing().when(user).setGender((String) any());
+        doNothing().when(user).setName((String) any());
+        doNothing().when(user).setPassword((String) any());
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
         when(userRepository.findByEmail((String) any())).thenReturn(user);
-        assertThrows(UserNotFoundException.class, () -> userServiceImpl.deleteUserByEmail("ashu@gmail.com"));
+        userServiceImpl.findByEmail("jane.doe@example.org");
+        verify(userRepository).findByEmail((String) any());
+        verify(user).getEmail();
+        verify(user).setAddress((Address) any());
+        verify(user).setContactNo(anyLong());
+        verify(user).setEmail((String) any());
+        verify(user).setGender((String) any());
+        verify(user).setName((String) any());
+        verify(user).setPassword((String) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#findByEmail(String)}
+     */
+    @Test
+    void testFindByEmail3() {
+        User user = mock(User.class);
+        when(user.getEmail()).thenReturn(null);
+        doNothing().when(user).setAddress((Address) any());
+        doNothing().when(user).setContactNo(anyLong());
+        doNothing().when(user).setEmail((String) any());
+        doNothing().when(user).setGender((String) any());
+        doNothing().when(user).setName((String) any());
+        doNothing().when(user).setPassword((String) any());
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+        assertThrows(UserNotFoundException.class, () -> userServiceImpl.findByEmail("jane.doe@example.org"));
+        verify(userRepository).findByEmail((String) any());
+        verify(user).getEmail();
+        verify(user).setAddress((Address) any());
+        verify(user).setContactNo(anyLong());
+        verify(user).setEmail((String) any());
+        verify(user).setGender((String) any());
+        verify(user).setName((String) any());
+        verify(user).setPassword((String) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#deleteUserByEmail(String)}
+     */
+    @Test
+    void testDeleteUserByEmail() {
+        User user = new User();
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+        doNothing().when(userRepository).deleteByEmail((String) any());
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+        assertTrue(userServiceImpl.deleteUserByEmail("jane.doe@example.org"));
         verify(userRepository).findByEmail((String) any());
         verify(userRepository).deleteByEmail((String) any());
-
     }
 
-
-//    @Test
-//    public void updateusertest() throws UserNotFoundException
-//    {
-//
-//
-//        user.setPassword("ashutosh@123");
-//        user.setGender("MALE");
-//        user.setEmail("ashu@gmail.com");
-//        user.setPassword("password123");
-//        user.setName("Arnav");
-//        user.setContactNo(9337138976L);
-//        Address address=new Address();
-//        address.setAddressID(Generators.timeBasedGenerator().generate());
-//        address.setCity("Jeypore");
-//        address.setLandmark("NSrinivas");
-//        address.setBuildingName("SR Sri");
-//        address.setHouseNumber(1);
-//        address.setStreetName("A");
-//        address.setPinCode(764001);
-//        address.setState("Odisha");
-//      user.setAddress(address);
-//        when(userRepository.findById(user.getEmail())).thenReturn(options);
-//        System.out.println(options);
-//        User fetch=userServiceImpl.UpdateByEmail(user, user.getEmail());
-//        System.out.println(fetch);
-//        System.out.println("********");
-//        System.out.println(user.getContactNo());
-//        assertEquals(user, fetch);
-//    }
-
-
-
-
+    /**
+     * Method under test: {@link UserServiceImpl#deleteUserByEmail(String)}
+     */
+    @Test
+    void testDeleteUserByEmail2() {
+        User user = new User();
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+        doThrow(new UserNotFoundException("Msg")).when(userRepository).deleteByEmail((String) any());
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+        assertThrows(UserNotFoundException.class, () -> userServiceImpl.deleteUserByEmail("jane.doe@example.org"));
+        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).deleteByEmail((String) any());
     }
 
+    /**
+     * Method under test: {@link UserServiceImpl#deleteUserByEmail(String)}
+     */
+    @Test
+    void testDeleteUserByEmail3() {
+        User user = mock(User.class);
+        when(user.getEmail()).thenReturn("jane.doe@example.org");
+        doNothing().when(user).setAddress((Address) any());
+        doNothing().when(user).setContactNo(anyLong());
+        doNothing().when(user).setEmail((String) any());
+        doNothing().when(user).setGender((String) any());
+        doNothing().when(user).setName((String) any());
+        doNothing().when(user).setPassword((String) any());
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+        doNothing().when(userRepository).deleteByEmail((String) any());
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+        assertTrue(userServiceImpl.deleteUserByEmail("jane.doe@example.org"));
+        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).deleteByEmail((String) any());
+        verify(user).getEmail();
+        verify(user).setAddress((Address) any());
+        verify(user).setContactNo(anyLong());
+        verify(user).setEmail((String) any());
+        verify(user).setGender((String) any());
+        verify(user).setName((String) any());
+        verify(user).setPassword((String) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#deleteUserByEmail(String)}
+     */
+    @Test
+    void testDeleteUserByEmail4() {
+        User user = mock(User.class);
+        when(user.getEmail()).thenReturn(null);
+        doNothing().when(user).setAddress((Address) any());
+        doNothing().when(user).setContactNo(anyLong());
+        doNothing().when(user).setEmail((String) any());
+        doNothing().when(user).setGender((String) any());
+        doNothing().when(user).setName((String) any());
+        doNothing().when(user).setPassword((String) any());
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+        doNothing().when(userRepository).deleteByEmail((String) any());
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+        assertThrows(UserNotFoundException.class, () -> userServiceImpl.deleteUserByEmail("jane.doe@example.org"));
+        verify(userRepository).findByEmail((String) any());
+        verify(user).getEmail();
+        verify(user).setAddress((Address) any());
+        verify(user).setContactNo(anyLong());
+        verify(user).setEmail((String) any());
+        verify(user).setGender((String) any());
+        verify(user).setName((String) any());
+        verify(user).setPassword((String) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#UpdateByEmail(User, String)}
+     */
+    @Test
+    void testUpdateByEmail() {
+        User user = new User();
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+
+        User user1 = new User();
+        user1.setAddress(new Address());
+        user1.setContactNo(1L);
+        user1.setEmail("jane.doe@example.org");
+        user1.setGender("Gender");
+        user1.setName("Name");
+        user1.setPassword("iloveyou");
+        when(userRepository.save((User) any())).thenReturn(user1);
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+
+        User user2 = new User();
+        user2.setAddress(new Address());
+        user2.setContactNo(1L);
+        user2.setEmail("jane.doe@example.org");
+        user2.setGender("Gender");
+        user2.setName("Name");
+        user2.setPassword("iloveyou");
+        assertSame(user1, userServiceImpl.UpdateByEmail(user2, "jane.doe@example.org"));
+        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).save((User) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#UpdateByEmail(User, String)}
+     */
+    @Test
+    void testUpdateByEmail2() {
+        User user = new User();
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+        when(userRepository.save((User) any())).thenThrow(new UserNotFoundException("Msg"));
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+
+        User user1 = new User();
+        user1.setAddress(new Address());
+        user1.setContactNo(1L);
+        user1.setEmail("jane.doe@example.org");
+        user1.setGender("Gender");
+        user1.setName("Name");
+        user1.setPassword("iloveyou");
+        assertThrows(UserNotFoundException.class, () -> userServiceImpl.UpdateByEmail(user1, "jane.doe@example.org"));
+        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).save((User) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#UpdateByEmail(User, String)}
+     */
+    @Test
+    void testUpdateByEmail3() {
+        User user = new User();
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+
+        User user1 = new User();
+        user1.setAddress(new Address());
+        user1.setContactNo(1L);
+        user1.setEmail("jane.doe@example.org");
+        user1.setGender("Gender");
+        user1.setName("Name");
+        user1.setPassword("iloveyou");
+        when(userRepository.save((User) any())).thenReturn(user1);
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+        User user2 = mock(User.class);
+        when(user2.getAddress()).thenReturn(new Address());
+        doNothing().when(user2).setAddress((Address) any());
+        doNothing().when(user2).setContactNo(anyLong());
+        doNothing().when(user2).setEmail((String) any());
+        doNothing().when(user2).setGender((String) any());
+        doNothing().when(user2).setName((String) any());
+        doNothing().when(user2).setPassword((String) any());
+        user2.setAddress(new Address());
+        user2.setContactNo(1L);
+        user2.setEmail("jane.doe@example.org");
+        user2.setGender("Gender");
+        user2.setName("Name");
+        user2.setPassword("iloveyou");
+        assertSame(user1, userServiceImpl.UpdateByEmail(user2, "jane.doe@example.org"));
+        verify(userRepository).findByEmail((String) any());
+        verify(userRepository).save((User) any());
+        verify(user2).getAddress();
+        verify(user2).setAddress((Address) any());
+        verify(user2).setContactNo(anyLong());
+        verify(user2).setEmail((String) any());
+        verify(user2).setGender((String) any());
+        verify(user2).setName((String) any());
+        verify(user2).setPassword((String) any());
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#UpdateByEmail(User, String)}
+     */
+    @Test
+    @Disabled("TODO: Complete this test")
+    void testUpdateByEmail4() {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   java.lang.NullPointerException
+        //       at com.stackroute.userservice.service.UserServiceImpl.UpdateByEmail(UserServiceImpl.java:84)
+        //   See https://diff.blue/R013 to resolve this issue.
+
+        User user = new User();
+        user.setAddress(new Address());
+        user.setContactNo(1L);
+        user.setEmail("jane.doe@example.org");
+        user.setGender("Gender");
+        user.setName("Name");
+        user.setPassword("iloveyou");
+
+        User user1 = new User();
+        user1.setAddress(new Address());
+        user1.setContactNo(1L);
+        user1.setEmail("jane.doe@example.org");
+        user1.setGender("Gender");
+        user1.setName("Name");
+        user1.setPassword("iloveyou");
+        when(userRepository.save((User) any())).thenReturn(user1);
+        when(userRepository.findByEmail((String) any())).thenReturn(user);
+        User user2 = mock(User.class);
+        when(user2.getAddress()).thenReturn(null);
+        doNothing().when(user2).setAddress((Address) any());
+        doNothing().when(user2).setContactNo(anyLong());
+        doNothing().when(user2).setEmail((String) any());
+        doNothing().when(user2).setGender((String) any());
+        doNothing().when(user2).setName((String) any());
+        doNothing().when(user2).setPassword((String) any());
+        user2.setAddress(new Address());
+        user2.setContactNo(1L);
+        user2.setEmail("jane.doe@example.org");
+        user2.setGender("Gender");
+        user2.setName("Name");
+        user2.setPassword("iloveyou");
+        userServiceImpl.UpdateByEmail(user2, "jane.doe@example.org");
+    }
+}
 

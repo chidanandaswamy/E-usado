@@ -36,25 +36,21 @@ public class ChatController {
         return new ResponseEntity<Chat>(chatService.saveChat(chat), HttpStatus.CREATED);
     }
   // update reply to the question
+    //{questionId}
     @PutMapping("/reply/{questionId}")
     public ResponseEntity<Chat> updateChat(@PathVariable("questionId") long questionId, @RequestBody Chat chat){
          return new ResponseEntity<Chat>(chatService.updateChat(chat, questionId), HttpStatus.OK);
     }
 
    // get reply by QuestionId
+    //{questionId}
    @GetMapping("/reply/{questionId}")
    public ResponseEntity<Chat> getChatByQuestionId(@PathVariable("questionId") long questionId){
        return new ResponseEntity<Chat>(chatService.getChatByQuestionId(questionId), HttpStatus.OK);
    }
 
-   // delete chat by QuestionId
-    @DeleteMapping("{questionId}")
-    public ResponseEntity<String> deleteChat(@PathVariable("questionId") long questionId){
-        chatService.deleteChatByQuestionId(questionId);
-        return new ResponseEntity<String>("Chat deleted successfully.", HttpStatus.OK);
-    }
-
     //reply to previous answer
+    //{questionId}
     @PutMapping("/answer/{questionId}")
     public ResponseEntity<Chat> replyChat(@PathVariable("questionId") long questionId
          ,@RequestBody Chat chat){
@@ -62,20 +58,25 @@ public class ChatController {
 
     }
 
-    // get chat by productId
-   /* @GetMapping("{productId}")
-    public ResponseEntity<Chat> getChatByProductId(@PathVariable("productId") long productId){
-        return new ResponseEntity<Chat>(chatService.getChatByProductId(productId), HttpStatus.OK);
-    }*/
+    @GetMapping
+    public String getMessage(){
+        return "BSDBFVKSBD";
+    }
 
-//    @GetMapping
-//    public String getMessage(){
-//        return "BSDBFVKSBD";
-//    }
+    //{productId}
     @GetMapping("{productId}")
     public ResponseEntity<List<Chat>> getChatByProductId(@PathVariable("productId") String productId){
         System.out.println(productId);
         return new ResponseEntity<List<Chat>>(chatService.getChatByProductId(productId), HttpStatus.OK);
     }
+
+    // delete chat by QuestionId
+    //{questionId}
+    @DeleteMapping("{questionId}")
+    public ResponseEntity<String> deleteChat(@PathVariable("questionId") long questionId){
+        chatService.deleteChatByQuestionId(questionId);
+        return new ResponseEntity<String>("Chat deleted successfully.", HttpStatus.OK);
+    }
+
 
 }

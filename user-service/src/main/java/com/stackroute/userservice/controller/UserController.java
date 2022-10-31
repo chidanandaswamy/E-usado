@@ -23,12 +23,6 @@ public class UserController {
     UserServiceImpl userServiceImpl;
 
 
-
-
-
-
-
-
     @RequestMapping(value="/users/register" ,method=RequestMethod.POST)
 
     public ResponseEntity<?> register(@RequestBody User user) throws UserNotFoundException{

@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> orders = orderRepository.findById(id);
         if(orders.isPresent()){
             orderRepository.deleteById(id);
-            return new ResponseEntity<>("Order with id " + id + " deleted successfull", HttpStatus.OK);
+            return new ResponseEntity<>("Order with id " + id + " canceled successfully", HttpStatus.OK);
         } else {
             throw new OrderNotFoundException("Order with id " + id + " is not found.");
         }
@@ -97,9 +97,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity<?> deleteAll(Order order) {
+    public String deleteAll(Order order) {
         orderRepository.deleteAll();
-        return new ResponseEntity<>("Orders are deleted", HttpStatus.ACCEPTED);
+        return "Orders are canceled";
     }
 
 

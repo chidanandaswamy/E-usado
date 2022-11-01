@@ -22,9 +22,8 @@ public class CartController {
 
 
 
-
     @GetMapping("/getCart/{cartOwnerEmail}")
-    public ResponseEntity<?> getCartByEmail(@PathVariable String cartOwnerEmail) {
+    public ResponseEntity<?> getCartByOwnerEmail(@PathVariable String cartOwnerEmail) {
         responseEntity= new ResponseEntity<>(cartServiceImpl.getCartById(cartOwnerEmail), HttpStatus.CREATED);
 
         return responseEntity;
@@ -32,7 +31,7 @@ public class CartController {
 
 
     @DeleteMapping("/deleteCart/{cartOwnerEmail}")
-    public ResponseEntity<?> deleteCartByEmail(@PathVariable String cartOwnerEmail) {
+    public ResponseEntity<?> deleteCartByOwnerEmail(@PathVariable String cartOwnerEmail) {
         responseEntity=new ResponseEntity<String>(cartServiceImpl.deleteCartById(cartOwnerEmail), HttpStatus.OK);
         return responseEntity;
     }

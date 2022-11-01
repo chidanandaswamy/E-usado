@@ -4,6 +4,7 @@ package com.stackroute.emailservice.service;
 import com.stackroute.emailservice.dto.MailRequest;
 import com.stackroute.emailservice.model.OrderService;
 import com.stackroute.emailservice.model.SlotBooking;
+import com.stackroute.emailservice.model.UserService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,15 +57,15 @@ public class RabbitMQConsumerService {
 
 
 //            for registration conformation mail
-//    @RabbitListener(queues = "User_queue")
-//    public void sendEmailThank(UserService request2) {
-//
-//        Map<String, Object> model = new HashMap<>();
-//        model.put("UserEmail", request2.getEmail());
-//        model.put("UserName", request2.getName());
-//
-//         service.sendEmailThankyou(request2, model);
-//    }
+    @RabbitListener(queues = "User_queue_email")
+    public void sendEmailThank(UserService request2) {
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("UserEmail", request2.getEmail());
+        model.put("UserName", request2.getName());
+
+         service.sendEmailThankyou(request2, model);
+    }
 
 
     //slot booked conformation mail

@@ -13,12 +13,21 @@ import org.springframework.context.annotation.Configuration;
 public class MessageConfiguration {
 
     public static final String QUEUE = "User_queue";
+
+    public static final String EMAIL_QUEUE = "User_queue_email";
     public static final String EXCHANGE = "User_exchange";
     public static final String ROUTING_KEY = "User_routingkey";
+
+    public static final String EMAIL_ROUTING_KEY = "User_routingkey_email";
 
     @Bean
     public Queue queue(){
         return new Queue(QUEUE,false);
+    }
+
+    @Bean
+    public Queue queueEmail(){
+        return new Queue(EMAIL_QUEUE,false);
     }
     @Bean
     public DirectExchange exchange(){
@@ -28,6 +37,11 @@ public class MessageConfiguration {
     @Bean
     public Binding binding(Queue queue, DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding bindingEmail(Queue queueEmail, DirectExchange exchange){
+        return BindingBuilder.bind(queueEmail).to(exchange).with(EMAIL_ROUTING_KEY);
     }
     @Bean
     public MessageConverter converter(){

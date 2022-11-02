@@ -4,6 +4,7 @@ package com.stackroute.emailservice.service;
 import com.stackroute.emailservice.dto.MailRequest;
 import com.stackroute.emailservice.model.OrderService;
 import com.stackroute.emailservice.model.SlotBooking;
+import com.stackroute.emailservice.model.UserService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,8 @@ public class RabbitMQConsumerService {
     @RabbitListener(queues = "productMailQueue")
     public void ProductAddedConforming(MailRequest request1) {
 
+        System.out.println("porduct mail" + request1);
+
         Map<String, Object> model = new HashMap<>();
         model.put("name", "E-usado");
         model.put("productName", request1.getProductName());
@@ -34,13 +37,16 @@ public class RabbitMQConsumerService {
         model.put("productDiscount", request1.getProductDiscount());
         model.put("productManufacturedYear", request1.getProductManufacturedYear());
         model.put("DamageLevel", request1.getProductDamageLevel());
-       model.put("productSpecs", request1.getProductSpecs());
+        model.put("productSpecs", request1.getProductSpecs());
 
          service.sendEmailProductAdded(request1, model);
     }
 
     @RabbitListener(queues = "Slot_queue")
     public void sendEmailSlot(SlotBooking request1) {
+
+        System.out.println("slot service" + request1);
+
         Map<String, Object> model = new HashMap<>();
         model.put("slotId", request1.getSlotId());
         model.put("buyerName", request1.getBuyerName());
@@ -56,20 +62,25 @@ public class RabbitMQConsumerService {
 
 
 //            for registration conformation mail
-//    @RabbitListener(queues = "User_queue")
-//    public void sendEmailThank(UserService request2) {
-//
-//        Map<String, Object> model = new HashMap<>();
-//        model.put("UserEmail", request2.getEmail());
-//        model.put("UserName", request2.getName());
-//
-//         service.sendEmailThankyou(request2, model);
-//    }
+    @RabbitListener(queues = "User_queue_email")
+    public void sendEmailThank(UserService request2) {
+
+        System.out.println("useer" + request2);
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("UserEmail", request2.getEmail());
+        model.put("UserName", request2.getName());
+
+         service.sendEmailThankyou(request2, model);
+    }
 
 
     //slot booked conformation mail
     @RabbitListener(queues = "Order_queue")
     public void OrderConformation(OrderService request2) {
+
+        System.out.println("order " + request2);
+
         Map<String, Object> model = new HashMap<>();
         model.put("orderID", request2.getId());
         model.put("location", "Banglore, India");

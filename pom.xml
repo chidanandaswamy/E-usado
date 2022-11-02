@@ -25,7 +25,6 @@
 		<module>eureka-server</module>
 		<module>authentication-service</module>
 		<module>user-service</module>
-		<module>cart-service</module>
 		<module>order-service</module>
 		<module>product-service</module>
 		<module>chat-service</module>

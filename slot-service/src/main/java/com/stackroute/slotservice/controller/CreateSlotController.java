@@ -20,7 +20,7 @@ public class CreateSlotController {
 
     CreateSlotServiceImp createSlotServiceImp;
 
-    @PostMapping("/Registrations")
+    @PostMapping("/BookSlot")
     public ResponseEntity<?> addCreateSlot(@RequestBody CreateSlot createSlot){
         createSlot.setSlotId(createSlotServiceImp.getSequenceNumber(createSlot.SEQUENCE_NAME));
         return createSlotServiceImp.addCreateSlot(createSlot);
@@ -31,7 +31,7 @@ public class CreateSlotController {
 //        return createSlotServiceImp.getAllSlots();
 //    }
 
-    @GetMapping("/List_of_Registrations")
+    @GetMapping("/BookSlot")
     public HashSet<CreateSlot> findAll() {
         return createSlotServiceImp.findAllUsers();
     }
@@ -43,7 +43,7 @@ public class CreateSlotController {
 //    }
 
 
-    @GetMapping("/Registrations_Details/{slotId}")
+    @GetMapping("/BookSlot/{slotId}")
     public ResponseEntity<?> getById(@PathVariable long slotId, HttpSession session) {
         try {
             return new ResponseEntity<CreateSlot>(createSlotServiceImp.getById(slotId), HttpStatus.CREATED);
@@ -61,7 +61,7 @@ public class CreateSlotController {
 
 
 
-    @PutMapping("/Registrations_Details/{slotId}")
+    @PutMapping("/BookSlot/{slotId}")
     public ResponseEntity<CreateSlot> UpdateSlotById( @RequestBody CreateSlot createSlot,@PathVariable long slotId){
         responseEntity=new ResponseEntity<CreateSlot>(createSlotServiceImp.UpdateSlotById(createSlot,slotId),HttpStatus.OK);
         return responseEntity;
@@ -70,13 +70,13 @@ public class CreateSlotController {
 
 
 
-    @DeleteMapping("/Registrations_Details")
+    @DeleteMapping("/BookSlot")
     public void deleteCreateSlots(){
         createSlotServiceImp.deleteAllCreateSlots();
     }
 
 
-    @DeleteMapping("/Registrations_Details/{slotId}")
+    @DeleteMapping("/BookSlot/{slotId}")
     public ResponseEntity<?> deleteCreatedSlotById(@PathVariable long slotId){
                  return createSlotServiceImp.deleteCreatedSlotById(slotId);
 }

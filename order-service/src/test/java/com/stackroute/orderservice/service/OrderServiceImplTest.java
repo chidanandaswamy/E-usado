@@ -52,8 +52,6 @@ class OrderServiceImplTest {
     private RabbitTemplate rabbitTemplate;
 
 
-
-
     @Test
     void testGetSequenceNumber() {
         DbSequence dbSequence = new DbSequence();
@@ -65,8 +63,6 @@ class OrderServiceImplTest {
         verify(mongoOperations).findAndModify((Query) any(), (UpdateDefinition) any(), (FindAndModifyOptions) any(),
                 (Class<DbSequence>) any());
     }
-
-
 
 
     @Test
@@ -86,8 +82,6 @@ class OrderServiceImplTest {
         verify(dbSequence).setId((String) any());
         verify(dbSequence).setSeq((String) any());
     }
-
-
 
     @Test
     void testCreateOrder() throws AmqpException {
@@ -123,7 +117,6 @@ class OrderServiceImplTest {
     }
 
 
-
     @Test
     void testCreateOrder2() throws AmqpException {
         Order order = new Order();
@@ -155,16 +148,12 @@ class OrderServiceImplTest {
         verify(rabbitTemplate).convertAndSend((String) any(), (String) any(), (Object) any());
     }
 
-
-
     @Test
     void testGetAllOrders() {
         when(orderRepository.findAll()).thenReturn(new ArrayList<>());
         assertThrows(OrderNotFoundException.class, () -> orderServiceImpl.getAllOrders());
         verify(orderRepository).findAll();
     }
-
-
 
     @Test
     void testGetAllOrders2() {
@@ -189,14 +178,12 @@ class OrderServiceImplTest {
     }
 
 
-
     @Test
     void testGetAllOrders3() {
         when(orderRepository.findAll()).thenThrow(new OrderNotFoundException("No Order found"));
         assertThrows(OrderNotFoundException.class, () -> orderServiceImpl.getAllOrders());
         verify(orderRepository).findAll();
     }
-
 
 
     @Test
@@ -220,8 +207,6 @@ class OrderServiceImplTest {
         verify(orderRepository).findById((String) any());
     }
 
-
-
     @Test
     void testGetOrderById2() {
         when(orderRepository.findById((String) any())).thenReturn(Optional.empty());
@@ -230,15 +215,12 @@ class OrderServiceImplTest {
     }
 
 
-
     @Test
     void testGetOrderById3() {
         when(orderRepository.findById((String) any())).thenThrow(new OrderNotFoundException("foo"));
         assertThrows(OrderNotFoundException.class, () -> orderServiceImpl.getOrderById("42"));
         verify(orderRepository).findById((String) any());
     }
-
-
 
 
     @Test
@@ -273,7 +255,6 @@ class OrderServiceImplTest {
     }
 
 
-
     @Test
     void testUpdateOrder2() {
         when(orderRepository.save((Order) any())).thenThrow(new OrderNotFoundException("Orders are updated"));
@@ -293,7 +274,6 @@ class OrderServiceImplTest {
     }
 
 
-
     @Test
     void testDeleteOrderById() {
         Order order = new Order();
@@ -310,13 +290,12 @@ class OrderServiceImplTest {
         doNothing().when(orderRepository).deleteById((String) any());
         when(orderRepository.findById((String) any())).thenReturn(ofResult);
         ResponseEntity<String> actualDeleteOrderByIdResult = orderServiceImpl.deleteOrderById("42");
-        assertEquals("Order with id 42 deleted successfull", actualDeleteOrderByIdResult.getBody());
+        assertEquals("Order with id 42 canceled successfully", actualDeleteOrderByIdResult.getBody());
         assertEquals(HttpStatus.OK, actualDeleteOrderByIdResult.getStatusCode());
         assertTrue(actualDeleteOrderByIdResult.getHeaders().isEmpty());
         verify(orderRepository).findById((String) any());
         verify(orderRepository).deleteById((String) any());
     }
-
 
 
     @Test
@@ -340,7 +319,6 @@ class OrderServiceImplTest {
     }
 
 
-
     @Test
     void testDeleteOrderById3() {
         doNothing().when(orderRepository).deleteById((String) any());
@@ -348,7 +326,6 @@ class OrderServiceImplTest {
         assertThrows(OrderNotFoundException.class, () -> orderServiceImpl.deleteOrderById("42"));
         verify(orderRepository).findById((String) any());
     }
-
 
 
     @Test
@@ -365,18 +342,13 @@ class OrderServiceImplTest {
         order.setProductName("Product Name");
         order.setProductPrice(10.0d);
         order.setTotalAmount(10.0d);
-        ResponseEntity<?> actualDeleteAllResult = orderServiceImpl.deleteAll(order);
-        assertEquals("Orders are deleted", actualDeleteAllResult.getBody());
-        assertEquals(HttpStatus.ACCEPTED, actualDeleteAllResult.getStatusCode());
-        assertTrue(actualDeleteAllResult.getHeaders().isEmpty());
+        assertEquals("Orders are canceled", orderServiceImpl.deleteAll(order));
         verify(orderRepository).deleteAll();
     }
 
-
-
     @Test
     void testDeleteAll2() {
-        doThrow(new OrderNotFoundException("Orders are deleted")).when(orderRepository).deleteAll();
+        doThrow(new OrderNotFoundException("Orders are canceled")).when(orderRepository).deleteAll();
 
         Order order = new Order();
         order.setBuyerEmail("jane.doe@example.org");

@@ -130,7 +130,7 @@ public class CreateSlotServiceImp implements CreateSlotService{
         Optional<CreateSlot> slotOptional = createSlotRepository.findById(slotId);
         System.out.println(slotOptional);
         if (slotOptional != null && slotOptional.isPresent()==true) {
-
+            createSlot.setSlotId(slotId);
             return createSlotRepository.save(createSlot);
         } else {
             throw new SlotNotFoundException("User with slotId " + slotId + " doesn't exist.");

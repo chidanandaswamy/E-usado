@@ -39,7 +39,6 @@ public class ProductController {
                                          @RequestParam(name = "productDamageLevel", defaultValue = "-1") Float productDamageLevel,
                                          @RequestParam(name = "location", defaultValue = "all") String location,
                                          @RequestParam(name = "productAvailability", defaultValue = "all") String productAvailability){
-
         return productServiceImpl.getProducts(search,
                 pageNumber,
                 pageSize,

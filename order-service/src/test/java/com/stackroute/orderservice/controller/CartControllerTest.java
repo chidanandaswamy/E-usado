@@ -33,62 +33,62 @@ class CartControllerTest {
     @MockBean
     private CartServiceImpl cartServiceImpl;
 
-    @Test
-    void testCreateCart() throws Exception {
-        Cart cart = new Cart();
-        cart.setCartOwnerEmail("jane.doe@example.org");
-        cart.setLocation(new Location());
-        cart.setProductAddedTime(1L);
-        cart.setProductAvailability(true);
-        cart.setProductBrand("Product Brand");
-        cart.setProductCategory("Product Category");
-        cart.setProductDamageLevel(10.0f);
-        cart.setProductDescription("Product Description");
-        cart.setProductDiscount(10.0f);
-        cart.setProductId("42");
-        cart.setProductManufacturedYear("Product Manufactured Year");
-        cart.setProductName("Product Name");
-        cart.setProductOwnerEmail("jane.doe@example.org");
-        cart.setProductPrice(10.0d);
-        cart.setProductPurchasedDate(1L);
-        cart.setProductSpecs(new HashMap<>());
-        cart.setWarrantyStatus(true);
-        when(cartServiceImpl.createCart((Cart) any())).thenReturn(cart);
-
-        Cart cart1 = new Cart();
-        cart1.setCartOwnerEmail("jane.doe@example.org");
-        cart1.setLocation(new Location());
-        cart1.setProductAddedTime(1L);
-        cart1.setProductAvailability(true);
-        cart1.setProductBrand("Product Brand");
-        cart1.setProductCategory("Product Category");
-        cart1.setProductDamageLevel(10.0f);
-        cart1.setProductDescription("Product Description");
-        cart1.setProductDiscount(10.0f);
-        cart1.setProductId("42");
-        cart1.setProductManufacturedYear("Product Manufactured Year");
-        cart1.setProductName("Product Name");
-        cart1.setProductOwnerEmail("jane.doe@example.org");
-        cart1.setProductPrice(10.0d);
-        cart1.setProductPurchasedDate(1L);
-        cart1.setProductSpecs(new HashMap<>());
-        cart1.setWarrantyStatus(true);
-        String content = (new ObjectMapper()).writeValueAsString(cart1);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/addToCart")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content);
-        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(cartController).build().perform(requestBuilder);
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string(
-                                "{\"productId\":\"42\",\"productName\":\"Product Name\",\"productPrice\":10.0,\"productBrand\":\"Product Brand\","
-                                        + "\"productCategory\":\"Product Category\",\"productDescription\":\"Product Description\",\"productSpecs\":{},"
-                                        + "\"productManufacturedYear\":\"Product Manufactured Year\",\"productPurchasedDate\":1,\"productOwnerEmail\":"
-                                        + "\"jane.doe@example.org\",\"productDiscount\":10.0,\"warrantyStatus\":true,\"productDamageLevel\":10.0,\"location"
-                                        + "\":{\"name\":null,\"coordinates\":null},\"productAvailability\":true,\"productAddedTime\":1,\"cartOwnerEmail\":"
-                                        + "\"jane.doe@example.org\"}"));
-    }
+//    @Test
+//    void testCreateCart() throws Exception {
+//        Cart cart = new Cart();
+//        cart.setCartOwnerEmail("jane.doe@example.org");
+//        cart.setLocation(new Location());
+//        cart.setProductAddedTime(1L);
+//        cart.setProductAvailability(true);
+//        cart.setProductBrand("Product Brand");
+//        cart.setProductCategory("Product Category");
+//        cart.setProductDamageLevel(10.0f);
+//        cart.setProductDescription("Product Description");
+//        cart.setProductDiscount(10.0f);
+//        cart.setProductId("42");
+//        cart.setProductManufacturedYear("Product Manufactured Year");
+//        cart.setProductName("Product Name");
+//        cart.setProductOwnerEmail("jane.doe@example.org");
+//        cart.setProductPrice(10.0d);
+//        cart.setProductPurchasedDate(1L);
+//        cart.setProductSpecs(new HashMap<>());
+//        cart.setWarrantyStatus(true);
+//        when(cartServiceImpl.createCart((Cart) any())).thenReturn(cart);
+//
+//        Cart cart1 = new Cart();
+//        cart1.setCartOwnerEmail("jane.doe@example.org");
+//        cart1.setLocation(new Location());
+//        cart1.setProductAddedTime(1L);
+//        cart1.setProductAvailability(true);
+//        cart1.setProductBrand("Product Brand");
+//        cart1.setProductCategory("Product Category");
+//        cart1.setProductDamageLevel(10.0f);
+//        cart1.setProductDescription("Product Description");
+//        cart1.setProductDiscount(10.0f);
+//        cart1.setProductId("42");
+//        cart1.setProductManufacturedYear("Product Manufactured Year");
+//        cart1.setProductName("Product Name");
+//        cart1.setProductOwnerEmail("jane.doe@example.org");
+//        cart1.setProductPrice(10.0d);
+//        cart1.setProductPurchasedDate(1L);
+//        cart1.setProductSpecs(new HashMap<>());
+//        cart1.setWarrantyStatus(true);
+//        String content = (new ObjectMapper()).writeValueAsString(cart1);
+//        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/addToCart")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(content);
+//        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(cartController).build().perform(requestBuilder);
+//        actualPerformResult.andExpect(MockMvcResultMatchers.status().isCreated())
+//                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+//                .andExpect(MockMvcResultMatchers.content()
+//                        .string(
+//                                "{\"productId\":\"42\",\"productName\":\"Product Name\",\"productPrice\":10.0,\"productBrand\":\"Product Brand\","
+//                                        + "\"productCategory\":\"Product Category\",\"productDescription\":\"Product Description\",\"productSpecs\":{},"
+//                                        + "\"productManufacturedYear\":\"Product Manufactured Year\",\"productPurchasedDate\":1,\"productOwnerEmail\":"
+//                                        + "\"jane.doe@example.org\",\"productDiscount\":10.0,\"warrantyStatus\":true,\"productDamageLevel\":10.0,\"location"
+//                                        + "\":{\"name\":null,\"coordinates\":null},\"productAvailability\":true,\"productAddedTime\":1,\"cartOwnerEmail\":"
+//                                        + "\"jane.doe@example.org\"}"));
+//    }
 
 
 

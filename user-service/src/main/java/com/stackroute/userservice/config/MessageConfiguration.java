@@ -40,8 +40,8 @@ public class MessageConfiguration {
     }
 
     @Bean
-    public Binding bindingEmail(Queue queue, DirectExchange exchange){
-        return BindingBuilder.bind(queue).to(exchange).with(EMAIL_ROUTING_KEY);
+    public Binding bindingEmail(Queue queueEmail, DirectExchange exchange){
+        return BindingBuilder.bind(queueEmail).to(exchange).with(EMAIL_ROUTING_KEY);
     }
     @Bean
     public MessageConverter converter(){

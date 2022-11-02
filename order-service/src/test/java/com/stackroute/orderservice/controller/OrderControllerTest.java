@@ -34,7 +34,6 @@ class OrderControllerTest {
     private OrderServiceImpl orderServiceImpl;
 
 
-
     @Test
     void testCreateOrder() throws Exception {
         when(orderServiceImpl.getSequenceNumber((String) any())).thenReturn("42");
@@ -60,8 +59,6 @@ class OrderControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(100));
     }
 
-
-
     @Test
     void testGetOrderById() throws Exception {
         when(orderServiceImpl.getOrderById((String) any())).thenReturn(new ResponseEntity<>(HttpStatus.CONTINUE));
@@ -71,7 +68,6 @@ class OrderControllerTest {
                 .perform(requestBuilder);
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(100));
     }
-
 
 
     @Test
@@ -86,8 +82,6 @@ class OrderControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
 
-
-
     @Test
     void testGetAllOrders2() throws Exception {
         when(orderServiceImpl.getAllOrders()).thenReturn(new ArrayList<>());
@@ -100,7 +94,6 @@ class OrderControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
-
 
 
     @Test
@@ -127,8 +120,6 @@ class OrderControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(100));
     }
 
-
-
     @Test
     void testDeleteOrderById() throws Exception {
         when(orderServiceImpl.deleteOrderById((String) any())).thenReturn(new ResponseEntity<>(HttpStatus.CONTINUE));
@@ -140,16 +131,16 @@ class OrderControllerTest {
     }
 
 
-
     @Test
     void testDeleteAll() throws Exception {
-        when((ResponseEntity<Object>) orderServiceImpl.deleteAll((Order) any()))
-                .thenReturn(new ResponseEntity<>(HttpStatus.CONTINUE));
+        when(orderServiceImpl.deleteAll((Order) any())).thenReturn("Delete All");
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/api/v1/deleteAllOrders");
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(orderController)
                 .build()
                 .perform(requestBuilder);
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(100));
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=ISO-8859-1"))
+                .andExpect(MockMvcResultMatchers.content().string("Delete All"));
     }
 }
 

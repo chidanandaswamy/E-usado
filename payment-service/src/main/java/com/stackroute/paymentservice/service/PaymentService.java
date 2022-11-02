@@ -1,6 +1,5 @@
 package com.stackroute.paymentservice.service;
 
-import com.stackroute.paymentservice.dto.ResponseDto;
 import com.stackroute.paymentservice.exception.CustomerCreationFailedException;
 import com.stackroute.paymentservice.exception.PaymentFailedException;
 import com.stackroute.paymentservice.model.Payment;

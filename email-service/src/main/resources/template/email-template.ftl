@@ -18,30 +18,26 @@
 							</div>
 
 							<div style="font-size: 24px; color: #555100;">
-								<br> Sending Email using Spring Boot with <b>FreeMarker
+								<br> Thank you for ordering using <b>E-usado
 									template !!! <br>
 							</div>
 							<div>
-                               <pre>
-						    Order Id:${orderID}
-							ordered Products Na,e:${orderedProducts}
-							Buyer Email Id:${orderBuyerEmailId}
-							order Date:${orderDate}
+                           <pre>
+						    Order Id: ${orderID}
+Email Id: ${orderBuyerEmailId}
+Products Name: ${orderedProducts}
+Product price: ${productPrice}
+Order Date: ${orderDate}
+Product Brand: ${productBrand}
+Payment Status: ${OrderPaymentStatus}
+order Total Amount: ${orderTotalAmount}
+						     OrderStatus: ${OrderStatus}
+                              <pre>
 
-							Payment Status:${OrderPaymentStatus}
-						    order Total Amount:${orderTotalAmount}
-						     OrderStatus:${OrderStatus}
-
-
-
-
-							</pre>
 								<br> Thank you for ordering in E-usado
 								product on<br> 'Shop more on E-usado get attractive rewards on all electronics<br>
-								spring ,spring boot ,hibernate , web services and micro service
-								<br> ""project build using microservice
-								to gain the knowledge open the back end code"<br>
-								<br>"Sharing the knowledge is biggest learning" <br> <br>
+
+								<br> E-usado is largest online selling flatform <br> <br>
 								<br> <br> <b>E-usado</b><br>${location}<br>
 								<br>
 							</div>

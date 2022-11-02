@@ -17,28 +17,28 @@ public class RabbitMqConfiguration {
     public static final String ROUTING_KEY = "Slot_routingkey";
 
     @Bean
-    public Queue squeue(){
+    public Queue queue(){
         return new Queue(QUEUE,false);
     }
     @Bean
-    public DirectExchange sexchange(){
+    public DirectExchange exchange(){
 
         return new DirectExchange(EXCHANGE);
     }
     @Bean
-    public Binding sbinding(Queue queue, DirectExchange exchange){
+    public Binding binding(Queue queue, DirectExchange exchange){
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
 
     @Bean
-    public Jackson2JsonMessageConverter sconverter(){
+    public Jackson2JsonMessageConverter converter(){
         return new Jackson2JsonMessageConverter();
     }
 
     @Bean
-    public AmqpTemplate stemplate(ConnectionFactory connectionFactory){
+    public AmqpTemplate template(ConnectionFactory connectionFactory){
         final RabbitTemplate rabbitTemplate=new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(sconverter());
+        rabbitTemplate.setMessageConverter(converter());
         return rabbitTemplate;
     }
 }

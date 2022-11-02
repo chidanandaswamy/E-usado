@@ -10,10 +10,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class OrderService {
-    private long id;
+    private String id;
     private String buyerEmail;
     private String orderDate;
-    private String products;
+    private String productName;
+    private Double productPrice;
+    private String productBrand;
     private Double totalAmount;
     private String paymentStatus;
     private String orderStatus;

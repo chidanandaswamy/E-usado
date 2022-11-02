@@ -25,12 +25,12 @@ public class RabbitMQConsumerService {
     @RabbitListener(queues = "productMailQueue")
     public void ProductAddedConforming(MailRequest request1) {
 
-        System.out.println("porduct mail" + request1);
+        System.out.println("product mail" + request1);
 
         Map<String, Object> model = new HashMap<>();
         model.put("name", "E-usado");
         model.put("productName", request1.getProductName());
-        model.put("location", "Banglore, India");
+        model.put("location", "Bangalore, India");
         model.put("productPrice", request1.getProductPrice());
         model.put("productDescription", request1.getProductDescription());
         model.put("productBrand", request1.getProductBrand());
@@ -39,7 +39,7 @@ public class RabbitMQConsumerService {
         model.put("DamageLevel", request1.getProductDamageLevel());
         model.put("productSpecs", request1.getProductSpecs());
 
-         service.sendEmailProductAdded(request1, model);
+        service.sendEmailProductAdded(request1, model);
     }
 
     @RabbitListener(queues = "Slot_queue")
@@ -61,17 +61,17 @@ public class RabbitMQConsumerService {
     }
 
 
-//            for registration conformation mail
+    //            for registration conformation mail
     @RabbitListener(queues = "User_queue_email")
     public void sendEmailThank(UserService request2) {
 
-        System.out.println("useer" + request2);
+        System.out.println("user" + request2);
 
         Map<String, Object> model = new HashMap<>();
         model.put("UserEmail", request2.getEmail());
         model.put("UserName", request2.getName());
 
-         service.sendEmailThankyou(request2, model);
+        service.sendEmailThankyou(request2, model);
     }
 
 
@@ -83,7 +83,7 @@ public class RabbitMQConsumerService {
 
         Map<String, Object> model = new HashMap<>();
         model.put("orderID", request2.getId());
-        model.put("location", "Banglore, India");
+        model.put("location", "Bangalore, India");
         model.put("orderedProducts", request2.getProductName());
         model.put("orderBuyerEmailId", request2.getBuyerEmail());
         model.put("orderDate", request2.getOrderDate());

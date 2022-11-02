@@ -77,11 +77,11 @@ class EmailControllerTest {
 
         OrderService orderService = new OrderService();
         orderService.setBuyerEmail("jane.doe@example.org");
-        orderService.setId(123L);
+        orderService.setId("123");
         orderService.setOrderDate("2020-03-01");
         orderService.setOrderStatus("Order Status");
         orderService.setPaymentStatus("Payment Status");
-        orderService.setProducts("Products");
+//        orderService.setProducts("Products");
         orderService.setTotalAmount(10.0d);
         String content = (new ObjectMapper()).writeValueAsString(orderService);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/OrderConformation")

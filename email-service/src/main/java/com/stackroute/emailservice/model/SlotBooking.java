@@ -1,7 +1,7 @@
 package com.stackroute.emailservice.model;
 
-import com.stackroute.slotservice.model.DateTimeSlots;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class SlotBooking {
@@ -12,7 +12,7 @@ public class SlotBooking {
     private String buyerName;
     private String buyerEmailId;
 //    private SlotStatus status;
-    private List<DateTimeSlots> dateTimeSlots;
+    private List<HashMap<String, Object>> dateTimeSlots;
     private String date;
     private String description;
 
@@ -20,7 +20,7 @@ public class SlotBooking {
         super();
     }
 
-    public SlotBooking(long slotId, String sellerName, String sellerEmailId, String buyerName, String buyerEmailId, List<DateTimeSlots> dateTimeSlots, String date, String description) {
+    public SlotBooking(long slotId, String sellerName, String sellerEmailId, String buyerName, String buyerEmailId, List<HashMap<String, Object>> dateTimeSlots, String date, String description) {
         super();
         this.slotId = slotId;
         this.sellerName = sellerName;
@@ -72,11 +72,11 @@ public class SlotBooking {
         this.buyerEmailId = buyerEmailId;
     }
 
-    public List<DateTimeSlots> getDateTimeSlots() {
+    public List<HashMap<String, Object>> getDateTimeSlots() {
         return dateTimeSlots;
     }
 
-    public void setDateTimeSlots(List<DateTimeSlots> dateTimeSlots) {
+    public void setDateTimeSlots(List<HashMap<String, Object>> dateTimeSlots) {
         this.dateTimeSlots = dateTimeSlots;
     }
 

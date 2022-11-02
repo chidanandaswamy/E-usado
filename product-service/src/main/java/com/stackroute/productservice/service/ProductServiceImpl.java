@@ -287,6 +287,11 @@ public class ProductServiceImpl implements ProductService{
         int offset = pageSize * (pageNumber - 1);
         int limit = pageSize;
 
+        {
+            Criteria criteria = Criteria.where("productOwnerEmail").is(ownerEmail);
+            and.add(criteria.getCriteriaObject());
+        }
+
         if(productAddedTime != null && productAddedTime > 0){
             Criteria criteria = Criteria.where("productAddedTime").is(productAddedTime);
             and.add(criteria.getCriteriaObject());

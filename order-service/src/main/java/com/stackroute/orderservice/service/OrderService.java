@@ -20,7 +20,7 @@ public interface OrderService {
 
     ResponseEntity<String> deleteOrderById(String id);
 
-    ResponseEntity<?>  deleteAll(Order order);
+    String  deleteAll(Order order);
 }
 
 

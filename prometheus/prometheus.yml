@@ -6,21 +6,21 @@ scrape_configs:
   - job_name: 'eureka_service'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['eureka-service:8761']
+      - targets: ['eureka-server:8761']
         labels:
           applications: 'Eureka service application'
 
   - job_name: 'api_gateway'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: [ 'api-gateway:8080' ]
+      - targets: [ 'API-GATEWAY:8080' ]
         labels:
           applications: 'API gateway application'
 
   - job_name: 'authentication_service'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: [ 'authentication-service:8081' ]
+      - targets: [ 'AUTHENTICATION-SERVICE:8081' ]
         labels:
           applications: 'Authentication service application'
 
@@ -34,7 +34,7 @@ scrape_configs:
   - job_name: 'config_service'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: [ 'config-service:8888' ]
+      - targets: [ 'config-server:8888' ]
         labels:
           applications: 'Config service application'
 
@@ -48,14 +48,14 @@ scrape_configs:
   - job_name: 'order_service'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: [ 'order-service:8087' ]
+      - targets: [ 'ORDER-SERVICE:8087' ]
         labels:
           applications: 'Order service application'
 
   - job_name: 'payment_service'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: [ 'payment-service:8088' ]
+      - targets: [ 'PAYMENT-SERVICE:8088' ]
         labels:
           applications: 'Payment service application'
 

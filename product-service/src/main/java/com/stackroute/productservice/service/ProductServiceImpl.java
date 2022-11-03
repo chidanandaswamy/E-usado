@@ -49,25 +49,33 @@ public class ProductServiceImpl implements ProductService{
     private String orderRoutingKey;
 
     @Override
-    public ResponseEntity<String> createProduct(String productAsJSONString, MultipartFile[] images) {
+    public ResponseEntity<String> createProduct(String productAsJSONString, MultipartFile image) {
 
         Product product = JSON.parseObject(productAsJSONString, Product.class);
         product.setProductId(Generators.timeBasedGenerator().generate().toString());
         product.setProductAddedTime(System.currentTimeMillis());
 
-        if(images != null && images.length > 0){
+        if(image != null){
             try {
-                Binary[] tempImageBinary = new Binary[images.length];
-                int i=0;
-                for(MultipartFile image : images){
-                    tempImageBinary[i] = new Binary(BsonBinarySubType.BINARY, image.getBytes());
-                    i++;
-                }
-                product.setProductImages(tempImageBinary);
+                product.setProductImage(new Binary(BsonBinarySubType.BINARY, image.getBytes()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+
+//        if(images != null && images.length > 0){
+//            try {
+//                Binary[] tempImageBinary = new Binary[images.length];
+//                int i=0;
+//                for(MultipartFile image : images){
+//                    tempImageBinary[i] = new Binary(BsonBinarySubType.BINARY, image.getBytes());
+//                    i++;
+//                }
+//                product.setProductImages(tempImageBinary);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 
         Product savedProduct = productRepository.save(product);
 
@@ -223,28 +231,38 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ResponseEntity<String> updateProductById(String id, String productAsJSONString, MultipartFile[] images) {
+    public ResponseEntity<String> updateProductById(String id, String productAsJSONString, MultipartFile image) {
         Optional<Product> productOptional = productRepository.findById(id);
         System.out.println(productOptional.isPresent());
         if(productOptional.isPresent()){
             Product product = JSON.parseObject(productAsJSONString, Product.class);
             product.setProductId(id);
 
-            if(images != null && images.length > 0){
+//            if(images != null && images.length > 0){
+//                try {
+//                    Binary[] tempImageBinary = new Binary[images.length];
+//                    int i=0;
+//                    for(MultipartFile image : images){
+//                        tempImageBinary[i] = new Binary(BsonBinarySubType.BINARY, image.getBytes());
+//                        i++;
+//                    }
+//                    product.setProductImages(tempImageBinary);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//            else {
+//                product.setProductImages(productOptional.get().getProductImages());
+//            }
+
+            if(image != null){
                 try {
-                    Binary[] tempImageBinary = new Binary[images.length];
-                    int i=0;
-                    for(MultipartFile image : images){
-                        tempImageBinary[i] = new Binary(BsonBinarySubType.BINARY, image.getBytes());
-                        i++;
-                    }
-                    product.setProductImages(tempImageBinary);
+                    product.setProductImage(new Binary(BsonBinarySubType.BINARY, image.getBytes()));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }
-            else {
-                product.setProductImages(productOptional.get().getProductImages());
+            } else {
+                product.setProductImage(product.getProductImage());
             }
 
             Product savedProduct = productRepository.save(product);

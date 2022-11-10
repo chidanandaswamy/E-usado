@@ -41,7 +41,7 @@ public class Product {
     private Boolean warrantyStatus;
     private Float productDamageLevel;
     private Location location;
-    private Binary[] productImages;
+    private Binary productImage;
     private Boolean productAvailability;
     private Long productAddedTime;
 }

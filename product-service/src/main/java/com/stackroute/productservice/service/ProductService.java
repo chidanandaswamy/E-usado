@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductService {
-    ResponseEntity<String> createProduct(String product, MultipartFile[] images);
+    ResponseEntity<String> createProduct(String product, MultipartFile image);
     ResponseEntity<?> getProducts(String search,
                                   int pageNumber,
                                   int pageSize,
@@ -21,7 +21,7 @@ public interface ProductService {
                                   String location,
                                   String productAvailability);
     ResponseEntity<Product> getProductById(String id);
-    ResponseEntity<String> updateProductById(String id, String productAsJSONString, MultipartFile[] images);
+    ResponseEntity<String> updateProductById(String id, String productAsJSONString, MultipartFile image);
     ResponseEntity<String> deleteProductById(String id);
     ResponseEntity<String> deleteAllProducts();
     ResponseEntity<?> getProductsByOwnerEmail(String ownerEmail, int pageNumber, int pageSize, Long productAddedTime);

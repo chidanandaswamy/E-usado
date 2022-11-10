@@ -17,8 +17,8 @@ public class ProductController {
     private ProductServiceImpl productServiceImpl;
 
     @PostMapping("/product")
-    public ResponseEntity<?> createProduct(@RequestParam String productAsJSONString, @RequestParam MultipartFile[] images){
-        return productServiceImpl.createProduct(productAsJSONString, images);
+    public ResponseEntity<?> createProduct(@RequestParam String productAsJSONString, @RequestParam MultipartFile image){
+        return productServiceImpl.createProduct(productAsJSONString, image);
     }
 
     @PostMapping("/product/add-to-cart/product-id/{id}/user-email/{email}")
@@ -67,8 +67,8 @@ public class ProductController {
     }
 
     @PutMapping("/product/{id}")
-    public ResponseEntity<?> updateProductById(@PathVariable String id, @RequestParam String productAsJSONString, @RequestParam MultipartFile[] images){
-        return productServiceImpl.updateProductById(id, productAsJSONString, images);
+    public ResponseEntity<?> updateProductById(@PathVariable String id, @RequestParam String productAsJSONString, @RequestParam MultipartFile image){
+        return productServiceImpl.updateProductById(id, productAsJSONString, image);
     }
 
     @DeleteMapping("/product/{id}")

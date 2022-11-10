@@ -68,8 +68,8 @@ public class RabbitMQConsumerService {
         System.out.println("user" + request2);
 
         Map<String, Object> model = new HashMap<>();
-        model.put("UserEmail", request2.getEmail());
-        model.put("UserName", request2.getName());
+        model.put("userEmail", request2.getEmail());
+        model.put("userName", request2.getName());
 
         service.sendEmailThankyou(request2, model);
     }
@@ -90,6 +90,8 @@ public class RabbitMQConsumerService {
         model.put("OrderPaymentStatus", request2.getPaymentStatus());
         model.put("orderTotalAmount", request2.getTotalAmount());
         model.put("OrderStatus", request2.getOrderStatus());
+        model.put("productPrice", request2.getProductPrice());
+        model.put("productBrand", request2.getProductBrand());
 
         System.out.println(request2);
         service.OrderConformationsendEmail(request2, model);

@@ -14,6 +14,9 @@ public class ApiConfig {
 
         FreeMarkerConfigurationFactoryBean bean = new FreeMarkerConfigurationFactoryBean();
         bean.setTemplateLoaderPath("classpath:/template");
+      
+
+
         return bean;
 
 
